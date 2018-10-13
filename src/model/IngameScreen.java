@@ -1,10 +1,9 @@
-package modell;
+package model;
 
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class IngameScreen extends GameScreen {
 

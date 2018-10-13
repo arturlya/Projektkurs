@@ -1,4 +1,4 @@
-package modell;
+package model;
 
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;

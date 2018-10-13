@@ -1,4 +1,4 @@
-package modell;
+package model;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.input.Input;
