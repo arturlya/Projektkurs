@@ -20,7 +20,7 @@ public class MainController {
         environment = new Environment("assets/maps/test.tmx");
         ingameScreen = new IngameScreen();
         Game.getScreenManager().addScreen(ingameScreen);
-        Game.getConfiguration().graphics().setFullscreen(true);
+        Game.getConfiguration().graphics().setFullscreen(false);
         GameController gameController = new GameController(environment,ingameScreen);
 
         Game.start();

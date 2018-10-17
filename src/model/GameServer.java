@@ -30,8 +30,8 @@ public class GameServer extends Server {
 
     @Override
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
-        if(pMessage.contains("START")){
-            String[] temp = pMessage.split("START",1);
+        if(pMessage.contains("START") && numberOfPlayers >1){
+            String[] temp = pMessage.split("START",2);
             if(temp[1].contains("true")){
                 startVote++;
                 System.out.println("Player ready");
@@ -41,12 +41,22 @@ public class GameServer extends Server {
             }else{
                 System.err.println("Couldn't handle : "+temp[1]);
             }
-            sendToAll("START"+startVote);
+        }
+        if(isStarting()){
+            sendToAll("STARTtrue");
         }
     }
 
     @Override
     public void processClosingConnection(String pClientIP, int pClientPort) {
+        System.out.println("Player left the game");
+    }
 
+    private boolean isStarting(){
+        if(startVote == numberOfPlayers && numberOfPlayers >1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

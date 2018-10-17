@@ -1,6 +1,8 @@
 package model;
 
 
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.abitur.netz.Client;
 
 public class User {
@@ -29,12 +31,6 @@ public class User {
         clientActive = true;
     }
 
-    public GameClient getClient(){
-        if(clientActive){
-            return client;
-        }
-        return null;
-    }
 
 
 

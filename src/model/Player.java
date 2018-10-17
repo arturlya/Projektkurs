@@ -15,6 +15,7 @@ public abstract class Player extends GravitationalObject{
     protected Hurtbox hurtbox;
     protected boolean shieldActive;
     protected Projectile projectile;
+    protected boolean moving;
 
     public Player(){
         hitbox = new Rectangle2D.Double(0,0,50,100);
@@ -53,12 +54,15 @@ public abstract class Player extends GravitationalObject{
             switch (directionLR) {
                 case 0:
                     setHorizontalSpeed(-speed);
+                    moving = true;
                     break;
                 case 1:
                     setHorizontalSpeed(speed);
+                    moving = true;
                     break;
                 case -1:
                     setHorizontalSpeed(0);
+                    moving = false;
                     break;
             }
         }
@@ -67,8 +71,12 @@ public abstract class Player extends GravitationalObject{
         Input.keyboard().onKeyPressed(KeyEvent.VK_LEFT, (key) -> {
             directionLR = 0;
             lookingAt = 0;
+            moving = true;
         });
-        Input.keyboard().onKeyReleased(KeyEvent.VK_LEFT, (key) -> directionLR = -1);
+        Input.keyboard().onKeyReleased(KeyEvent.VK_LEFT, (key) -> {
+            directionLR = -1;
+            moving = false;
+        });
         Input.keyboard().onKeyPressed(KeyEvent.VK_RIGHT, (key) -> {
             directionLR = 1;
             lookingAt = 1;
@@ -158,4 +166,7 @@ public abstract class Player extends GravitationalObject{
         }
     }
 
+    public boolean isMoving() {
+        return moving;
+    }
 }

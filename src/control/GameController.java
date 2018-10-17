@@ -2,6 +2,7 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import model.IngameScreen;
+import model.StaticData;
 import model.User;
 import model.Warrior;
 
@@ -20,5 +21,8 @@ public class GameController {
         user.hostGame(4762);
         user.init(ingameScreen);
 
+        User user2 = new User();
+        user.joinGame(StaticData.getIp(),4762);
+        user.init(ingameScreen);
     }
 }
