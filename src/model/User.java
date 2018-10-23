@@ -19,6 +19,7 @@ public class User {
     public void init(){
         client.init();
     }
+
     public void joinGame(String ip, int port){
         client = new GameClient(ip,port,ingameScreen);
         if(client.isConnected()) {
@@ -28,6 +29,7 @@ public class User {
             System.out.println("couldn't connect to "+ip);
         }
     }
+
     public void hostGame(int port){
         this.port = port;
         server = new GameServer(port);

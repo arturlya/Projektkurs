@@ -104,6 +104,7 @@ public class GameClient extends Client implements IUpdateable {
                             }
                         }
                     }
+
                 } else if (message.contains("POSITION")) {
                     String[] temp = message.split("POSITION");
                     temp = temp[1].split("#");

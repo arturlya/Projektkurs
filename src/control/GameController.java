@@ -24,6 +24,7 @@ public class GameController {
         user.init();
 
 
+
 //        User user2 = new User(ingameScreen);
   //      user2.joinGame("192.168.178.61",2796);
     //    user2.init();
