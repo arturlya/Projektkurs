@@ -2,12 +2,13 @@ package model;
 
 public class Mage extends Player{
 
-    public Mage(){
-        super();
+    public Mage(boolean playable){
+        super(playable);
         setX(300);
         setY(300);
         setWidth(50);
         setHeight(100);
+        setName("Mage");
     }
 
     @Override

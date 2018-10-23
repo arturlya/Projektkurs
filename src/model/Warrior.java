@@ -10,11 +10,13 @@ public class Warrior extends Player{
     private boolean firstAttackDown;
     private GrapplingHook hook;
 
-    public Warrior(){
-        this.setX(500);
+    public Warrior(boolean playable){
+        super(playable);
+        this.setX(Math.random()*300+400);
         this.setY(300);
         setWidth(50);
         setHeight(100);
+        setName("Warrior");
     }
 
     @Override
