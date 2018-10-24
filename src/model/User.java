@@ -33,6 +33,7 @@ public class User {
     public void hostGame(int port){
         this.port = port;
         server = new GameServer(port);
+
         client = new GameClient("localhost",port,ingameScreen);
 
         clientActive = true;

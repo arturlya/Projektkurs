@@ -19,15 +19,19 @@ public class GameController {
         Game.getEnvironment().add(m);
         ingameScreen.addGravObject(m);*/
 
-        User user = new User(ingameScreen);
-        user.hostGame(2796);
-        user.init();
+        int switchFunction = 2;
+
+        if(switchFunction == 1) {
+            User user = new User(ingameScreen);
+            user.hostGame(2796);
+            user.init();
 
 
+        }else {
+            User user2 = new User(ingameScreen);
+            user2.joinGame("192.168.178.61", 2796);
+            user2.init();
 
-//        User user2 = new User(ingameScreen);
-  //      user2.joinGame("192.168.178.61",2796);
-    //    user2.init();
-
+        }
     }
 }
