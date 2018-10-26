@@ -21,12 +21,12 @@ public class MainController {
 
     public MainController(){
         Game.init();
+        Game.getConfiguration().graphics().setFullscreen(true);
         Game.load("assets/maps/game.litidata");
-        Game.getEnvironment().getMap().setName("Map1");
-        environment = new Environment(Game.getEnvironment().getMap());
+        List<IMap> list = Game.getMaps();
+        environment = new Environment(list.get(0));
         ingameScreen = new IngameScreen();
         Game.getScreenManager().addScreen(ingameScreen);
-        Game.getConfiguration().graphics().setFullscreen(false);
         GameController gameController = new GameController(environment,ingameScreen);
         Game.start();
     }
