@@ -29,7 +29,7 @@ public class GameController {
 
         }else {
             User user2 = new User(ingameScreen);
-            user2.joinGame("192.168.0.117", 2796);
+            user2.joinGame("localhost", 2796);
             user2.init();
 
         }

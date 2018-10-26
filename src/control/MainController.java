@@ -21,7 +21,7 @@ public class MainController {
 
     public MainController(){
         Game.init();
-        Game.getConfiguration().graphics().setFullscreen(true);
+        Game.getConfiguration().graphics().setFullscreen(false);
         Game.load("assets/maps/game.litidata");
         List<IMap> list = Game.getMaps();
         environment = new Environment(list.get(0));

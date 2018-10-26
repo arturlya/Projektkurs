@@ -1,8 +1,11 @@
 package model;
 
+import de.gurkenlabs.litiengine.gui.GuiComponent;
 
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
-public class User {
+public class User extends GuiComponent {
 
     private GameClient client;
     private GameServer server;
@@ -10,8 +13,10 @@ public class User {
 
     private int port;
     private boolean clientActive;
+    private int cursorX,cursorY;
 
     public User(IngameScreen ingameScreen){
+        super(0,0);
         clientActive = false;
         this.ingameScreen = ingameScreen;
     }
@@ -45,6 +50,9 @@ public class User {
         }
     }
 
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        super.mouseMoved(e);
 
-
+    }
 }
