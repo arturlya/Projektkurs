@@ -1,6 +1,7 @@
 package control;
 
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.environment.tilemap.IMap;
 import model.IngameScreen;
 import model.StaticData;
 import model.User;
@@ -12,12 +13,11 @@ public class GameController {
         Game.loadEnvironment(environment);
         Game.getEnvironment().add(new Timer());
 
+        //IMap map = Game.getEnvironment().getMap();
 
-/*
-        Warrior m = new Warrior();
-
+        Warrior m = new Warrior(true);
         Game.getEnvironment().add(m);
-        ingameScreen.addGravObject(m);*/
+        ingameScreen.addGravObject(m);
 
         int switchFunction = 2;
 
@@ -29,7 +29,7 @@ public class GameController {
 
         }else {
             User user2 = new User(ingameScreen);
-            user2.joinGame("192.168.178.61", 2796);
+            user2.joinGame("192.168.0.117", 2796);
             user2.init();
 
         }

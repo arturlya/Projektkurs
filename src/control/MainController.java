@@ -2,9 +2,13 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.environment.tilemap.IMap;
 import de.gurkenlabs.litiengine.gui.screens.Resolution;
 import model.IngameScreen;
 import model.StaticData;
+
+import java.awt.*;
+import java.util.List;
 
 public class MainController {
 
@@ -17,12 +21,13 @@ public class MainController {
 
     public MainController(){
         Game.init();
-        environment = new Environment("assets/maps/test.tmx");
+        Game.load("assets/maps/game.litidata");
+        Game.getEnvironment().getMap().setName("Map1");
+        environment = new Environment(Game.getEnvironment().getMap());
         ingameScreen = new IngameScreen();
         Game.getScreenManager().addScreen(ingameScreen);
         Game.getConfiguration().graphics().setFullscreen(false);
         GameController gameController = new GameController(environment,ingameScreen);
-
         Game.start();
     }
 }
