@@ -42,6 +42,10 @@ public class IngameScreen extends GameScreen {
         gravObjects.add(g);
     }
 
+    public ArrayList<GravitationalObject> getGravObjects() {
+        return gravObjects;
+    }
+
     public void removeGravObject(GravitationalObject g){
         gravObjects.remove(g);
     }

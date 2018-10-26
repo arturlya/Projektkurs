@@ -120,6 +120,15 @@ public abstract class Player extends GravitationalObject{
                     }
                 }
             });
+            //Jump
+            Input.keyboard().onKeyTyped(KeyEvent.VK_W, (key) -> {
+                if(attackWindDown <= 0){
+                    if(!inAir){
+                        setVerticalSpeed(-500);
+                        inAir = true;
+                    }
+                }
+            });
         }
         if (projectile != null) {
             if (!projectile.getHitbox().intersects(Game.getScreenManager().getBounds())) {
