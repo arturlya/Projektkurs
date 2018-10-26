@@ -1,0 +1,6 @@
+main threw an exception:
+java.lang.NullPointerException
+	at model.User.init(User.java:20)
+	at control.GameController.<init>(GameController.java:31)
+	at control.MainController.<init>(MainController.java:28)
+	at control.MainController.main(MainController.java:16)
