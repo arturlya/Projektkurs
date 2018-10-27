@@ -27,7 +27,7 @@ public class MenuScreen extends Screen {
 
     public void render(Graphics2D g) {
         if (menuNumber == 0){
-            //g.drawImage(menuImages[menuNumber],0,0, Game.getConfiguration().graphics().getResolutionWidth(),Game.getConfiguration().graphics().getResolutionHeight(),null);
+            ///g.drawImage(menuImages[menuNumber],0,0, Game.getConfiguration().graphics().getResolutionWidth(),Game.getConfiguration().graphics().getResolutionHeight(),null);
         }
         Game.getEnvironment().render(g);
     }
