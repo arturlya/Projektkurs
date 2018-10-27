@@ -3,9 +3,9 @@ package control;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.environment.tilemap.IMap;
-import de.gurkenlabs.litiengine.gui.screens.Resolution;
-import model.IngameScreen;
-import model.StaticData;
+import de.gurkenlabs.litiengine.gui.screens.GameScreen;
+import model.Screens.IngameScreen;
+import model.Screens.MenuScreen;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,7 +19,6 @@ public class MainController {
         new MainController();
     }
 
-    private IngameScreen ingameScreen;
     private Environment environment;
     private Image cursor;
 
@@ -29,14 +28,17 @@ public class MainController {
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
         } catch (IOException ex) {
-            System.out.println("Bild konnrte nicht geladen werden!");
+            System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor);
         Game.load("assets/maps/game.litidata");
-        List<IMap> list = Game.getMaps();
-        environment = new Environment(list.get(0));
-        ingameScreen = new IngameScreen();
+        IMap map1 = Game.getMap("map1");
+        environment = new Environment(map1);
+        Game.loadEnvironment(environment);
+        Game.getScreenManager().addScreen(new MenuScreen());
+        IngameScreen ingameScreen = new IngameScreen(environment);
         Game.getScreenManager().addScreen(ingameScreen);
+        Game.getScreenManager().displayScreen(ingameScreen);
         GameController gameController = new GameController(environment,ingameScreen);
         Game.start();
     }

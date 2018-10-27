@@ -1,25 +1,22 @@
 package model;
 
-import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.GuiComponent;
+import model.Screens.IngameScreen;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class User extends GuiComponent {
 
     private GameClient client;
     private GameServer server;
-    private IngameScreen ingameScreen;
 
     private int port;
     private boolean clientActive;
     private int cursorX,cursorY;
 
-    public User(IngameScreen ingameScreen){
+    public User(){
         super(0,0);
         clientActive = false;
-        this.ingameScreen = ingameScreen;
     }
 
     public void init(){
@@ -27,7 +24,7 @@ public class User extends GuiComponent {
     }
 
     public void joinGame(String ip, int port){
-        client = new GameClient(ip,port,ingameScreen);
+        client = new GameClient(ip,port);
         if(client.isConnected()) {
             clientActive = true;
             System.out.println("joined " + ip + " at port " + port);
@@ -40,7 +37,7 @@ public class User extends GuiComponent {
         this.port = port;
         server = new GameServer(port);
 
-        client = new GameClient("localhost",port,ingameScreen);
+        client = new GameClient("localhost",port);
 
         clientActive = true;
     }

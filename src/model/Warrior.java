@@ -2,6 +2,7 @@ package model;
 
 
 import de.gurkenlabs.litiengine.Game;
+import model.Screens.IngameScreen;
 
 import java.awt.geom.Rectangle2D;
 

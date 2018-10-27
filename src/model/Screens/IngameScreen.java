@@ -1,29 +1,28 @@
-package model;
+package model.Screens;
 
-import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
+import model.GravitationalObject;
+import model.Player;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.io.*;
 import java.util.ArrayList;
 
 public class IngameScreen extends GameScreen {
 
     private ArrayList<GravitationalObject> gravObjects;
-    private Menu menu;
+    private Environment environment;
 
-    public IngameScreen(){
+    public IngameScreen(Environment environment){
+        super("INGAME");
         gravObjects = new ArrayList<>();
-        menu = new Menu();
-
+        this.environment = environment;
     }
 
     @Override
     public void render(final Graphics2D g){
         super.render(g);
-        menu.render(g);
+        environment.render(g);
         for(int i = 0; i < gravObjects.size(); i++){
             if(gravObjects.get(i) instanceof Player){
                 if(((Player) gravObjects.get(i)).getHurtbox().isHurting()){
@@ -49,27 +48,5 @@ public class IngameScreen extends GameScreen {
 
     public void removeGravObject(GravitationalObject g){
         gravObjects.remove(g);
-    }
-
-    private class Menu {
-
-        private int menuNumber;
-        private Image[] menuImages;
-
-        Menu(){
-            menuNumber = 0;
-            menuImages = new Image[4];
-            try {
-                menuImages[0] = ImageIO.read(new File("assets/img/menu.png"));
-            } catch (IOException ex) {
-                System.out.println("Bild konnrte nicht geladen werden!");
-            }
-        }
-
-        public void render(Graphics2D g) {
-            if (menuNumber == 0){
-                g.drawImage(menuImages[menuNumber],0,0,Game.getConfiguration().graphics().getResolutionWidth(),Game.getConfiguration().graphics().getResolutionHeight(),null);
-            }
-        }
     }
 }

@@ -4,6 +4,7 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.IEntity;
 import de.gurkenlabs.litiengine.input.Input;
+import model.Screens.IngameScreen;
 import model.abitur.datenstrukturen.List;
 import model.abitur.netz.Client;
 
@@ -18,13 +19,11 @@ public class GameClient extends Client implements IUpdateable {
     private int playerNumber;
 
     private List<Player> others;
-    private IngameScreen ingameScreen;
 
-    public GameClient(String ip, int port, IngameScreen ingameScreen){
+    public GameClient(String ip, int port){
         super(ip,port);
         ready = false;
         others = new List<>();
-        this.ingameScreen = ingameScreen;
         choosePlayer(1);
         Input.getLoop().attach(this);
         Input.keyboard().addKeyListener(new KeyListener() {
@@ -104,13 +103,11 @@ public class GameClient extends Client implements IUpdateable {
                                     Player otherPlayer = new Warrior(false);
                                     others.append(otherPlayer);
                                     Game.getEnvironment().add(otherPlayer);
-                                    ingameScreen.addGravObject(otherPlayer);
                                     System.out.println("Added player");
                                 } else if (charInfo[1].equals("Mage")) {
                                     Player otherPlayer = new Mage(false);
                                     others.append(otherPlayer);
                                     Game.getEnvironment().add(otherPlayer);
-                                    ingameScreen.addGravObject(otherPlayer);
                                     System.out.println("Added player");
                                 }
                             }
@@ -150,9 +147,9 @@ public class GameClient extends Client implements IUpdateable {
         entityList.toFirst();
         while(entityList.hasAccess()){
             Game.getEnvironment().add(entityList.getContent());
-            if(entityList.getContent() instanceof GravitationalObject){
-                ingameScreen.addGravObject((GravitationalObject)(entityList.getContent()));
-            }
+            /*if(entityList.getContent() instanceof GravitationalObject){
+
+            }*/
             entityList.next();
         }
     }
