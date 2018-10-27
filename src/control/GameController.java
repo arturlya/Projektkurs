@@ -3,6 +3,7 @@ package control;
 import de.gurkenlabs.litiengine.Game;
 import model.Screens.IngameScreen;
 import model.User;
+import model.Warrior;
 
 public class GameController {
     public GameController(de.gurkenlabs.litiengine.environment.Environment environment, IngameScreen ingameScreen) {
@@ -12,9 +13,9 @@ public class GameController {
 
         //IMap map = Game.getEnvironment().getMap();
 
-        /*Warrior m = new Warrior(true);
+        Warrior m = new Warrior(true);
         Game.getEnvironment().add(m);
-        ingameScreen.addGravObject(m);*/
+        ingameScreen.addGravObject(m);
 
         int switchFunction = 2;
 

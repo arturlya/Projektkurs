@@ -40,6 +40,7 @@ public class MainController {
         Game.getScreenManager().addScreen(ingameScreen);
         Game.getScreenManager().displayScreen(ingameScreen);
         GameController gameController = new GameController(environment,ingameScreen);
+        //Game.getScreenManager().displayScreen("MENU");
         Game.start();
     }
 }
