@@ -1,15 +1,23 @@
 package model;
 
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.configuration.Quality;
+import de.gurkenlabs.litiengine.graphics.DebugRenderer;
+import de.gurkenlabs.litiengine.graphics.IRenderable;
+import de.gurkenlabs.litiengine.graphics.RenderType;
+import de.gurkenlabs.litiengine.graphics.StaticShadowType;
 import de.gurkenlabs.litiengine.input.Input;
+import de.gurkenlabs.litiengine.util.TimeUtilities;
 import model.Screens.IngameScreen;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.logging.Level;
 
 import static control.Timer.dt;
 
-public abstract class Player extends GravitationalObject{
+public abstract class Player extends GravitationalObject {
 
     protected double attackWindUp, attackHurtTime, attackWindDown, speed;
     protected int directionLR, directionUD, lookingAt;
@@ -27,6 +35,25 @@ public abstract class Player extends GravitationalObject{
         directionUD = -1;
         speed = 100;
         this.playable = playable;
+
+    }
+
+    @Override
+    public void render(Graphics2D g){
+        super.render(g);
+
+        if(hurtbox.isHurting()){
+            g.setColor(new Color(255,0,0,100));
+        }else{
+            g.setColor(new Color(0,255,0,100));
+        }
+        g.fill(hurtbox);
+        g.setColor(new Color(70,120,255));
+        if(shieldActive == true) {
+            g.setColor(new Color(150,150,150));
+        }
+        g.fill(hitbox);
+
     }
 
     @Override
