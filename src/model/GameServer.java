@@ -11,7 +11,10 @@ public class GameServer extends Server {
     private Player[] players;
 
 
-
+    /**
+     *
+     * @param port Port des Servers
+     */
     public GameServer(int port){
         super(port);
         startVote = 0;
@@ -19,6 +22,12 @@ public class GameServer extends Server {
         players = new Player[maxPlayers];
     }
 
+    /**
+     * Methode, die bei neuer Verbindung aufgerufen wird.
+     *
+     * @param pClientIP IP des beigetretenen Clients
+     * @param pClientPort Port des beigetretenen Clients
+     */
     @Override
     public void processNewConnection(String pClientIP, int pClientPort) {
         numberOfPlayers++;
@@ -35,8 +44,18 @@ public class GameServer extends Server {
 
     }
 
+    /**
+     * Verarbeitet die Nachrichten der Clients.
+     *
+     * @param pClientIP IP des Clients
+     * @param pClientPort Port des Clients
+     * @param pMessage Nachricht des Clients.
+     *                 - Bei "START" wertet der Server den Vote des Clients aus
+     *                 - bei "PLAYER" merkt er sich den neuen Spieler und gibt ihm eine Spielernummer
+     *                 - bei "POSITION" aktualisiert er die Position des bewegenden Spielers und leitet diese Nachricht weiter
+     */
     @Override
-    public void processMessage(String pClientIP, int pClientPort, Object pMessage) {
+    public void processMessage(String pClientIP, int pClientPort, String pMessage) {
         if(pMessage.getClass().getName().equals("java.lang.String")) {
             String message = pMessage.toString();
             if (message.contains("START") && numberOfPlayers > 1) {
@@ -56,31 +75,28 @@ public class GameServer extends Server {
                 switch (Integer.parseInt(temp[2])) {
                     case 1:
                         players[Integer.parseInt(temp[1]) - 1] = new Warrior(false);
-                        players[Integer.parseInt(temp[1])-1].setPlayerNumber(Integer.parseInt(temp[1]));
+                        players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
                         break;
                     case 2:
                         players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
-                        players[Integer.parseInt(temp[1])-1].setPlayerNumber(Integer.parseInt(temp[1]));
+                        players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
                         break;
                 }
                 System.out.println("Sended all players");
                 sendToAll(getAllPlayers());
+
 
             } else if (message.contains("POSITION")) {
                 sendToAll(message);
                 String[] temp = message.split("POSITION");
                 String[] help = temp[1].split("#", 3);
 
-                if (players[Integer.parseInt(help[0])] != null) {
-                    players[Integer.parseInt(help[0])].setX(Double.parseDouble(help[1]));
-                    players[Integer.parseInt(help[0])].setY(Double.parseDouble(help[2]));
+                if (players[Integer.parseInt(help[0])-1] != null) {
+                    players[Integer.parseInt(help[0])-1].setX(Double.parseDouble(help[1]));
+                    players[Integer.parseInt(help[0])-1].setY(Double.parseDouble(help[2]));
                     //System.out.println("Refreshing");
                 }
             }
-        }else if(pMessage.getClass().getName().equals("model.Player")){
-            System.out.println("got Player");
-            Player player = (Player) pMessage;
-            players[player.getPlayerNumber()-1] = player;
         }
         if(isStarting() && startVote<10){
 
@@ -96,18 +112,23 @@ public class GameServer extends Server {
             //System.out.println("Game is starting");
         }
 
-        for(int i=0;i<players.length;i++){
-            if(players[i] != null)
-            System.out.println(players[i].getPlayerNumber());
-        }
     }
 
+    /**
+     * Verarbeitet das Verlassen eies Spielers
+     *
+     * @param pClientIP IP des gegangenen Spielers
+     * @param pClientPort Port des gegangenen Spielers
+     */
     @Override
     public void processClosingConnection(String pClientIP, int pClientPort) {
         System.out.println("Player left the game");
         sendToAll("QUIT");
     }
 
+    /**
+     * @return Gibt zurück, ob alle Spieler( müssen mehr als 1 sein) bereit sind.
+     */
     private boolean isStarting(){
         if(startVote == numberOfPlayers && numberOfPlayers >1){
             return true;
@@ -116,6 +137,9 @@ public class GameServer extends Server {
         }
     }
 
+    /**
+     * @return Gibt einen String mit allen Spieler Unterklassen der einzelnen Clients mit dem Schlüsselwort "ALL"
+     */
     private String getAllPlayers(){
         String temp = "ALL"+numberOfPlayers+"NEXT";
         for(int i=0;i<players.length;i++){
