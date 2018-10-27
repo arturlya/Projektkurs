@@ -2,12 +2,14 @@ package model;
 
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;
+import de.gurkenlabs.litiengine.graphics.IRenderable;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import static control.Timer.dt;
 
-public class GravitationalObject extends Entity implements IUpdateable{
+public class GravitationalObject extends Entity implements IUpdateable, IRenderable {
 
     protected double verticalSpeed, horizontalSpeed;
     protected boolean inAir;
@@ -18,6 +20,10 @@ public class GravitationalObject extends Entity implements IUpdateable{
         setX(getX() + horizontalSpeed * dt);
         setY(getY() + verticalSpeed * dt);
         hitbox.setRect(this.getX(),this.getY(),this.getWidth(),this.getHeight());
+    }
+
+    @Override
+    public void render(Graphics2D graphics2D) {
     }
 
     public double getVerticalSpeed() {

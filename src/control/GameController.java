@@ -1,6 +1,8 @@
 package control;
 
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.RenderType;
+import model.GravitationalObject;
 import model.Screens.IngameScreen;
 import model.User;
 import model.Warrior;
@@ -12,10 +14,15 @@ public class GameController {
         Game.getEnvironment().add(new PhysicsController(ingameScreen.getGravObjects()));
 
         //IMap map = Game.getEnvironment().getMap();
-
+/*
         Warrior m = new Warrior(true);
+        m.setX(0);
+        m.setY(100);
         Game.getEnvironment().add(m);
-        ingameScreen.addGravObject(m);
+        Game.getEnvironment().add(m,RenderType.NORMAL);
+*/
+        //ingameScreen.addGravObject(m);
+
 
         int switchFunction = 2;
 

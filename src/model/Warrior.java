@@ -4,6 +4,7 @@ package model;
 import de.gurkenlabs.litiengine.Game;
 import model.Screens.IngameScreen;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Warrior extends Player{
@@ -13,12 +14,11 @@ public class Warrior extends Player{
 
     public Warrior(boolean playable){
         super(playable);
-        this.setX(Math.random()*300+400);
-        this.setY(300);
         setWidth(50);
         setHeight(100);
         setName("Warrior");
     }
+
 
     @Override
     public void update() {
@@ -33,6 +33,7 @@ public class Warrior extends Player{
         if(firstAttackDown){
             secondDownAttack();
         }
+        //hitbox.setRect(getX(),getY(),50,100);
     }
 
     @Override
@@ -132,7 +133,7 @@ public class Warrior extends Player{
     @Override
     public void specialAttackStand() {
         attackWindUp = 0.2;
-        shoot(getX(),getY()+hitbox.height*0.25,20,10);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10);
         attackWindDown = 0.3;
     }
 
