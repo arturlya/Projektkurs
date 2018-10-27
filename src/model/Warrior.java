@@ -156,6 +156,8 @@ public class Warrior extends Player{
             hitbox = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
             isActive = false;
             directionChosen = false;
+            inAir = true;
+            setVerticalSpeed(-350);
         }
 
         @Override
@@ -169,7 +171,6 @@ public class Warrior extends Player{
                 }
                 directionChosen = true;
             }
-            setVerticalSpeed(-350);
         }
     }
 }

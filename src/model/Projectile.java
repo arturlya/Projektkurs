@@ -22,10 +22,11 @@ public class Projectile extends GravitationalObject {
         hurtbox.setDamage(0);
         hurtbox.setKnockback(0);
         if(player.getLookingAt() == 1 ){
-            setHorizontalSpeed(500);
+            setHorizontalSpeed(1000);
         }else{
-            setHorizontalSpeed(-500);
+            setHorizontalSpeed(-1000);
         }
+        inAir = true;
     }
 
     public Hurtbox getHurtbox() {
