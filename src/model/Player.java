@@ -22,6 +22,7 @@ public abstract class Player extends GravitationalObject {
     protected double attackWindUp, attackHurtTime, attackWindDown, speed;
     protected int directionLR, directionUD, lookingAt;
     protected Hurtbox hurtbox;
+
     protected boolean shieldActive;
     protected Projectile projectile;
     protected boolean moving;
@@ -35,6 +36,8 @@ public abstract class Player extends GravitationalObject {
         directionUD = -1;
         speed = 100;
         this.playable = playable;
+        setY(200);
+        setX(Math.random()*300+400);
 
     }
 
