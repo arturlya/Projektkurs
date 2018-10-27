@@ -16,9 +16,9 @@ public class GameController {
 
         //IMap map = Game.getEnvironment().getMap();
 
-        Warrior m = new Warrior(true);
+        /**Warrior m = new Warrior(true);
         Game.getEnvironment().add(m);
-        ingameScreen.addGravObject(m);
+        ingameScreen.addGravObject(m);**/
 
         int switchFunction = 2;
 
@@ -28,7 +28,7 @@ public class GameController {
             user.init();
 
 
-        }else {
+        }else if (switchFunction == 2){
             User user2 = new User(ingameScreen);
             user2.joinGame("localhost", 2796);
             user2.init();

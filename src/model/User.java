@@ -1,5 +1,6 @@
 package model;
 
+import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.GuiComponent;
 
 import java.awt.*;
@@ -50,9 +51,23 @@ public class User extends GuiComponent {
         }
     }
 
+    /*@Override
+    public void mousePressed(MouseEvent e) {
+        super.mousePressed(e);
+        System.out.println(1);
+        if (e.getX() >= 645*1920/Game.getConfiguration().graphics().getResolutionWidth() && e.getX() <= 1270*1920/Game.getConfiguration().graphics().getResolutionWidth()) {
+            System.out.println(1);
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println(1);
+    }*/
+
     @Override
     public void mouseMoved(MouseEvent e) {
         super.mouseMoved(e);
-
+        System.out.println(1);
     }
 }

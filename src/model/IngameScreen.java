@@ -1,5 +1,6 @@
 package model;
 
+import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 
 import javax.imageio.ImageIO;
@@ -50,11 +51,6 @@ public class IngameScreen extends GameScreen {
         gravObjects.remove(g);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        super.mouseClicked(e);
-    }
-
     private class Menu {
 
         private int menuNumber;
@@ -72,7 +68,7 @@ public class IngameScreen extends GameScreen {
 
         public void render(Graphics2D g) {
             if (menuNumber == 0){
-                g.drawImage(menuImages[menuNumber],0,0,1920,1080,null);
+                g.drawImage(menuImages[menuNumber],0,0,Game.getConfiguration().graphics().getResolutionWidth(),Game.getConfiguration().graphics().getResolutionHeight(),null);
             }
         }
     }
