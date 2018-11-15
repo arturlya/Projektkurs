@@ -36,9 +36,10 @@ public class PhysicsController extends Entity implements IUpdateable {
         if(Game.getEnvironment().getEntities().size() != entityAmount){
             updateGravObjects();
         }
-        for(int i = 0; i < gravObjects.size(); i++){
-            if(gravObjects.get(i).isInAir()){
-                gravObjects.get(i).setVerticalSpeed(gravObjects.get(i).getVerticalSpeed() + 500 * dt);
+        for(GravitationalObject g : gravObjects){
+
+            if(g.isInAir()){
+                g.setVerticalSpeed(g.getVerticalSpeed() + 500 * dt);
             }
         }
     }
@@ -54,5 +55,9 @@ public class PhysicsController extends Entity implements IUpdateable {
             }
         }
         entityAmount = Game.getEnvironment().getEntities().size();
+    }
+
+    public ArrayList<GravitationalObject> getGravObjects() {
+        return gravObjects;
     }
 }
