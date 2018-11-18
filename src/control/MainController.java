@@ -2,16 +2,12 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
-import de.gurkenlabs.litiengine.environment.tilemap.IMap;
-import de.gurkenlabs.litiengine.gui.screens.GameScreen;
-import model.Screens.IngameScreen;
-import model.Screens.MenuScreen;
+import model.Maps.Map1;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class MainController {
 
@@ -19,28 +15,24 @@ public class MainController {
         new MainController();
     }
 
-    private Environment environment;
+    private ScreenController screenController;
+    private Environment menu,blank;
     private Image cursor;
 
     public MainController(){
         Game.init();
-        Game.getConfiguration().graphics().setFullscreen(false);
+        Game.getConfiguration().graphics().setFullscreen(true);
+        Game.getRenderEngine().setBaseRenderScale(1.0f);
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor);
-        Game.load("assets/maps/game.litidata");
-        IMap map1 = Game.getMap("map1");
-        environment = new Environment(map1);
-        Game.loadEnvironment(environment);
-        Game.getScreenManager().addScreen(new MenuScreen());
-        IngameScreen ingameScreen = new IngameScreen(environment);
-        Game.getScreenManager().addScreen(ingameScreen);
-        Game.getScreenManager().displayScreen(ingameScreen);
-        GameController gameController = new GameController(environment,ingameScreen);
-        //Game.getScreenManager().displayScreen("MENU");
+        screenController = new ScreenController();
+        //screenController.setIngameScreen(new Map1());
+        screenController.setMenuScreen();
+        new GameController(screenController.getIngameScreen());
         Game.start();
     }
 }

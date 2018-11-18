@@ -11,18 +11,15 @@ import java.util.ArrayList;
 public class IngameScreen extends GameScreen {
 
     private ArrayList<GravitationalObject> gravObjects;
-    private Environment environment;
 
-    public IngameScreen(Environment environment){
+    public IngameScreen(){
         super("INGAME");
         gravObjects = new ArrayList<>();
-        this.environment = environment;
     }
 
     @Override
     public void render(final Graphics2D g){
         super.render(g);
-        environment.render(g);
         for(int i = 0; i < gravObjects.size(); i++){
             if(gravObjects.get(i) instanceof Player){
                 if(((Player) gravObjects.get(i)).getHurtbox().isHurting()){

@@ -8,7 +8,7 @@ import model.User;
 import model.Warrior;
 
 public class GameController {
-    public GameController(de.gurkenlabs.litiengine.environment.Environment environment, IngameScreen ingameScreen) {
+    public GameController(IngameScreen ingameScreen) {
 
         Game.getEnvironment().add(new Timer());
         Game.getEnvironment().add(new PhysicsController(ingameScreen.getGravObjects()));
