@@ -15,7 +15,7 @@ import static control.Timer.dt;
 /**
  * Kontrolliert die Physik aller GravitationalObjects
  */
-public class PhysicsController extends Entity implements IUpdateable {
+public class PhysicsController implements IUpdateable {
     private ArrayList<GravitationalObject> gravObjects;
     private Collection entities;
     private int entityAmount;
@@ -25,6 +25,7 @@ public class PhysicsController extends Entity implements IUpdateable {
      *
      */
     public PhysicsController(){
+        Game.getLoop().attach(this);
         this.gravObjects = new ArrayList<>();
         entities = Game.getEnvironment().getEntities();
         entityAmount = entities.size();
@@ -39,7 +40,7 @@ public class PhysicsController extends Entity implements IUpdateable {
         for(GravitationalObject g : gravObjects){
 
             if(g.isInAir()){
-                g.setVerticalSpeed(g.getVerticalSpeed() + 500 * dt);
+                g.setVerticalSpeed(g.getVerticalSpeed() + 1000 * dt);
             }
         }
     }

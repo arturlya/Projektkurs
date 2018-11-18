@@ -1,5 +1,6 @@
 package model;
 
+import com.sun.javafx.image.impl.IntArgb;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.configuration.Quality;
 import de.gurkenlabs.litiengine.graphics.DebugRenderer;
@@ -8,6 +9,7 @@ import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.graphics.StaticShadowType;
 import de.gurkenlabs.litiengine.input.Input;
 import de.gurkenlabs.litiengine.util.TimeUtilities;
+import de.gurkenlabs.litiengine.util.geom.Vector2D;
 import model.Screens.IngameScreen;
 
 import java.awt.*;
@@ -19,10 +21,11 @@ import static control.Timer.dt;
 
 public abstract class Player extends GravitationalObject {
 
-    protected double attackWindUp, attackHurtTime, attackWindDown, speed;
+    protected double attackWindUp, attackHurtTime, attackWindDown, speed, invincibilityTimer;
     protected int directionLR, directionUD, lookingAt;
     protected Hurtbox hurtbox;
     protected boolean attackTriggered;
+    protected int knockbackPercentage;
 
     protected boolean shieldActive;
     protected Projectile projectile;
@@ -64,6 +67,9 @@ public abstract class Player extends GravitationalObject {
     public void update() {
         super.update();
 
+        if(invincibilityTimer > 0){
+            invincibilityTimer -= dt;
+        }
 
         if(attackWindDown <= 0){
             hurtbox.setRect(-100,-100,0,0);
@@ -92,21 +98,9 @@ public abstract class Player extends GravitationalObject {
 
         //bewegung, abhängig von richtung
         if(attackWindDown <= 0) {
-            switch (directionLR) {
-                case 0:
-                    setHorizontalSpeed(-speed);
-                    moving = true;
-                    break;
-                case 1:
-                    setHorizontalSpeed(speed);
-                    moving = true;
-                    break;
-                case -1:
-                    setHorizontalSpeed(0);
-                    moving = false;
-                    break;
-            }
+            horizontalMovement();
         }
+        horizontalDecelerate();
 
         if(playable) {
             //richtung setzen
@@ -174,6 +168,49 @@ public abstract class Player extends GravitationalObject {
                 Game.getEnvironment().remove(projectile);
                 projectile = null;
             }
+        }
+    }
+
+    public void horizontalMovement(){
+        if(directionLR == 0){
+            if(horizontalSpeed > -speed){
+                horizontalSpeed -= speed * dt * 40;
+                moving = true;
+            }
+        }else if(directionLR == 1){
+            if(horizontalSpeed < speed){
+                horizontalSpeed += speed * dt * 40;
+                moving = true;
+            }
+        }else if(directionLR == -1){
+            moving = false;
+        }
+    }
+
+    public void horizontalDecelerate(){
+        if(horizontalSpeed < 50 && horizontalSpeed > -50){
+            horizontalSpeed = 0;
+        }else if(horizontalSpeed > 50){
+            horizontalSpeed -= 1000*dt;
+        }else if(horizontalSpeed < -50){
+            horizontalSpeed += 1000*dt;
+        }
+    }
+
+    public void registerHit(Vector2D direction, Hurtbox hurtbox){
+        if(invincibilityTimer <= 0) {
+            knockbackPercentage += hurtbox.getDamage();
+            if(knockbackPercentage < 10){
+                verticalSpeed = direction.getY() * hurtbox.getKnockback() * 1.1;
+                horizontalSpeed = direction.getX() * hurtbox.getKnockback() * 1.1;
+            }
+            verticalSpeed = direction.getY() * hurtbox.getKnockback() * Math.pow(1.1, knockbackPercentage/10);
+            horizontalSpeed = direction.getX() * hurtbox.getKnockback() * Math.pow(1.1, knockbackPercentage/10);
+            //Später rausnehmen
+            if(verticalSpeed != 0){
+                inAir = true;
+            }
+            invincibilityTimer = 0.5;
         }
     }
 
