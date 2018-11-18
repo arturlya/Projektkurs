@@ -22,6 +22,7 @@ public abstract class Player extends GravitationalObject {
     protected double attackWindUp, attackHurtTime, attackWindDown, speed;
     protected int directionLR, directionUD, lookingAt;
     protected Hurtbox hurtbox;
+    protected boolean attackTriggered;
 
     protected boolean shieldActive;
     protected Projectile projectile;
@@ -81,6 +82,12 @@ public abstract class Player extends GravitationalObject {
         }
         if(attackWindUp <= 0){
             shieldActive = false;
+            attackTriggered = false;
+        }
+
+        //hurtbox relativ zum Spieler mitbewegen
+        if(attackWindDown > 0){
+            hurtbox.setRect(getX() + hurtbox.getRelativeX(), getY() + hurtbox.getRelativeY(), hurtbox.getWidth(), hurtbox.getHeight());
         }
 
         //bewegung, abhängig von richtung
@@ -207,6 +214,7 @@ public abstract class Player extends GravitationalObject {
             projectile = new Projectile(this, paramX, paramY, width, height);
             ((IngameScreen) Game.getScreenManager().getCurrentScreen()).addGravObject(projectile);
             Game.getEnvironment().add(projectile);
+            Game.getEnvironment().add(projectile,RenderType.NORMAL);
         }
     }
 

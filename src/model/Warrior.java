@@ -41,10 +41,13 @@ public class Warrior extends Player{
         if(!inAir) {
             directionLR = -1;
             if (lookingAt == 1) {
-                hurtbox.setRect(getX()+hitbox.width,getY(),50,100);
+                //hurtbox.setRect(getX()+hitbox.width,getY(),50,100);
+                hurtbox.setRelativeRect(hitbox.width,0,hitbox.width,hitbox.height);
+
 
             } else {
-                hurtbox.setRect(getX()-hitbox.width,getY(),50,100);
+                //hurtbox.setRect(getX()-hitbox.width,getY(),50,100);
+                hurtbox.setRelativeRect(-hitbox.width,0,hitbox.width,hitbox.height);
             }
             hurtbox.setDamage(0);
             hurtbox.setKnockback(0);
@@ -57,7 +60,12 @@ public class Warrior extends Player{
     @Override
     public void normalAttackDown() {
         if(!inAir){
-            hurtbox.setRect(getX() - hitbox.width, getY() + hitbox.height * 0.8, hitbox.getWidth(), hitbox.getHeight() * 0.2);
+            if(lookingAt == 0) {
+                //hurtbox.setRect(getX() - hitbox.width, getY() + hitbox.height * 0.8, hitbox.getWidth(), hitbox.getHeight() * 0.2);
+                hurtbox.setRelativeRect(-hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
+            }else{
+                hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
+            }
             hurtbox.setDamage(0);
             hurtbox.setKnockback(0);
             attackWindUp = 0.5;
@@ -70,7 +78,12 @@ public class Warrior extends Player{
     }
 
     private void secondDownAttack() {
-        hurtbox.setRect(getX() + hitbox.width, getY() + hitbox.height * 0.8, hitbox.getWidth(), hitbox.getHeight() * 0.2);
+        if(lookingAt == 0) {
+            //hurtbox.setRect(getX() + hitbox.width, getY() + hitbox.height * 0.8, hitbox.getWidth(), hitbox.getHeight() * 0.2);
+            hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
+        }else{
+            hurtbox.setRelativeRect(-hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
+        }
         hurtbox.setDamage(0);
         hurtbox.setKnockback(0);
         attackWindUp = 0.1;
@@ -83,7 +96,8 @@ public class Warrior extends Player{
     @Override
     public void normalAttackUp() {
         if(!inAir){
-            hurtbox.setRect(getX()- hitbox.getWidth()*0.1,getY()- hitbox.getHeight()*0.5,hitbox.width+hitbox.getWidth()*0.2,hitbox.getHeight()*0.5);
+            //hurtbox.setRect(getX()- hitbox.getWidth()*0.1,getY()- hitbox.getHeight()*0.5,hitbox.width+hitbox.getWidth()*0.2,hitbox.getHeight()*0.5);
+            hurtbox.setRelativeRect(-hitbox.width*0.1, -hitbox.height*0.5,hitbox.width+hitbox.width*0.2,hitbox.height*0.5);
             hurtbox.setDamage(0);
             hurtbox.setKnockback(0);
             attackWindUp = 0.3;
@@ -95,14 +109,16 @@ public class Warrior extends Player{
     @Override
     public void normalAttackStand() {
         if(lookingAt == 1){
-            hurtbox.setRect(getX()+ hitbox.getWidth(),getY()+ hitbox.getHeight()*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
+            //hurtbox.setRect(getX()+ hitbox.getWidth(),getY()+ hitbox.getHeight()*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
+            hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
             hurtbox.setDamage(0);
             hurtbox.setKnockback(0);
             attackWindUp = 0.2;
             attackHurtTime = 0.3;
             attackWindDown = 0.1;
         }else{
-            hurtbox.setRect(getX()- hitbox.getWidth()*1.5,getY()+ hitbox.getHeight()*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
+            //hurtbox.setRect(getX()- hitbox.getWidth()*1.5,getY()+ hitbox.getHeight()*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
+            hurtbox.setRelativeRect(-hitbox.width*1.5,hitbox.height*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
             hurtbox.setDamage(0);
             hurtbox.setKnockback(0);
             attackWindUp = 0.2;

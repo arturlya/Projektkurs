@@ -23,8 +23,11 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
     }
 
     @Override
-    public void render(Graphics2D graphics2D) {
+    public void render(Graphics2D g) {
+        g.setColor(new Color(70,120,255));
+        g.fill(hitbox);
     }
+
 
     public double getVerticalSpeed() {
         return verticalSpeed;
@@ -57,4 +60,5 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
     public void setHitbox(Rectangle2D.Double hitbox) {
         this.hitbox = hitbox;
     }
+
 }

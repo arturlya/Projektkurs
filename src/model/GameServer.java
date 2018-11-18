@@ -82,7 +82,7 @@ public class GameServer extends Server {
                         players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
                         break;
                 }
-                System.out.println("Sended all players");
+                //System.out.println("Sended all players");
                 sendToAll(getAllPlayers());
 
 
@@ -91,20 +91,23 @@ public class GameServer extends Server {
                 String[] temp = message.split("POSITION");
                 String[] help = temp[1].split("#", 3);
 
-                if (players[Integer.parseInt(help[0])-1] != null) {
+               /* if (players[Integer.parseInt(help[0])-1] != null) {
                     players[Integer.parseInt(help[0])-1].setX(Double.parseDouble(help[1]));
                     players[Integer.parseInt(help[0])-1].setY(Double.parseDouble(help[2]));
                     //System.out.println("Refreshing");
-                }
+                }*/
             }
+
         }
         if(isStarting() && startVote<10){
 
             if(players[0] != null && players[1] != null) {
-                sendToAll("STARTtrue");
-                sendToAll(getAllPlayers());
-                startVote = Integer.MAX_VALUE;
-                System.out.println("Sended all players");
+                if(players[0].getPlayerNumber()!= 0 && players[1].getPlayerNumber() != 0) {
+                    sendToAll(getAllPlayers());
+                    sendToAll("STARTtrue");
+                    startVote = Integer.MAX_VALUE;
+                    System.out.println("Sended all players");
+                }
             }else{
                 System.out.println("Nicht alle haben einen Spieler gewählt");
                 sendToAll("CHOOSE");
