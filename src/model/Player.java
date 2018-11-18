@@ -110,27 +110,27 @@ public abstract class Player extends GravitationalObject {
 
         if(playable) {
             //richtung setzen
-            Input.keyboard().onKeyPressed(KeyEvent.VK_LEFT, (key) -> {
+            Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
                 directionLR = 0;
                 lookingAt = 0;
                 moving = true;
             });
-            Input.keyboard().onKeyReleased(KeyEvent.VK_LEFT, (key) -> {
+            Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
                 directionLR = -1;
                 moving = false;
             });
-            Input.keyboard().onKeyPressed(KeyEvent.VK_RIGHT, (key) -> {
+            Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
                 directionLR = 1;
                 lookingAt = 1;
             });
-            Input.keyboard().onKeyReleased(KeyEvent.VK_RIGHT, (key) -> directionLR = -1);
-            Input.keyboard().onKeyPressed(KeyEvent.VK_UP, (key) -> directionUD = 0);
-            Input.keyboard().onKeyReleased(KeyEvent.VK_UP, (key) -> directionUD = -1);
-            Input.keyboard().onKeyPressed(KeyEvent.VK_DOWN, (key) -> directionUD = 1);
-            Input.keyboard().onKeyReleased(KeyEvent.VK_DOWN, (key) -> directionUD = -1);
+            Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> directionLR = -1);
+            Input.keyboard().onKeyPressed(StaticData.moveUp, (key) -> directionUD = 0);
+            Input.keyboard().onKeyReleased(StaticData.moveUp, (key) -> directionUD = -1);
+            Input.keyboard().onKeyPressed(StaticData.moveDown, (key) -> directionUD = 1);
+            Input.keyboard().onKeyReleased(StaticData.moveDown, (key) -> directionUD = -1);
 
             //Angriffe
-            Input.keyboard().onKeyTyped(KeyEvent.VK_A, (key) -> {
+            Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
                 if (attackWindDown <= 0) {
                     setHorizontalSpeed(0);
                     if (directionLR != -1) {
@@ -144,7 +144,7 @@ public abstract class Player extends GravitationalObject {
                     }
                 }
             });
-            Input.keyboard().onKeyTyped(KeyEvent.VK_S, (key) -> {
+            Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
                 if (attackWindDown <= 0) {
                     setHorizontalSpeed(0);
                     if (directionLR != -1) {
@@ -159,7 +159,7 @@ public abstract class Player extends GravitationalObject {
                 }
             });
             //Jump
-            Input.keyboard().onKeyTyped(KeyEvent.VK_W, (key) -> {
+            Input.keyboard().onKeyTyped(StaticData.jump, (key) -> {
                 if(attackWindDown <= 0){
                     if(!inAir){
                         setVerticalSpeed(-500);

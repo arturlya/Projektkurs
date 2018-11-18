@@ -11,7 +11,7 @@ public class GameController {
     public GameController(IngameScreen ingameScreen) {
 
         Game.getEnvironment().add(new Timer());
-        Game.getEnvironment().add(new PhysicsController(ingameScreen.getGravObjects()));
+        Game.getEnvironment().add(new PhysicsController());
 
         //IMap map = Game.getEnvironment().getMap();
 /*
