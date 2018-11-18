@@ -56,7 +56,7 @@ public class MenuScreen extends Screen implements IUpdateable {
     @Override
     public void update() {
         Input.keyboard().onKeyPressed(KeyEvent.VK_ENTER, (key) -> {
-            if (textFields.get(0).getText().length() == 5 && )
+            //if (textFields.get(0).getText().length() == 5 && )
         });
     }
 
