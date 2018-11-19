@@ -1,15 +1,12 @@
 package model.Screens;
 
-import com.sun.deploy.util.StringUtils;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.graphics.Spritesheet;
 import de.gurkenlabs.litiengine.gui.*;
 import de.gurkenlabs.litiengine.gui.Menu;
-import de.gurkenlabs.litiengine.gui.screens.Resolution;
 import de.gurkenlabs.litiengine.gui.screens.Screen;
 import de.gurkenlabs.litiengine.input.Input;
-import de.gurkenlabs.litiengine.sound.Sound;
 import model.*;
 
 import javax.imageio.ImageIO;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 public class MenuScreen extends Screen implements IUpdateable {
 
     private String menuName;
-    public static String port;
+    public static String joinPort,hostPort;
     private char[] chars;
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
     private static boolean chooseKey;
@@ -79,18 +76,30 @@ public class MenuScreen extends Screen implements IUpdateable {
 
     @Override
     public void update() {
-        Input.keyboard().onKeyTyped(KeyEvent.VK_ESCAPE, (key) -> {
-            menuName = "main";
-        });
+        Input.keyboard().onKeyTyped(KeyEvent.VK_ESCAPE, (key) -> menuName = "main");
         Input.keyboard().onKeyTyped(KeyEvent.VK_ENTER, (key) -> {
-            if (textFields.get(0).getText().length() == 4 && textFields.get(0).getText() != null) {
+            if (textFields.get(0).getText().length() == 4 && textFields.get(0).getText() != null && menuName.equalsIgnoreCase("join")) {
                 chars = textFields.get(0).getText().toCharArray();
                 boolean isNumber = false;
                 for (char aChar : chars) {
                     isNumber = Character.isDigit(aChar);
                     if (!isNumber) break;
                 }
-                if (isNumber) port = textFields.get(0).getText();
+                if (isNumber) {
+                    joinPort = textFields.get(0).getText();
+                    textFields.get(0).setText("");
+                }
+            }else if (textFields.get(1).getText().length() == 4 && textFields.get(1).getText() != null && menuName.equalsIgnoreCase("create")) {
+                chars = textFields.get(1).getText().toCharArray();
+                boolean isNumber = false;
+                for (char aChar : chars) {
+                    isNumber = Character.isDigit(aChar);
+                    if (!isNumber) break;
+                }
+                if (isNumber) {
+                    hostPort = textFields.get(1).getText();
+                    textFields.get(1).setText("");
+                }
             }
         });
         if (chooseKey && keyChecker.getKey() != 0 && keyChecker.getKey() != 27) {
@@ -136,11 +145,12 @@ public class MenuScreen extends Screen implements IUpdateable {
             for (ImageComponent button : buttons) {
                 button.render(g);
             }
-        } else if (menuName.equalsIgnoreCase("create")) {
+        }else if (menuName.equalsIgnoreCase("join")) {
             g.drawImage(trans, 0, 0, width, height, null);
             textFields.get(0).render(g);
-        } else if (menuName.equalsIgnoreCase("join")) {
-            textFields.get(0).render(g);
+        }else if (menuName.equalsIgnoreCase("create")) {
+            g.drawImage(trans, 0, 0, width, height, null);
+            textFields.get(1).render(g);
         }else if (menuName.equalsIgnoreCase("options")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
@@ -155,7 +165,7 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(trans,0,0,width,height,null);
             audio.render(g);
             g.drawString("Volume: ",width/2-200,height/2-117);
-            g.drawString(""+StaticData.audioVolume,width/2+200,height/2-317);
+            g.drawString(""+audio.getCurrentValue(),width/2+200,height/2-117);
         }else if (menuName.equalsIgnoreCase("overall")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
@@ -196,8 +206,11 @@ public class MenuScreen extends Screen implements IUpdateable {
     }
 
     private void createTextField(){
-        textFields.add(new TextFieldComponent(910,520,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),null));
+        textFields.add(new TextFieldComponent(910,520,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
+        textFields.add(new TextFieldComponent(910,520,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
         for (TextFieldComponent textField : textFields) {
+            textField.setFormat(TextFieldComponent.INTEGER_FORMAT);
+            textField.setMaxLength(4);
             textField.prepare();
         }
     }
@@ -227,6 +240,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         audio = new HorizontalSlider(width/2-100,height/2-150,300,50,0,100,5,null,null,true);
         audio.prepare();
         audio.setEnabled(true);
+        audio.setCurrentValue(StaticData.audioVolume);
     }
 
     private void createFullscreenCheckMark(){

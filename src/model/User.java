@@ -40,7 +40,7 @@ public class User extends GuiComponent {
         client = new GameClient(ip,port);
         if(client.isConnected()) {
             clientActive = true;
-            System.out.println("joined " + ip + " at port " + port);
+            System.out.println("joined " + ip + " at joinPort " + port);
         }else{
             System.out.println("couldn't connect to "+ip);
         }

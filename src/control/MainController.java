@@ -36,7 +36,7 @@ public class MainController {
         /**
          * Wer von euch lit ist uncommented!
          */
-        //Game.getSoundEngine().playMusic(Sound.get("assets/audio/Musik/bgm.mp3"));
+        Game.getSoundEngine().playMusic(Sound.get("assets/audio/Musik/bgm.mp3"));
         Game.start();
     }
 }

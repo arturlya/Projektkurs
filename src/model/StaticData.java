@@ -17,7 +17,7 @@ public final class StaticData {
     public static int jump = KeyEvent.VK_UP;
     public static int normalAttack = KeyEvent.VK_LEFT;
     public static int specialAttack = KeyEvent.VK_DOWN;
-    public static int audioVolume = 100;
+    public static float audioVolume = Game.getConfiguration().sound().getMusicVolume()*100;
 
 
     public StaticData() {
