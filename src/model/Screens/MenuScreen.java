@@ -1,5 +1,6 @@
 package model.Screens;
 
+import control.Config;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.graphics.Spritesheet;
@@ -105,29 +106,36 @@ public class MenuScreen extends Screen implements IUpdateable {
         if (chooseKey && keyChecker.getKey() != 0 && keyChecker.getKey() != 27) {
             for (int i = 0; i < keyMenu.getCellComponents().size(); i++) {
                 if (KeyEvent.getKeyText(keyChecker.getKey()).equalsIgnoreCase(keyMenu.getCellComponents().get(i).getText())) {
-                    //Doppelten Key löschen
+                    keyMenu.getCellComponents().get(i).setText("");
+                    if (i == 0) StaticData.moveUp = 0;
+                    if (i == 1) StaticData.moveDown = 0;
+                    if (i == 2) StaticData.moveLeft = 0;
+                    if (i == 3) StaticData.moveRight = 0;
+                    if (i == 4) StaticData.jump = 0;
+                    if (i == 5) StaticData.normalAttack = 0;
+                    if (i == 6) StaticData.specialAttack = 0;
                 }
             }
             if (keyNameMenu.getCurrentSelection() == 0) {
-                StaticData.moveUp = keyChecker.getKey();
+                Config.pref.putInt("moveUp",keyChecker.getKey());
                 keyMenu.getCellComponents().get(0).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 1) {
-                StaticData.moveDown = keyChecker.getKey();
+                Config.pref.putInt("moveDown",keyChecker.getKey());
                 keyMenu.getCellComponents().get(1).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 2) {
-                StaticData.moveLeft = keyChecker.getKey();
+                Config.pref.putInt("moveLeft",keyChecker.getKey());
                 keyMenu.getCellComponents().get(2).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 3) {
-                StaticData.moveRight = keyChecker.getKey();
+                Config.pref.putInt("moveRight",keyChecker.getKey());
                 keyMenu.getCellComponents().get(3).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 4) {
-                StaticData.jump = keyChecker.getKey();
+                Config.pref.putInt("jump",keyChecker.getKey());
                 keyMenu.getCellComponents().get(4).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 5) {
-                StaticData.normalAttack = keyChecker.getKey();
+                Config.pref.putInt("normalAttack",keyChecker.getKey());
                 keyMenu.getCellComponents().get(5).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 6) {
-                StaticData.specialAttack = keyChecker.getKey();
+                Config.pref.putInt("specialAttack",keyChecker.getKey());
                 keyMenu.getCellComponents().get(6).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }
             chooseKey = false;
