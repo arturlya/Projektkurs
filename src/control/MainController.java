@@ -2,6 +2,7 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.sound.Sound;
 import model.Maps.Map1;
 
 import javax.imageio.ImageIO;
@@ -22,7 +23,6 @@ public class MainController {
     public MainController(){
         Game.init();
         Game.getConfiguration().graphics().setFullscreen(true);
-        Game.getRenderEngine().setBaseRenderScale(1.0f);
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
         } catch (IOException ex) {
@@ -32,7 +32,11 @@ public class MainController {
         screenController = new ScreenController();
         //screenController.setIngameScreen(new Map1());
         screenController.setMenuScreen();
-        new GameController(screenController.getIngameScreen());
+        new GameController();
+        /**
+         * Wer von euch lit ist uncommented!
+         */
+        //Game.getSoundEngine().playMusic(Sound.get("assets/audio/Musik/bgm.mp3"));
         Game.start();
     }
 }

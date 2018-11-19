@@ -1,5 +1,7 @@
 package model;
 
+import de.gurkenlabs.litiengine.Game;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.net.InetAddress;
@@ -15,9 +17,17 @@ public final class StaticData {
     public static int jump = KeyEvent.VK_UP;
     public static int normalAttack = KeyEvent.VK_LEFT;
     public static int specialAttack = KeyEvent.VK_DOWN;
+    public static int audioVolume = 100;
 
 
     public StaticData() {
+        if (Game.getConfiguration().graphics().isFullscreen()) {
+            ScreenWidth = (int)Game.getConfiguration().graphics().getResolution().getWidth();
+            ScreenHeight = (int)Game.getConfiguration().graphics().getResolution().getHeight();
+        }else{
+            ScreenWidth = Game.getConfiguration().graphics().getResolutionWidth();
+            ScreenHeight = Game.getConfiguration().graphics().getResolutionHeight();
+        }
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException err) {

@@ -15,7 +15,7 @@ public class GameController {
 
     private PhysicsController physicsController;
 
-    public GameController(IngameScreen ingameScreen) {
+    public GameController() {
 
         physicsController = new PhysicsController();
 
