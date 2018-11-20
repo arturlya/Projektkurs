@@ -17,7 +17,6 @@ public class MainController {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 Config.pref.exportNode(new FileOutputStream("assets/keyAssignment.xml"));
-                System.out.println(1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
