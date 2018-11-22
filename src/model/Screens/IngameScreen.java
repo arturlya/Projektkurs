@@ -20,6 +20,10 @@ public class IngameScreen extends GameScreen {
     @Override
     public void render(final Graphics2D g){
         super.render(g);
+        renderGravObjects(g);
+    }
+
+    public void renderGravObjects(final Graphics2D g){
         for(int i = 0; i < gravObjects.size(); i++){
             if(gravObjects.get(i) instanceof Player){
                 if(((Player) gravObjects.get(i)).getHurtbox().isHurting()){

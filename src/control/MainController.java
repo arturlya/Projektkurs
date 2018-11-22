@@ -35,7 +35,7 @@ public class MainController {
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
-        Game.getScreenManager().getRenderComponent().setCursor(cursor);
+        Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
         screenController = new ScreenController();
         //screenController.setIngameScreen(new Map1());
         screenController.setMenuScreen();

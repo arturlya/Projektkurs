@@ -24,6 +24,7 @@ public class MenuScreen extends Screen implements IUpdateable {
     public static String joinPort,hostPort;
     private char[] chars;
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
+    private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
     private static boolean chooseKey;
     private Image bg,trans,join,options,exit;
     private BufferedImage textfield,create;
@@ -37,6 +38,7 @@ public class MenuScreen extends Screen implements IUpdateable {
     public MenuScreen(){
         super("MENU");
         Game.getLoop().attach(this);
+        System.out.println(widthMultiplier);
         menuName = "main";
         try {
             bg = ImageIO.read(new File("assets/img/Menu/bg.png"));
@@ -66,11 +68,11 @@ public class MenuScreen extends Screen implements IUpdateable {
             }
         }
 
-        public int getKey(){
+        int getKey(){
             return key;
         }
 
-        public void setKey(int key) {
+        void setKey(int key) {
             this.key = key;
         }
     }
@@ -195,7 +197,6 @@ public class MenuScreen extends Screen implements IUpdateable {
         }else if (menuName.equalsIgnoreCase("keys")) {
             for (int i = 0; i < keyNameMenu.getCellComponents().size(); i++) {
                 if (keyNameMenu.getCellComponents().get(i).getBoundingBox().intersects(e.getX(), e.getY(), 1, 1)) {
-
                     chooseKey = true;
                     keyNameMenu.setCurrentSelection(i);
                 }
@@ -204,18 +205,18 @@ public class MenuScreen extends Screen implements IUpdateable {
     }
 
     private void createButtons(){
-        buttons.add(new ImageComponent(640,151,join));
-        buttons.add(new ImageComponent(640,349,create));
-        buttons.add(new ImageComponent(640,547,options));
-        buttons.add(new ImageComponent(640,745,exit));
+        buttons.add(new ImageComponent(640*widthMultiplier,151*heightMultiplier,join));
+        buttons.add(new ImageComponent(640*widthMultiplier,349*heightMultiplier,create));
+        buttons.add(new ImageComponent(640*widthMultiplier,547*heightMultiplier,options));
+        buttons.add(new ImageComponent(640*widthMultiplier,745*heightMultiplier,exit));
         for (ImageComponent button : buttons) {
             button.prepare();
         }
     }
 
     private void createTextField(){
-        textFields.add(new TextFieldComponent(910,520,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
-        textFields.add(new TextFieldComponent(910,520,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
+        textFields.add(new TextFieldComponent(910*widthMultiplier,520*heightMultiplier,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
+        textFields.add(new TextFieldComponent(910*widthMultiplier,520*heightMultiplier,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
         for (TextFieldComponent textField : textFields) {
             textField.setFormat(TextFieldComponent.INTEGER_FORMAT);
             textField.setMaxLength(4);
@@ -224,7 +225,7 @@ public class MenuScreen extends Screen implements IUpdateable {
     }
 
     private void createSubMenus(){
-        keyNameMenu = new Menu(0, 0, width - 500, height, "Move Forwards", "Move Backwards", "Move Left", "Move Right", "Jump", "Normal Attack", "Special Attack");
+        keyNameMenu = new Menu(0, 0, width - 500*widthMultiplier, height, "Move Forwards", "Move Backwards", "Move Left", "Move Right", "Jump", "Normal Attack", "Special Attack");
         keyNameMenu.prepare();
         keyNameMenu.setEnabled(true);
         ArrayList<String> arrayList = new ArrayList<>();
@@ -235,7 +236,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         arrayList.add(KeyEvent.getKeyText(StaticData.jump));
         arrayList.add(KeyEvent.getKeyText(StaticData.normalAttack));
         arrayList.add(KeyEvent.getKeyText(StaticData.specialAttack));
-        keyMenu = new Menu(width-490,0,490,height,arrayList.get(0),arrayList.get(1),arrayList.get(2),arrayList.get(3),arrayList.get(4),arrayList.get(5),arrayList.get(6));
+        keyMenu = new Menu(width-490*widthMultiplier,0,490*widthMultiplier,height,arrayList.get(0),arrayList.get(1),arrayList.get(2),arrayList.get(3),arrayList.get(4),arrayList.get(5),arrayList.get(6));
         keyMenu.prepare();
         keyMenu.setEnabled(true);
         optionsMenu = new Menu(0, 0, width, height, "Key Assignment", "Audio & Video", "Overall");

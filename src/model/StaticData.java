@@ -7,7 +7,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public final class StaticData {
-    public static int ScreenWidth = Toolkit.getDefaultToolkit().getScreenSize().width,ScreenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+    public static int ScreenWidth,ScreenHeight;
+    public static float ScreenWidthMultiplier,ScreenHeightMultiplier;
     public static String ip;
     public static int moveUp;
     public static int moveDown;
@@ -19,7 +20,7 @@ public final class StaticData {
     public static float audioVolume = Game.getConfiguration().sound().getMusicVolume()*100;
 
 
-    public StaticData() {
+    static {
         if (Game.getConfiguration().graphics().isFullscreen()) {
             ScreenWidth = (int)Game.getConfiguration().graphics().getResolution().getWidth();
             ScreenHeight = (int)Game.getConfiguration().graphics().getResolution().getHeight();
@@ -27,6 +28,8 @@ public final class StaticData {
             ScreenWidth = Game.getConfiguration().graphics().getResolutionWidth();
             ScreenHeight = Game.getConfiguration().graphics().getResolutionHeight();
         }
+        ScreenWidthMultiplier = ScreenWidth/1920f;
+        ScreenHeightMultiplier = ScreenHeight/1080f;
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException err) {
