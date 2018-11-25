@@ -2,12 +2,9 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
-import model.GravitationalObject;
-import model.Mage;
+import model.*;
 import model.Maps.Map1;
 import model.Screens.IngameScreen;
-import model.User;
-import model.Warrior;
 
 import java.util.ArrayList;
 
@@ -26,8 +23,8 @@ public class GameController {
         //IMap map = Game.getEnvironment().getMap();
 
         Mage m = new Mage(true);
-        m.setX(300);
-        m.setY(100);
+        m.setX(500);
+        m.setY(300);
         Game.getEnvironment().add(m);
         Game.getEnvironment().add(m,RenderType.NORMAL);
 
@@ -57,5 +54,9 @@ public class GameController {
 
     public ArrayList<GravitationalObject> getGravObjects(){
         return physicsController.getGravObjects();
+    }
+
+    public ArrayList<Player> getPlayers(){
+        return physicsController.getPlayers();
     }
 }

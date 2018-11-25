@@ -3,8 +3,12 @@ package control;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;
+import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.GravitationalObject;
+import model.Maps.Map;
+import model.Player;
 
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,8 +21,10 @@ import static control.Timer.dt;
  */
 public class PhysicsController implements IUpdateable {
     private ArrayList<GravitationalObject> gravObjects;
+    private ArrayList<Player> players;
     private Collection entities;
     private int entityAmount;
+    private Map map;
 
 
     /**
@@ -29,7 +35,9 @@ public class PhysicsController implements IUpdateable {
         this.gravObjects = new ArrayList<>();
         entities = Game.getEnvironment().getEntities();
         entityAmount = entities.size();
+        players = new ArrayList<>();
         updateGravObjects();
+        initializeMap();
     }
 
     @Override
@@ -39,8 +47,23 @@ public class PhysicsController implements IUpdateable {
         }
         for(GravitationalObject g : gravObjects){
 
+            if(g.getVerticalSpeed() >= 0) {
+                boolean colliding = false;
+                for (int i = 0; i < map.getLines().size() && !colliding; i++) {
+                    if (g.getDownLines()[0].intersectsLine(map.getLines().get(i)) || g.getDownLines()[1].intersectsLine(map.getLines().get(i))) {
+                        colliding = true;
+                        g.setY(map.getLines().get(i).getY1() - g.getHeight());
+                        g.setInAir(false);
+                    }
+                }
+                if (!colliding) {
+                    g.setInAir(true);
+                }
+            }
             if(g.isInAir()){
                 g.setVerticalSpeed(g.getVerticalSpeed() + 1000 * dt);
+            }else{
+                g.setVerticalSpeed(0);
             }
         }
     }
@@ -56,9 +79,29 @@ public class PhysicsController implements IUpdateable {
             }
         }
         entityAmount = Game.getEnvironment().getEntities().size();
+        updatePlayers();
+    }
+
+    private void updatePlayers(){
+        for (GravitationalObject g : gravObjects) {
+            if(g instanceof Player){
+                if(!players.contains(g)){
+                    players.add((Player)g);
+                }
+            }
+        }
+    }
+
+    private void initializeMap(){
+        Iterator itr = Game.getEnvironment().getRenderables(RenderType.BACKGROUND).iterator();
+        map = (Map)itr.next();
     }
 
     public ArrayList<GravitationalObject> getGravObjects() {
         return gravObjects;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 }

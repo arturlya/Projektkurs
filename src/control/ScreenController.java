@@ -5,6 +5,7 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;
 import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.Maps.Map;
 import model.Screens.IngameScreen;
 import model.Screens.MenuScreen;
@@ -41,7 +42,7 @@ public class ScreenController extends Entity implements IUpdateable {
     public void setIngameScreen(Map map){
         Game.loadEnvironment(environments.get(1));
         Game.getScreenManager().displayScreen(ingameScreen);
-        map = new Map();
+        Game.getEnvironment().add(map, RenderType.BACKGROUND);
     }
 
     public MenuScreen getMenuScreen() {

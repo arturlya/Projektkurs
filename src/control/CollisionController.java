@@ -21,16 +21,11 @@ public class CollisionController implements IUpdateable {
     public CollisionController(GameController gameController){
         Game.getLoop().attach(this);
         this.gravObjects = gameController.getGravObjects();
-        players = new ArrayList<>();
-        gravObjectAmount = gravObjects.size();
-        updatePlayers();
+        players = gameController.getPlayers();
     }
 
     @Override
     public void update() {
-        if(gravObjectAmount != gravObjects.size()){
-            updatePlayers();
-        }
         checkHurtboxToPlayerCollision();
     }
 
@@ -46,17 +41,6 @@ public class CollisionController implements IUpdateable {
                 }
             }
         }
-    }
-
-    private void updatePlayers(){
-        for (GravitationalObject g : gravObjects) {
-            if(g instanceof Player){
-                if(!players.contains(g)){
-                    players.add((Player)g);
-                }
-            }
-        }
-        gravObjectAmount = players.size();
     }
 
     private void playerHit(Player attacker, Player defender){

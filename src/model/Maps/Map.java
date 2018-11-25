@@ -26,4 +26,12 @@ public class Map extends Entity implements IRenderable {
     public void render(Graphics2D graphics2D) {
 
     }
+
+    public ArrayList<Point> getSpawnpoints() {
+        return spawnpoints;
+    }
+
+    public ArrayList<Line2D.Double> getLines() {
+        return lines;
+    }
 }

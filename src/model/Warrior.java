@@ -2,6 +2,7 @@ package model;
 
 
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.Screens.IngameScreen;
 
 import java.awt.*;
@@ -25,8 +26,8 @@ public class Warrior extends Player{
         super.update();
         if(hook != null){
             if(!hook.getHitbox().intersects(Game.getScreenManager().getBounds())){
+                Game.getEnvironment().removeRenderable(hook);
                 Game.getEnvironment().remove(hook);
-                ((IngameScreen)Game.getScreenManager().getCurrentScreen()).removeGravObject(hook);
                 hook = null;
             }
         }
@@ -147,8 +148,8 @@ public class Warrior extends Player{
 
     protected void shootGrapplingHook(){
         hook = new GrapplingHook(this,getX(),getY());
-        ((IngameScreen)Game.getScreenManager().getCurrentScreen()).addGravObject(hook);
         Game.getEnvironment().add(hook);
+        Game.getEnvironment().add(hook, RenderType.NORMAL);
     }
 
     private class GrapplingHook extends GravitationalObject{
