@@ -5,13 +5,8 @@
     <map/>
     <node name="control">
       <map>
-        <entry key="moveUp" value="87"/>
-        <entry key="moveDown" value="83"/>
-        <entry key="moveLeft" value="65"/>
-        <entry key="moveRight" value="68"/>
-        <entry key="jump" value="38"/>
-        <entry key="normalAttack" value="37"/>
-        <entry key="specialAttack" value="40"/>
+        <entry key="normalAttack" value="39"/>
+        <entry key="specialAttack" value="37"/>
       </map>
     </node>
   </root>

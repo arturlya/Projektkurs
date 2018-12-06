@@ -37,7 +37,7 @@ public class PhysicsController implements IUpdateable {
         entityAmount = entities.size();
         players = new ArrayList<>();
         updateGravObjects();
-        initializeMap();
+        //initializeMap();
     }
 
     @Override
