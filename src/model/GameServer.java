@@ -52,14 +52,13 @@ public class GameServer extends Server {
      * @param pMessage Nachricht des Clients.
      *                 - Bei "START" wertet der Server den Vote des Clients aus
      *                 - bei "PLAYER" merkt er sich den neuen Spieler und gibt ihm eine Spielernummer
-     *                 - bei "POSITION" aktualisiert er die Position des bewegenden Spielers und leitet diese Nachricht weiter
+     *                 - bei "POSITION" leitet er die Position eines bewegenden Spielers weiter
+     *                 - bei "HURT" leitet er die HurtBox eines Spielers weiter
      */
     @Override
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
-        if(pMessage.getClass().getName().equals("java.lang.String")) {
-            String message = pMessage.toString();
-            if (message.contains("START") && numberOfPlayers > 1) {
-                String[] temp = message.split("START", 2);
+            if (pMessage.contains("START") && numberOfPlayers > 1) {
+                String[] temp = pMessage.split("START", 2);
                 if (temp[1].contains("true")) {
                     startVote++;
                     System.out.println("Player ready");
@@ -69,13 +68,13 @@ public class GameServer extends Server {
                 } else {
                     System.err.println("Couldn't handle : " + temp[1]);
                 }
-            } else if (message.contains("PLAYER")) {
+            } else if (pMessage.contains("PLAYER")) {
 
-                String[] temp = message.split("PLAYER", 3);
+                String[] temp = pMessage.split("PLAYER", 3);
                 switch (Integer.parseInt(temp[2])) {
                     case 1:
-                        players[Integer.parseInt(temp[1]) - 1] = new Warrior(false);
-                        players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
+                        players[Integer.parseInt(temp[1]) ] = new Warrior(false);
+                        players[Integer.parseInt(temp[1]) ].setPlayerNumber(Integer.parseInt(temp[1]));
                         break;
                     case 2:
                         players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
@@ -86,9 +85,9 @@ public class GameServer extends Server {
                 sendToAll(getAllPlayers());
 
 
-            } else if (message.contains("POSITION")) {
-                sendToAll(message);
-                String[] temp = message.split("POSITION");
+            } else if (pMessage.contains("POSITION")) {
+                sendToAll(pMessage);
+                String[] temp = pMessage.split("POSITION");
                 String[] help = temp[1].split("#", 3);
 
                /* if (players[Integer.parseInt(help[0])-1] != null) {
@@ -96,9 +95,10 @@ public class GameServer extends Server {
                     players[Integer.parseInt(help[0])-1].setY(Double.parseDouble(help[2]));
                     //System.out.println("Refreshing");
                 }*/
+            }else if(pMessage.contains("HURT")){
+                sendToAll(pMessage);
             }
 
-        }
         if(isStarting() && startVote<10){
 
             if(players[0] != null && players[1] != null) {

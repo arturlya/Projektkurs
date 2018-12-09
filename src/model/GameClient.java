@@ -71,6 +71,10 @@ public class GameClient extends Client implements IUpdateable {
         if (gameStarted && player.isMoving()) {
             send("POSITION"+player.getPlayerNumber()+"#" + player.getX() + "#" + player.getY());
         }
+        if(gameStarted){
+            //Also ... 0=player,1=x,2=y,3=width,4=height,5=isHurting,6=knockback,7=damage,8=relativeX,9=relativeY ...ufff...
+            send("HURT"+player.getPlayerNumber()+"#"+player.getHurtbox().getX()+"#"+player.getHurtbox().getY()+"#"+player.getHurtbox().width+"#"+player.getHurtbox().height+"#"+player.getHurtbox().isHurting()+"#"+player.getHurtbox().getKnockback()+"#"+player.getHurtbox().getDamage()+"#"+player.getHurtbox().getRelativeX()+"#"+player.getHurtbox().getRelativeY());
+        }
         if (playerNumber != 0 && player != null) {
             player.setPlayerNumber(playerNumber);
 
@@ -159,6 +163,29 @@ public class GameClient extends Client implements IUpdateable {
                     if (others.hasAccess()) {
                         others.getContent().setX(Double.parseDouble(temp[1]));
                         others.getContent().setY(Double.parseDouble(temp[2]));
+                    }
+                }
+            }else if(pMessage.contains("HURT")){
+                String[] temp = pMessage.split("HURT");
+                temp = temp[1].split("#");
+                if(Integer.parseInt(temp[0])!= player.getPlayerNumber()){
+                    int posInList = Integer.parseInt(temp[0]) - 2;
+                    others.toFirst();
+                    while (posInList > 0) {
+                        others.next();
+                        posInList--;
+                    }
+                    if (others.hasAccess()) {
+                        others.getContent().setHurtbox(new Hurtbox(Integer.parseInt(temp[1]),Integer.parseInt(temp[2]),Integer.parseInt(temp[3]),Integer.parseInt(temp[4])));
+                        if(temp[5].equals("true")){
+                            others.getContent().getHurtbox().setHurting(true);
+                        }else{
+                            others.getContent().getHurtbox().setHurting(false);
+                        }
+                        others.getContent().getHurtbox().setKnockback(Integer.parseInt(temp[6]));
+                        others.getContent().getHurtbox().setDamage(Integer.parseInt(temp[7]));
+                        others.getContent().getHurtbox().setRelativeX(Integer.parseInt(temp[8]));
+                        others.getContent().getHurtbox().setRelativeY(Integer.parseInt(temp[9]));
                     }
                 }
             }

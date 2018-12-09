@@ -1,5 +1,6 @@
 package model;
 
+import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.gui.GuiComponent;
 import model.Screens.IngameScreen;
 
@@ -9,6 +10,7 @@ public class User extends GuiComponent {
 
     private GameClient client;
     private GameServer server;
+    private ConnectionClient connector;
 
     private int port;
     private boolean clientActive;
@@ -21,13 +23,15 @@ public class User extends GuiComponent {
     public User(){
         super(0,0);
         clientActive = false;
+        connector = new ConnectionClient(this,2567);
     }
+
 
     /**
      * Methode zur Initialisierung
      */
     public void init(){
-        client.init();
+//        client.init();
     }
 
     /**
@@ -55,7 +59,8 @@ public class User extends GuiComponent {
         this.port = port;
         server = new GameServer(port);
 
-        client = new GameClient("localhost",port);
+        client = new GameClient(StaticData.ip,port);
+        System.out.println("Hosting Server at "+port);
 
         clientActive = true;
     }

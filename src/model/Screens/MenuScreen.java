@@ -21,7 +21,8 @@ import java.util.ArrayList;
 public class MenuScreen extends Screen implements IUpdateable {
 
     private String menuName;
-    public static String joinPort,hostPort;
+    public static String joinPort = "";
+    public static String hostPort = "";
     private char[] chars;
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;

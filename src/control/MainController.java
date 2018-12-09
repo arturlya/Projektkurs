@@ -3,6 +3,8 @@ package control;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.sound.Sound;
 import model.Maps.Map1;
+import model.StaticData;
+import model.User;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,7 +30,7 @@ public class MainController {
 
     public MainController(){
         Game.init();
-        Game.getConfiguration().graphics().setFullscreen(true);
+        Game.getConfiguration().graphics().setFullscreen(false);
         new Config();
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
@@ -39,7 +41,10 @@ public class MainController {
         screenController = new ScreenController();
         //screenController.setIngameScreen(new Map1());
         screenController.setMenuScreen();
-        new GameController();
+        User user = new User();
+        user.init();
+
+        //new GameController();
         /**
          * Wer von euch lit ist uncommented!
          */
