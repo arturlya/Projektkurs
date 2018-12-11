@@ -32,4 +32,6 @@ public class Projectile extends GravitationalObject {
     public Hurtbox getHurtbox() {
         return hurtbox;
     }
+
+    public Player getPlayer(){return player;}
 }

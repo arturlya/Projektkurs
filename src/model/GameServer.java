@@ -11,6 +11,8 @@ public class GameServer extends Server {
     private Player[] players;
 
 
+    private String allPlayer = "ALL";
+
     /**
      *
      * @param port Port des Servers
@@ -73,17 +75,45 @@ public class GameServer extends Server {
                 String[] temp = pMessage.split("PLAYER", 3);
                 switch (Integer.parseInt(temp[2])) {
                     case 1:
-                        players[Integer.parseInt(temp[1]) ] = new Warrior(false);
-                        players[Integer.parseInt(temp[1]) ].setPlayerNumber(Integer.parseInt(temp[1]));
+                    //    players[Integer.parseInt(temp[1]) ] = new Warrior(false);
+                    //    players[Integer.parseInt(temp[1]) ].setPlayerNumber(Integer.parseInt(temp[1]));
+                        if(numberOfPlayers>1) {
+                            String tmp[] = allPlayer.split("NEXT");
+                            allPlayer = "ALL" + numberOfPlayers + "NEXT";
+                            for(int i=1;i<tmp.length;i++){
+                                if(tmp[i] != null) {
+                                    allPlayer = allPlayer + tmp[i];
+                                    //if(i<numberOfPlayers-1){
+                                        allPlayer = allPlayer +"NEXT";
+                                   // }
+                                }
+                            }
+                            allPlayer = allPlayer + numberOfPlayers + "#"+"Warrior";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Warrior";}
                         break;
                     case 2:
-                        players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
-                        players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
+                    //    players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
+                    //    players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
+                        if(numberOfPlayers>1) {
+                            String tmp[] = allPlayer.split("NEXT");
+                            allPlayer = "ALL" + numberOfPlayers + "NEXT";
+                            for(int i=1;i<tmp.length;i++){
+                                if(tmp[i] != null) {
+                                    allPlayer = allPlayer + tmp[i];
+                                    //if(i<numberOfPlayers-1){
+                                    allPlayer = allPlayer +"NEXT";
+                                    // }
+                                }
+                            }
+                            allPlayer = allPlayer + numberOfPlayers + "#"+"Mage";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Mage";}
                         break;
                 }
                 //System.out.println("Sended all players");
-                sendToAll(getAllPlayers());
+              //  sendToAll(getAllPlayers());
 
+
+                sendToAll(allPlayer);
 
             } else if (pMessage.contains("POSITION")) {
                 sendToAll(pMessage);
@@ -100,10 +130,11 @@ public class GameServer extends Server {
             }
 
         if(isStarting() && startVote<10){
-
+/*
             if(players[0] != null && players[1] != null) {
                 if(players[0].getPlayerNumber()!= 0 && players[1].getPlayerNumber() != 0) {
-                    sendToAll(getAllPlayers());
+                    //sendToAll(getAllPlayers());
+                    sendToAll(allPlayer);
                     sendToAll("STARTtrue");
                     startVote = Integer.MAX_VALUE;
                     System.out.println("Sended all players");
@@ -111,8 +142,12 @@ public class GameServer extends Server {
             }else{
                 System.out.println("Nicht alle haben einen Spieler gewählt");
                 sendToAll("CHOOSE");
-            }
-            //System.out.println("Game is starting");
+            }*/
+
+            sendToAll(allPlayer);
+            sendToAll("STARTtrue");
+            startVote = Integer.MAX_VALUE;
+            System.out.println("Game is starting");
         }
 
     }
@@ -153,5 +188,6 @@ public class GameServer extends Server {
             }
         }
         return temp;
+
     }
 }

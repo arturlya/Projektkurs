@@ -14,12 +14,16 @@ public class ConnectionClient extends Client implements IUpdateable {
     private boolean connected;
 
     public ConnectionClient(User user,int port){
-        super("localhost",port);
+        super("192.168.178.50",port);
         Game.getLoop().attach(this);
         foundServer = false;
         this.user = user;
         connected = false;
-        System.out.println("Connected to ConnectionServer");
+        if(isConnected()) {
+            System.out.println("Connected to ConnectionServer");
+        }else{
+            System.out.println("Not connected to ConnectionServer");
+        }
 
     }
 

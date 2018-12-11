@@ -273,6 +273,9 @@ public abstract class Player extends GravitationalObject {
             //Später rausnehmen
             if(verticalSpeed != 0){
                 inAir = true;
+                moving = true;
+            }else{
+                moving = false;
             }
             invincibilityTimer = 0.5;
         }
@@ -326,7 +329,11 @@ public abstract class Player extends GravitationalObject {
     }
 
     public boolean isMoving() {
-        return moving;
+        if(!inAir) {
+            return moving;
+        }else{
+            return true;
+        }
     }
     public void setPlayerNumber(int value){
         playerNumber = value;
@@ -335,4 +342,7 @@ public abstract class Player extends GravitationalObject {
     public int getPlayerNumber(){
         return playerNumber;
     }
+    public void setShieldActive(boolean state){shieldActive = state;}
+
+    public Projectile getProjectile(){return projectile;}
 }
