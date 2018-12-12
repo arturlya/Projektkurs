@@ -6,7 +6,6 @@ import de.gurkenlabs.litiengine.input.Input;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import static control.Timer.dt;
@@ -19,6 +18,8 @@ public abstract class Player extends GravitationalObject {
     protected boolean attackTriggered;
     protected int knockbackPercentage;
 
+    protected boolean nAS,nAR,nAU,nAD, sAS,sAR,sAU,sAD;
+
     protected boolean shieldActive;
     protected Projectile projectile;
     protected boolean moving;
@@ -29,7 +30,7 @@ public abstract class Player extends GravitationalObject {
      * Konstruktor der abstrakten Klasse Player
      * @param playable entscheided, ob der Player spielbar, also von Tastatur-Inputs kontrolliert wird
      */
-    public Player(boolean playable){
+    public Player(double x, double y, boolean playable){
         super();
         hitbox = new Rectangle2D.Double(0,0,50,100);
         hurtbox = new Hurtbox(50,50,50,50);
@@ -37,8 +38,10 @@ public abstract class Player extends GravitationalObject {
         directionUD = -1;
         speed = 100;
         this.playable = playable;
-        setY(200);
-        setX(Math.random()*300+400);
+        setX(x);
+        setY(y);
+        //setY(200);
+        //setX(Math.random()*300+400);
         jumpsAvailable = 2;
     }
 
@@ -345,4 +348,33 @@ public abstract class Player extends GravitationalObject {
     public void setShieldActive(boolean state){shieldActive = state;}
 
     public Projectile getProjectile(){return projectile;}
+
+
+    public String getActiveAttack(){
+        String ans = "";
+        if(nAS){
+            ans = "nAS";
+        }else if(nAD){
+            ans = "nAD";
+        }else if(nAR){
+            ans = "nAR";
+        }else if(nAU){
+            ans = "nAU";
+        }else if(sAD){
+            ans = "sAD";
+        }else if(sAR){
+            ans = "sAR";
+        }else if(sAU){
+            ans  = "sAU";
+        }else if(sAS){
+            ans = "sAS";
+        }
+        if(!ans.equals("")){
+            sAS = false;
+            nAS = false;
+        }
+        return ans;
+    }
+
+
 }

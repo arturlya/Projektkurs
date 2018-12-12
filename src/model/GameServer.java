@@ -125,7 +125,8 @@ public class GameServer extends Server {
                     players[Integer.parseInt(help[0])-1].setY(Double.parseDouble(help[2]));
                     //System.out.println("Refreshing");
                 }*/
-            }else if(pMessage.contains("HURT")){
+            }else if(pMessage.contains("ATTACK")){
+                System.out.println("Message received");
                 sendToAll(pMessage);
             }
 

@@ -33,9 +33,11 @@ public class GameClient extends Client implements IUpdateable {
         ready = false;
         others = new List<>();
         choosePlayer(1);
-        player.setY(100);
+        player.setY(10);
         player.setX(600);
-        init();
+        Game.getEnvironment().add(player);
+        Game.getEnvironment().add(player,RenderType.NORMAL);
+        //init();
         Input.getLoop().attach(this);
         Input.keyboard().addKeyListener(new KeyListener() {
             @Override
@@ -71,9 +73,14 @@ public class GameClient extends Client implements IUpdateable {
     @Override
     public void update(){
         if(player != null)
-        if (gameStarted && player.isMoving()) {
-            send("POSITION"+player.getPlayerNumber()+"#" + player.getX() + "#" + player.getY());
+        if(player.getY()>2000){
+            player.setY(50);
         }
+        if (gameStarted && player.isMoving()) {
+           // send("POSITION"+playerNumber+"#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
+            send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
+        }
+        /*
         if(gameStarted && player.getHurtbox().isHurting()){
             //Also ... 0=player,1=x,2=y,3=width,4=height,5=isHurting,6=knockback,7=damage,8=relativeX,9=relativeY ...ufff...
             send("HURT"+player.getPlayerNumber()+"#"+player.getHurtbox().getX()+"#"+player.getHurtbox().getY()+"#"+player.getHurtbox().width+"#"+player.getHurtbox().height+"#"+player.getHurtbox().isHurting()+"#"+player.getHurtbox().getKnockback()+"#"+player.getHurtbox().getDamage()+"#"+player.getHurtbox().getRelativeX()+"#"+player.getHurtbox().getRelativeY());
@@ -84,6 +91,12 @@ public class GameClient extends Client implements IUpdateable {
         if(gameStarted && player.getProjectile() != null){
             //Das selbe wie bei Hurtbox nur mit dem Projectile
             send("PROJECTILE"+player.getPlayerNumber()+"#"+player.getProjectile().getHurtbox().getX()+"#"+player.getProjectile().getHurtbox().getY()+"#"+player.getProjectile().getHurtbox().width+"#"+player.getProjectile().getHurtbox().height);//+"#"+player.getProjectile().getHurtbox().isHurting()+"#"+player.getProjectile().getHurtbox().getKnockback()+"#"+player.getProjectile().getHurtbox().getDamage()+"#"+player.getProjectile().getHurtbox().getRelativeX()+"#"+player.getProjectile().getHurtbox().getRelativeY());
+        }*/
+
+        //System.out.println(player.getActiveAttack());
+        if(gameStarted && !player.getActiveAttack().equals("")){
+            System.out.println("YES!"+player.getActiveAttack());
+            send("ATTACK"+playerNumber+"#"+player.getActiveAttack());
         }
         if (playerNumber != 0 && player != null) {
             player.setPlayerNumber(playerNumber);
@@ -139,7 +152,7 @@ public class GameClient extends Client implements IUpdateable {
                             }
                             if(!alreadyKnown) {
                                 if (charInfo[1].equals("Warrior")) {
-                                    Player otherPlayer = new Warrior(false);
+                                    Player otherPlayer = new Warrior(400,50,false);
                                     otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
                                     others.append(otherPlayer);
                                     Game.getEnvironment().add(otherPlayer);
@@ -147,7 +160,7 @@ public class GameClient extends Client implements IUpdateable {
                                     //ingameScreen.addGravObject(otherPlayer);
                                     System.out.println("Added player");
                                 } else if (charInfo[1].equals("Mage")) {
-                                    Player otherPlayer = new Mage(false);
+                                    Player otherPlayer = new Mage(400,50,false);
                                     otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
                                     others.append(otherPlayer);
                                     Game.getEnvironment().add(otherPlayer);
@@ -174,9 +187,11 @@ public class GameClient extends Client implements IUpdateable {
                     if (others.hasAccess()) {
                         others.getContent().setX(Double.parseDouble(temp[1]));
                         others.getContent().setY(Double.parseDouble(temp[2]));
+                     //   others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
+                     //   others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
                     }
                 }
-            }else if(pMessage.contains("HURT")){
+            }/*else if(pMessage.contains("HURT")){
                 String[] temp = pMessage.split("HURT");
                 temp = temp[1].split("#");
                 if(Integer.parseInt(temp[0])!= player.getPlayerNumber()){
@@ -214,7 +229,7 @@ public class GameClient extends Client implements IUpdateable {
                     }
                 }
             }else if(pMessage.contains("PROJECTILE")){
-                String[] temp = pMessage.split("HURT");
+                String[] temp = pMessage.split("PROJECTILE");
                 temp = temp[1].split("#");
                 if(Integer.parseInt(temp[0])!= player.getPlayerNumber()) {
                     int posInList = Integer.parseInt(temp[0]) - 2;
@@ -224,7 +239,51 @@ public class GameClient extends Client implements IUpdateable {
                         posInList--;
                     }
                     if (others.hasAccess()) {
-                        others.getContent().shoot(Double.parseDouble(temp[0]),Double.parseDouble(temp[1]),(int)Double.parseDouble(temp[2]),(int)Double.parseDouble(temp[3]));
+                        if (others.getContent().getProjectile() == null) {
+                            others.getContent().shoot(Double.parseDouble(temp[0]), Double.parseDouble(temp[1]), (int) Double.parseDouble(temp[2]), (int) Double.parseDouble(temp[3]));
+                        }
+
+                    }
+                }
+            }*/
+            else if(pMessage.contains("ATTACK")){
+                System.out.println(pMessage);
+                String[] temp = pMessage.split("ATTACK");
+                temp = temp[1].split("#");
+                if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
+                    int posInList = Integer.parseInt(temp[0]) - 2;
+                    others.toFirst();
+                    while (posInList > 0) {
+                        others.next();
+                        posInList--;
+                    }
+                    if (others.hasAccess()) {
+                        switch (temp[1]){
+                            case "nAS":
+                                others.getContent().normalAttackStand();
+                                break;
+                            case "nAR":
+                                others.getContent().normalAttackRun();
+                                break;
+                            case "nAD":
+                                others.getContent().normalAttackDown();
+                                break;
+                            case "nAU":
+                                others.getContent().normalAttackUp();
+                                break;
+                            case "sAS":
+                                others.getContent().specialAttackStand();
+                                break;
+                            case "sAR":
+                                others.getContent().specialAttackRun();
+                                break;
+                            case "sAD":
+                                others.getContent().specialAttackDown();
+                                break;
+                            case "sAU":
+                                others.getContent().specialAttackUp();
+                                break;
+                        }
                     }
                 }
             }
@@ -278,10 +337,10 @@ public class GameClient extends Client implements IUpdateable {
         if(player == null) {
             switch (number) {
                 case 1:
-                    player = new Warrior(true);
+                    player = new Warrior(400,50,true);
                     break;
                 case 2:
-                    player = new Mage(true);
+                    player = new Mage(400,50,true);
 
 
                     break;

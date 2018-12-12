@@ -23,7 +23,7 @@ public class User extends GuiComponent {
     public User(){
         super(0,0);
         clientActive = false;
-        connector = new ConnectionClient(this,2567);
+       // connector = new ConnectionClient(this,2567);
     }
 
 

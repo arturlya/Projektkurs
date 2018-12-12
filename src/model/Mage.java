@@ -4,8 +4,8 @@ public class Mage extends Player{
 
     private boolean teleUsed;
 
-    public Mage(boolean playable){
-        super(playable);
+    public Mage(double x, double y, boolean playable){
+        super(x,y,playable);
         setWidth(50);
         setHeight(100);
         setName("Mage");

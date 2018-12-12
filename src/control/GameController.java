@@ -15,7 +15,7 @@ public class GameController {
 
     public GameController() {
 
-        int switchFunction = 2;
+        int switchFunction =2;
 
         if(switchFunction == 1) {
             User user = new User();
