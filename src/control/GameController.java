@@ -18,16 +18,19 @@ public class GameController {
         int switchFunction =2;
 
         if(switchFunction == 1) {
-            User user = new User();
-            user.hostGame(2796);
 
+            new GameServer(8888);
+
+            User user = new User();
+           // user.hostGame(8888);
+            user.joinGame("localhost",8888);
 
             //user.init();
 
 
         }else if (switchFunction == 2){
             User user2 = new User();
-            user2.joinGame("localhost", 2796);
+            user2.joinGame("localhost", 8888);
             //user2.init();
 
         }
