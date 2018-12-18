@@ -1,5 +1,6 @@
 package model;
 
+import com.dosse.upnp.UPnP;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.gui.GuiComponent;
 import model.Screens.IngameScreen;
@@ -9,7 +10,7 @@ import java.awt.event.MouseEvent;
 public class User extends GuiComponent {
 
     private GameClient client;
-    private GameServer server;
+   // private GameServer server;
     private ConnectionClient connector;
 
     private int port;
@@ -23,7 +24,8 @@ public class User extends GuiComponent {
     public User(){
         super(0,0);
         clientActive = false;
-       // connector = new ConnectionClient(this,2567);
+        connector = new ConnectionClient(this,2567);
+        // connector = new ConnectionClient(this,2567);
     }
 
 
@@ -41,6 +43,7 @@ public class User extends GuiComponent {
      * @param port Port des Servers
      */
     public void joinGame(String ip, int port){
+        System.out.println("Connecting to "+ip);
         client = new GameClient(ip,port);
         if(client.isConnected()) {
             clientActive = true;
@@ -56,13 +59,29 @@ public class User extends GuiComponent {
      * @param port Port des neuen Servers
      */
     public void hostGame(int port){
-        this.port = port;
-        server = new GameServer(port);
+        /*
+        System.out.println("IP test : Loakal : "+UPnP.getLocalIP()+"/n Global :"+UPnP.getExternalIP());
+        if(UPnP.isUPnPAvailable()) {
+            if(UPnP.isMappedTCP(port)) {
+                System.out.println("Port already mapped");
+            }else {
+                UPnP.openPortTCP(port);
+                if (UPnP.openPortTCP(port)) { //try to map port
+                    System.out.println("UPnP port forwarding enabled");
+                    this.port = port;
+                    server = new GameServer(port);
+                    client = new GameClient(StaticData.ip, port);
+                    System.out.println("Hosting Server at " + port);
+                    clientActive = true;
+                } else {
+                    System.out.println("UPnP port forwarding failed");
+                }
 
-        client = new GameClient(StaticData.ip,port);
-        System.out.println("Hosting Server at "+port);
-
-        clientActive = true;
+            }
+        }else{
+            System.out.println("UPNP not available");
+        }
+        */
     }
 
     /**

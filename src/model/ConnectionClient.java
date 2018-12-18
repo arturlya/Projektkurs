@@ -1,5 +1,6 @@
 package model;
 
+import com.dosse.upnp.UPnP;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import model.Screens.MenuScreen;
@@ -20,7 +21,8 @@ public class ConnectionClient extends Client implements IUpdateable {
     private boolean connected;
 
     public ConnectionClient(User user,int port){
-        super("178.201.129.203",port);
+        super("localhost",port);
+        // super("178.201.129.203",port);
         Game.getLoop().attach(this);
         foundServer = false;
         this.user = user;
@@ -36,9 +38,10 @@ public class ConnectionClient extends Client implements IUpdateable {
     @Override
     public void update() {
         if(MenuScreen.hostPort.length() == 4 && !connected){
-            send("SERVER"+getExternalIP()+"#"+MenuScreen.hostPort);
-            user.hostGame(Integer.parseInt(MenuScreen.hostPort));
-            connected = true;
+            send("SERVER"+MenuScreen.hostPort);
+           // user.hostGame(Integer.parseInt(MenuScreen.hostPort));
+            //user.joinGame(getExternalIP(),Integer.parseInt(MenuScreen.hostPort));
+            //connected = true;
         }
         if(MenuScreen.joinPort.length() == 4){
             send("CONNECT"+MenuScreen.joinPort);
