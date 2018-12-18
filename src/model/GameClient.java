@@ -94,15 +94,14 @@ public class GameClient extends Client implements IUpdateable {
         }*/
 
         //System.out.println(player.getActiveAttack());
-        if(gameStarted && !player.getActiveAttack().equals("")){
-            System.out.println("YES!"+player.getActiveAttack());
-            send("ATTACK"+playerNumber+"#"+player.getActiveAttack());
-        }
         if (playerNumber != 0 && player != null) {
             player.setPlayerNumber(playerNumber);
 
         }
 
+        if(gameStarted){
+            processInputs();
+        }
     }
 
 
@@ -186,7 +185,7 @@ public class GameClient extends Client implements IUpdateable {
                     }
                     if (others.hasAccess()) {
                         others.getContent().setX(Double.parseDouble(temp[1]));
-                        others.getContent().setY(Double.parseDouble(temp[2]));
+                       // others.getContent().setY(Double.parseDouble(temp[2]));
                      //   others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
                      //   others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
                     }
@@ -247,7 +246,6 @@ public class GameClient extends Client implements IUpdateable {
                 }
             }*/
             else if(pMessage.contains("ATTACK")){
-                System.out.println(pMessage);
                 String[] temp = pMessage.split("ATTACK");
                 temp = temp[1].split("#");
                 if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
@@ -284,6 +282,36 @@ public class GameClient extends Client implements IUpdateable {
                                 others.getContent().specialAttackUp();
                                 break;
                         }
+                    }
+                }
+            }else if(pMessage.contains("JUMP")){
+                String[] temp = pMessage.split("JUMP");
+                if (Integer.parseInt(temp[1]) != playerNumber) {
+                    int posInList = Integer.parseInt(temp[1]) - 2;
+                    others.toFirst();
+                    while (posInList > 0) {
+                        others.next();
+                        posInList--;
+                    }
+                    if (others.hasAccess()) {
+                        others.getContent().setVerticalSpeed(-700);
+                        others.getContent().setInAir(true);
+                        others.getContent().setJumpsAvailable(player.getJumpsAvailable()-1);
+                        others.getContent().setJumpCooldown(0.5);
+                    }
+                }
+            }else if(pMessage.contains("LOOKING")){
+                String[] temp = pMessage.split("LOOKING");
+                temp = temp[1].split("#");
+                if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
+                    int posInList = Integer.parseInt(temp[0]) - 2;
+                    others.toFirst();
+                    while (posInList > 0) {
+                        others.next();
+                        posInList--;
+                    }
+                    if (others.hasAccess()) {
+                        others.getContent().setLookingAt(Integer.parseInt(temp[1]));
                     }
                 }
             }
@@ -356,4 +384,102 @@ public class GameClient extends Client implements IUpdateable {
             }
         }
     }
+    /**
+     * Methode, die, falls der Player spielbar ist, die anderen Input-Mathoden aufruft
+     */
+    private void processInputs(){
+        processInputsDirections();
+        processInputsAttacks();
+        processInputsJump();
+    }
+
+    /**
+     * Methode, die die richtungsbeeinflussenden Inputs verarbeitet
+     */
+    private void processInputsDirections(){
+        Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
+            player.setDirectionLR(0);
+            player.setLookingAt(0);
+            send("LOOKING"+playerNumber+"#"+player.getLookingAt());
+            player.setMoving(true);
+        });
+        Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
+            player.setDirectionLR(-1);
+            player.setMoving(false);
+        });
+        Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
+            player.setDirectionLR(1);
+            player.setLookingAt(1);
+            send("LOOKING"+playerNumber+"#"+player.getLookingAt());
+            player.setMoving(true);
+        });
+        Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> {
+            player.setDirectionLR(-1);
+            player.setMoving(false);
+        });
+        Input.keyboard().onKeyPressed(StaticData.moveUp, (key) -> player.setDirectionUD(0));
+        Input.keyboard().onKeyReleased(StaticData.moveUp, (key) -> player.setDirectionUD(-1));
+        Input.keyboard().onKeyPressed(StaticData.moveDown, (key) -> player.setDirectionUD(1));
+        Input.keyboard().onKeyReleased(StaticData.moveDown, (key) -> player.setDirectionUD(-1));
+    }
+
+    /**
+     * Methode, die die Inputs für die Angriffe verarbeitet
+     */
+    private void processInputsAttacks(){
+        Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
+            if (player.getAttackWindDown() <= 0) {
+                player.setHorizontalSpeed(0);
+                if (player.getDirectionLR() != -1) {
+                    player.normalAttackRun();
+                    send("ATTACK"+playerNumber+"#nAR");
+                } else if (player.getDirectionUD() == 1) {
+                    player.normalAttackDown();
+                    send("ATTACK"+playerNumber+"#nAD");
+                } else if (player.getDirectionUD() == 0) {
+                    player.normalAttackUp();
+                    send("ATTACK"+playerNumber+"#nAU");
+                } else {
+                    player.normalAttackStand();
+                    send("ATTACK"+playerNumber+"#nAS");
+                }
+            }
+        });
+        Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
+            if (player.getAttackWindDown() <= 0) {
+                player.setHorizontalSpeed(0);
+                if (player.getDirectionLR() != -1) {
+                    player.specialAttackRun();
+                    send("ATTACK"+playerNumber+"#sAR");
+                } else if (player.getDirectionUD() == 1) {
+                    player.specialAttackDown();
+                    send("ATTACK"+playerNumber+"#sAD");
+                } else if (player.getDirectionUD() == 0) {
+                    player.specialAttackUp();
+                    send("ATTACK"+playerNumber+"#sAU");
+                } else {
+                    player.specialAttackStand();
+                    send("ATTACK"+playerNumber+"#sAS");
+                }
+            }
+        });
+    }
+
+    /**
+     * Methode, die den Input für den Jump verarbeitet
+     */
+    private void processInputsJump(){
+        Input.keyboard().onKeyTyped(StaticData.jump, (key) -> {
+            if(player.getAttackWindDown() <= 0){
+                if(player.getJumpsAvailable() > 0 && player.getJumpCooldown() <= 0){
+                    send("JUMP"+playerNumber);
+                    player.setVerticalSpeed(-700);
+                    player.setInAir(true);
+                    player.setJumpsAvailable(player.getJumpsAvailable()-1);
+                    player.setJumpCooldown(0.5);
+                }
+            }
+        });
+    }
+
 }

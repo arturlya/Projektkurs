@@ -22,6 +22,7 @@ public class GameServer extends Server {
         startVote = 0;
         maxPlayers = 4;
         players = new Player[maxPlayers];
+        System.out.println("Created new GameServer");
     }
 
     /**
@@ -126,7 +127,10 @@ public class GameServer extends Server {
                     //System.out.println("Refreshing");
                 }*/
             }else if(pMessage.contains("ATTACK")){
-                System.out.println("Message received");
+                sendToAll(pMessage);
+            } else if (pMessage.contains("JUMP")) {
+                sendToAll(pMessage);
+            }else if(pMessage.contains("LOOKING")){
                 sendToAll(pMessage);
             }
 

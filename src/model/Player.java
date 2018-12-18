@@ -18,8 +18,6 @@ public abstract class Player extends GravitationalObject {
     protected boolean attackTriggered;
     protected int knockbackPercentage;
 
-    protected boolean nAS,nAR,nAU,nAD, sAS,sAR,sAU,sAD;
-
     protected boolean shieldActive;
     protected Projectile projectile;
     protected boolean moving;
@@ -77,7 +75,7 @@ public abstract class Player extends GravitationalObject {
         setShapes();
         horizontalMovement();
         horizontalDecelerate();
-        processInputs();
+       // processInputs();
         removeProjectiles();
         if(!inAir){
             jumpsAvailable = 2;
@@ -134,95 +132,6 @@ public abstract class Player extends GravitationalObject {
                 projectile = null;
             }
         }
-    }
-
-    /**
-     * Methode, die, falls der Player spielbar ist, die anderen Input-Mathoden aufruft
-     */
-    private void processInputs(){
-        if(playable) {
-            processInputsDirections();
-            processInputsAttacks();
-            processInputsJump();
-        }
-    }
-
-    /**
-     * Methode, die die richtungsbeeinflussenden Inputs verarbeitet
-     */
-    private void processInputsDirections(){
-        Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
-            directionLR = 0;
-            lookingAt = 0;
-            moving = true;
-        });
-        Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
-            directionLR = -1;
-            moving = false;
-        });
-        Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
-            directionLR = 1;
-            lookingAt = 1;
-            moving = true;
-        });
-        Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> {
-            directionLR = -1;
-            moving = false;
-        });
-        Input.keyboard().onKeyPressed(StaticData.moveUp, (key) -> directionUD = 0);
-        Input.keyboard().onKeyReleased(StaticData.moveUp, (key) -> directionUD = -1);
-        Input.keyboard().onKeyPressed(StaticData.moveDown, (key) -> directionUD = 1);
-        Input.keyboard().onKeyReleased(StaticData.moveDown, (key) -> directionUD = -1);
-    }
-
-    /**
-     * Methode, die die Inputs für die Angriffe verarbeitet
-     */
-    private void processInputsAttacks(){
-        Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
-            if (attackWindDown <= 0) {
-                setHorizontalSpeed(0);
-                if (directionLR != -1) {
-                    normalAttackRun();
-                } else if (directionUD == 1) {
-                    normalAttackDown();
-                } else if (directionUD == 0) {
-                    normalAttackUp();
-                } else {
-                    normalAttackStand();
-                }
-            }
-        });
-        Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
-            if (attackWindDown <= 0) {
-                setHorizontalSpeed(0);
-                if (directionLR != -1) {
-                    specialAttackRun();
-                } else if (directionUD == 1) {
-                    specialAttackDown();
-                } else if (directionUD == 0) {
-                    specialAttackUp();
-                } else {
-                    specialAttackStand();
-                }
-            }
-        });
-    }
-
-    /**
-     * Methode, die den Input für den Jump verarbeitet
-     */
-    private void processInputsJump(){
-        Input.keyboard().onKeyTyped(StaticData.jump, (key) -> {
-            if(attackWindDown <= 0){
-                if(jumpsAvailable > 0 && jumpCooldown <= 0){
-                    setVerticalSpeed(-700);
-                    inAir = true;
-                    jumpsAvailable--;
-                    jumpCooldown = 0.5;
-                }
-            }
-        });
     }
 
     /**
@@ -350,31 +259,48 @@ public abstract class Player extends GravitationalObject {
     public Projectile getProjectile(){return projectile;}
 
 
-    public String getActiveAttack(){
-        String ans = "";
-        if(nAS){
-            ans = "nAS";
-        }else if(nAD){
-            ans = "nAD";
-        }else if(nAR){
-            ans = "nAR";
-        }else if(nAU){
-            ans = "nAU";
-        }else if(sAD){
-            ans = "sAD";
-        }else if(sAR){
-            ans = "sAR";
-        }else if(sAU){
-            ans  = "sAU";
-        }else if(sAS){
-            ans = "sAS";
-        }
-        if(!ans.equals("")){
-            sAS = false;
-            nAS = false;
-        }
-        return ans;
+
+    public void setDirectionLR(int directionLR) {
+        this.directionLR = directionLR;
     }
 
+    public void setLookingAt(int lookingAt) {
+        this.lookingAt = lookingAt;
+    }
 
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public void setDirectionUD(int directionUD) {
+        this.directionUD = directionUD;
+    }
+
+    public int getJumpsAvailable() {
+        return jumpsAvailable;
+    }
+
+    public void setJumpsAvailable(int jumpsAvailable) {
+        this.jumpsAvailable = jumpsAvailable;
+    }
+
+    public double getJumpCooldown() {
+        return jumpCooldown;
+    }
+
+    public void setJumpCooldown(double jumpCooldown) {
+        this.jumpCooldown = jumpCooldown;
+    }
+
+    public double getAttackWindDown() {
+        return attackWindDown;
+    }
+
+    public int getDirectionLR() {
+        return directionLR;
+    }
+
+    public int getDirectionUD() {
+        return directionUD;
+    }
 }
