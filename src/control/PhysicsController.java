@@ -36,8 +36,8 @@ public class PhysicsController implements IUpdateable {
         entities = Game.getEnvironment().getEntities();
         entityAmount = entities.size();
         players = new ArrayList<>();
-        updateGravObjects();
         initializeMap();
+        updateGravObjects();
     }
 
     @Override
@@ -87,6 +87,7 @@ public class PhysicsController implements IUpdateable {
             if(g instanceof Player){
                 if(!players.contains(g)){
                     players.add((Player)g);
+                    ((Player)g).spawn(map.getSpawnpoints().get(((Player)g).getPlayerNumber()));
                 }
             }
         }
@@ -95,6 +96,7 @@ public class PhysicsController implements IUpdateable {
     private void initializeMap(){
         Iterator itr = Game.getEnvironment().getRenderables(RenderType.BACKGROUND).iterator();
         map = (Map)itr.next();
+        System.out.println(map);
     }
 
     public ArrayList<GravitationalObject> getGravObjects() {

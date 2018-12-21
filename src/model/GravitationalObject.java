@@ -28,8 +28,8 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
         setX(getX() + horizontalSpeed * dt);
         setY(getY() + verticalSpeed * dt);
         hitbox.setRect(this.getX(),this.getY(),this.getWidth(),this.getHeight());
-        downLines[0].setLine(getX(), getY()+getHeight(), getX(), getY()+getHeight()+20);
-        downLines[1].setLine(getX()+getWidth(), getY()+getHeight(), getX()+getWidth(), getY()+getHeight()+20);
+        downLines[0].setLine(getX(), getY()+getHeight()-5, getX(), getY()+getHeight()+20);
+        downLines[1].setLine(getX()+getWidth(), getY()+getHeight()-5, getX()+getWidth(), getY()+getHeight()+20);
     }
 
     @Override

@@ -58,7 +58,7 @@ public abstract class Player extends GravitationalObject {
         }
         g.fill(hurtbox);
         g.setColor(new Color(70,120,255));
-        if(shieldActive == true) {
+        if(shieldActive) {
             g.setColor(new Color(150,150,150));
         }
         g.fill(hitbox);
@@ -208,6 +208,16 @@ public abstract class Player extends GravitationalObject {
         }
     }
 
+    public void spawn(Point point){
+        knockbackPercentage = 0;
+        attackWindUp = 0;
+        attackHurtTime = 0;
+        attackWindDown = 0;
+        setVerticalSpeed(0);
+        this.setX(point.x);
+        this.setY(point.y);
+    }
+
     public abstract void normalAttackRun();
 
     public abstract void normalAttackDown();
@@ -247,6 +257,7 @@ public abstract class Player extends GravitationalObject {
             return true;
         }
     }
+
     public void setPlayerNumber(int value){
         playerNumber = value;
     }
