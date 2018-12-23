@@ -23,6 +23,8 @@ public class PlayerTester{
     private ScreenController screenController;
     private Image cursor;
     private PhysicsController physicsController;
+    private int i;
+    int j;
 
     public PlayerTester(){
         Game.init();
@@ -67,6 +69,7 @@ public class PlayerTester{
 
         @Override
         public void update() {
+            i = 1;
             processInputs();
         }
 
@@ -84,25 +87,55 @@ public class PlayerTester{
          */
         private void processInputsDirections(){
             Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
-                player.setDirectionLR(0);
-                player.setLookingAt(0);
-                player.setMoving(true);
+                if(i == 1) {
+                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                        player.setDirectionLR(0);
+                        player.setLookingAt(0);
+                        player.setMoving(true);
+                    }
+                    i = 0;
+                }
             });
             Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
-                player.setDirectionLR(-1);
-                player.setMoving(false);
+                if(i == 1) {
+                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                        player.setMoving(false);
+                        player.setDirectionLR(-1);
+                    }
+                    i = 2;
+                }
             });
             Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
-                player.setDirectionLR(1);
-                player.setLookingAt(1);
-                player.setMoving(true);
+                if(i == 1) {
+                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                        player.setDirectionLR(1);
+                        player.setLookingAt(1);
+                        player.setMoving(true);
+                    }
+                    i = 0;
+                }
             });
             Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> {
-                player.setDirectionLR(-1);
-                player.setMoving(false);
+                if(i == 1) {
+                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                        player.setMoving(false);
+                        player.setDirectionLR(-1);
+                    }
+                    i = 0;
+                }
             });
-            Input.keyboard().onKeyPressed(StaticData.moveUp, (key) -> player.setDirectionUD(0));
-            Input.keyboard().onKeyReleased(StaticData.moveUp, (key) -> player.setDirectionUD(-1));
+            Input.keyboard().onKeyPressed(StaticData.moveUp, (key) ->{
+                if(i == 1) {
+                    player.setDirectionUD(0);
+                }
+                i = 0;
+            });
+
+            Input.keyboard().onKeyReleased(StaticData.moveUp, (key) ->{
+                if(i == 1) {
+                    player.setDirectionUD(-1);
+                }
+            });
             Input.keyboard().onKeyPressed(StaticData.moveDown, (key) -> player.setDirectionUD(1));
             Input.keyboard().onKeyReleased(StaticData.moveDown, (key) -> player.setDirectionUD(-1));
         }
@@ -128,12 +161,12 @@ public class PlayerTester{
             Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
                 if (player.getAttackWindDown() <= 0) {
                     player.setHorizontalSpeed(0);
-                    if (player.getDirectionLR() != -1) {
+                    if (player.getDirectionUD() == 0) {
+                        player.specialAttackUp();
+                    } else if (player.getDirectionLR() != -1) {
                         player.specialAttackRun();
                     } else if (player.getDirectionUD() == 1) {
                         player.specialAttackDown();
-                    } else if (player.getDirectionUD() == 0) {
-                        player.specialAttackUp();
                     } else {
                         player.specialAttackStand();
                     }

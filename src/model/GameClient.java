@@ -22,6 +22,8 @@ public class GameClient extends Client implements IUpdateable {
     private boolean gameStarted;
     private int playerNumber;
     private double coolDown;
+    private int i;
+    int j;
 
     private List<Player> others;
 
@@ -77,6 +79,7 @@ public class GameClient extends Client implements IUpdateable {
      */
     @Override
     public void update(){
+        i = 1;
         if(player != null)
 
         if (gameStarted && player.isMoving()) {
@@ -358,24 +361,44 @@ public class GameClient extends Client implements IUpdateable {
      */
     private void processInputsDirections(){
         Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
-            player.setDirectionLR(0);
-            player.setLookingAt(0);
-            send("LOOKING"+playerNumber+"#"+player.getLookingAt());
-            player.setMoving(true);
+            if(i == 1) {
+                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                    player.setDirectionLR(0);
+                    player.setLookingAt(0);
+                    send("LOOKING" + playerNumber + "#" + player.getLookingAt());
+                    player.setMoving(true);
+                }
+                i = 0;
+            }
         });
         Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
-            player.setDirectionLR(-1);
-            player.setMoving(false);
+            if(i == 1) {
+                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                    player.setDirectionLR(-1);
+                    player.setMoving(false);
+                }
+                i = 0;
+            }
         });
         Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
-            player.setDirectionLR(1);
-            player.setLookingAt(1);
-            send("LOOKING"+playerNumber+"#"+player.getLookingAt());
-            player.setMoving(true);
+            if(i == 1) {
+                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                    player.setDirectionLR(1);
+                    player.setLookingAt(1);
+                    send("LOOKING" + playerNumber + "#" + player.getLookingAt());
+                    player.setMoving(true);
+                }
+                i = 0;
+            }
         });
         Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> {
-            player.setDirectionLR(-1);
-            player.setMoving(false);
+            if(i == 1) {
+                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                    player.setDirectionLR(-1);
+                    player.setMoving(false);
+                }
+                i = 2;
+            }
         });
         Input.keyboard().onKeyPressed(StaticData.moveUp, (key) -> player.setDirectionUD(0));
         Input.keyboard().onKeyReleased(StaticData.moveUp, (key) -> player.setDirectionUD(-1));
@@ -408,18 +431,21 @@ public class GameClient extends Client implements IUpdateable {
         Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
             if (player.getAttackWindDown() <= 0) {
                 player.setHorizontalSpeed(0);
-                if (player.getDirectionLR() != -1) {
-                    player.specialAttackRun();
-                    send("ATTACK"+playerNumber+"#sAR");
-                } else if (player.getDirectionUD() == 1) {
-                    player.specialAttackDown();
-                    send("ATTACK"+playerNumber+"#sAD");
-                } else if (player.getDirectionUD() == 0) {
-                    player.specialAttackUp();
-                    send("ATTACK"+playerNumber+"#sAU");
-                } else {
-                    player.specialAttackStand();
-                    send("ATTACK"+playerNumber+"#sAS");
+                if (player.getAttackWindDown() <= 0) {
+                    player.setHorizontalSpeed(0);
+                    if (player.getDirectionUD() == 0) {
+                        player.specialAttackUp();
+                        send("ATTACK"+playerNumber+"#sAU");
+                    } else if (player.getDirectionLR() != -1) {
+                        player.specialAttackRun();
+                        send("ATTACK"+playerNumber+"#sAR");
+                    } else if (player.getDirectionUD() == 1) {
+                        player.specialAttackDown();
+                        send("ATTACK"+playerNumber+"#sAD");
+                    } else {
+                        player.specialAttackStand();
+                        send("ATTACK"+playerNumber+"#sAS");
+                    }
                 }
             }
         });

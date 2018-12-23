@@ -86,7 +86,7 @@ public class Mage extends Player{
         if(!teleUsed) {
             this.setY(this.getY() - hitbox.height * 2);
             inAir = true;
-            this.verticalSpeed = 0;
+            this.verticalSpeed = -500;
             teleUsed = true;
         }
     }

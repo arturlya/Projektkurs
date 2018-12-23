@@ -2,7 +2,6 @@ package model;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
-import de.gurkenlabs.litiengine.input.Input;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
 import java.awt.*;
@@ -12,7 +11,7 @@ import static control.Timer.dt;
 
 public abstract class Player extends GravitationalObject {
 
-    protected double attackWindUp, attackHurtTime, attackWindDown, speed, invincibilityTimer, jumpCooldown;
+    protected double attackWindUp, attackHurtTime, attackWindDown, maxSpeed, speed, invincibilityTimer, jumpCooldown;
     protected int directionLR, directionUD, lookingAt, jumpsAvailable;
     protected Hurtbox hurtbox;
     protected boolean attackTriggered;
@@ -37,7 +36,8 @@ public abstract class Player extends GravitationalObject {
         hurtbox = new Hurtbox(50,50,50,50);
         directionLR = -1;
         directionUD = -1;
-        speed = 100;
+        maxSpeed = 300;
+        speed = 4000;
         this.playable = playable;
         setX(x);
         setY(y);
@@ -148,15 +148,15 @@ public abstract class Player extends GravitationalObject {
      * Methode, die die horizontale Bewegung durchführt
      */
     private void horizontalMovement(){
-        if(attackWindDown <= 0) {
+        if(attackWindDown <= 0 || inAir) {
             if (directionLR == 0) {
-                if (horizontalSpeed > -speed) {
-                    horizontalSpeed -= speed * dt * 40;
+                if (horizontalSpeed > -maxSpeed) {
+                    horizontalSpeed -= dt * speed;
                     moving = true;
                 }
             } else if (directionLR == 1) {
-                if (horizontalSpeed < speed) {
-                    horizontalSpeed += speed * dt * 40;
+                if (horizontalSpeed < maxSpeed) {
+                    horizontalSpeed += dt * speed;
                     moving = true;
                 }
             } else if (directionLR == -1) {
