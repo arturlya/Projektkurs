@@ -15,11 +15,18 @@ public class GameController {
 
     public GameController() {
 
+
+        physicsController = new PhysicsController();
+
+        Game.getEnvironment().add(new Timer());
+        CollisionController collisionController = new CollisionController(physicsController);
+        Game.getRenderEngine().setBaseRenderScale(1);
+/*
         int switchFunction =2;
 
         if(switchFunction == 1) {
 
-            new GameServer(8888);
+           // new GameServer(8888);
 
             User user = new User();
            // user.hostGame(8888);
@@ -30,17 +37,11 @@ public class GameController {
 
         }else if (switchFunction == 2){
             User user2 = new User();
-            user2.joinGame("localhost", 8888);
+            user2.joinGame("178.201.129.203", 8888);
             //user2.init();
 
         }
-
-
-        physicsController = new PhysicsController();
-
-        Game.getEnvironment().add(new Timer());
-        CollisionController collisionController = new CollisionController(this);
-        Game.getRenderEngine().setBaseRenderScale(1);
+        */
 
         //IMap map = Game.getEnvironment().getMap();
 
