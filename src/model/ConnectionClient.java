@@ -21,8 +21,8 @@ public class ConnectionClient extends Client implements IUpdateable {
     private boolean connected;
 
     public ConnectionClient(User user,int port){
-        super("localhost",port);
-        // super("178.201.129.203",port);
+        //super("localhost",port);
+         super("178.201.129.203",port);
         Game.getLoop().attach(this);
         foundServer = false;
         this.user = user;
