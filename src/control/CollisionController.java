@@ -22,10 +22,10 @@ public class CollisionController implements IUpdateable {
     private int gravObjectAmount;
     private Map map;
 
-    public CollisionController(GameController gameController){
+    public CollisionController(PhysicsController physicsController){
         Game.getLoop().attach(this);
-        this.gravObjects = gameController.getGravObjects();
-        players = gameController.getPlayers();
+        gravObjects = physicsController.getGravObjects();
+        players = physicsController.getPlayers();
         initializeMap();
     }
 
@@ -37,7 +37,7 @@ public class CollisionController implements IUpdateable {
 
     private void checkPlayerOffScreen(){
         for(Player player : players){
-            if(!player.getHitbox().intersects(Game.getScreenManager().getBounds())){
+            if(!player.getHitbox().intersects(0,0,1920,1080)){
                 player.spawn(getFarthestSpawnpointFromPlayers());
             }
         }

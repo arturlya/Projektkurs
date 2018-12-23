@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 
 public class Warrior extends Player{
 
-    private boolean firstAttackDown;
+    private boolean downNormalAttackActive;
     private GrapplingHook hook;
 
     public Warrior(double x, double y, boolean playable){
@@ -29,13 +29,16 @@ public class Warrior extends Player{
                 hook = null;
             }
         }
-        if(firstAttackDown){
+        if(downNormalAttackActive && attackWindDown <= 0){
             secondDownAttack();
         }
     }
 
     @Override
     public void normalAttackRun() {
+        //Schlag von oben nach unten
+        //schaden mittel
+        //knockback schwach
         if(!inAir) {
             directionLR = -1;
             if (lookingAt == 1) {
@@ -55,6 +58,9 @@ public class Warrior extends Player{
 
     @Override
     public void normalAttackDown() {
+        //Sticht nach vorne, danach nach hinten
+        //schaden mittel
+        //knockback schach
         if(!inAir){
             if(lookingAt == 0) {
                 hurtbox.setRelativeRect(-hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
@@ -66,9 +72,7 @@ public class Warrior extends Player{
             attackWindUp = 0.5;
             attackHurtTime = 0.3;
             attackWindDown = 0.2;
-            if(!hurtbox.isHurting()) {
-                firstAttackDown = true;
-            }
+            downNormalAttackActive = true;
         }
     }
 
@@ -83,11 +87,14 @@ public class Warrior extends Player{
         attackWindUp = 0.1;
         attackHurtTime = 0.3;
         attackWindDown = 0.8;
-        firstAttackDown = false;
+        downNormalAttackActive = false;
     }
 
     @Override
     public void normalAttackUp() {
+        //sticht nach oben
+        //schaden mittel
+        //knockback schwach
         if(!inAir){
             hurtbox.setRelativeRect(-hitbox.width*0.1, -hitbox.height*0.5,hitbox.width+hitbox.width*0.2,hitbox.height*0.5);
             hurtbox.setDamage(0);
@@ -100,6 +107,9 @@ public class Warrior extends Player{
 
     @Override
     public void normalAttackStand() {
+        //sticht nach vorne
+        //schaden mittel
+        //knockback schwach
         if(lookingAt == 1){
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.4,hitbox.width+hitbox.width*0.5,hitbox.getHeight()*0.2);
             hurtbox.setDamage(0);
@@ -120,10 +130,14 @@ public class Warrior extends Player{
 
     @Override
     public void specialAttackRun() {
+        //schlägt mit schild
+        //schaden wenig
+        //knockback hoch
     }
 
     @Override
     public void specialAttackDown() {
+        //blockt
         if(!inAir){
             attackWindUp = 0.5;
             shieldActive = true;
@@ -133,6 +147,8 @@ public class Warrior extends Player{
 
     @Override
     public void specialAttackUp() {
+        //schießt haken
+        //schaden schwach
         if(hook == null) {
             shootGrapplingHook();
         }
@@ -140,6 +156,9 @@ public class Warrior extends Player{
 
     @Override
     public void specialAttackStand() {
+        //wirft messer
+        //schaden schach
+        //knockback schwach
         attackWindUp = 0.2;
         shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10);
         attackWindDown = 0.3;

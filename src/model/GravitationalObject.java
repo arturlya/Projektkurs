@@ -1,5 +1,6 @@
 package model;
 
+import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;
 import de.gurkenlabs.litiengine.graphics.IRenderable;
@@ -14,28 +15,33 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
 
     protected double verticalSpeed, horizontalSpeed;
     protected boolean inAir;
-    protected Rectangle2D.Double hitbox;
+    protected Rectangle2D.Double hitbox, renderHitbox;
     protected Line2D[] downLines;
+    protected double gameWidth = Game.getConfiguration().graphics().getResolutionWidth();
+    protected double gameHeight = Game.getConfiguration().graphics().getResolutionHeight();
 
     public GravitationalObject(){
         downLines = new Line2D[2];
         downLines[0] = new Line2D.Double();
         downLines[1] = new Line2D.Double();
+        renderHitbox = new Rectangle2D.Double();
     }
 
     @Override
     public void update() {
         setX(getX() + horizontalSpeed * dt);
         setY(getY() + verticalSpeed * dt);
-        hitbox.setRect(this.getX(),this.getY(),this.getWidth(),this.getHeight());
+        hitbox.setRect(getX(), getY(),getWidth(),getHeight());
         downLines[0].setLine(getX(), getY()+getHeight()-5, getX(), getY()+getHeight()+20);
         downLines[1].setLine(getX()+getWidth(), getY()+getHeight()-5, getX()+getWidth(), getY()+getHeight()+20);
+
+        renderHitbox.setRect(getX()/1920*gameWidth,getY()/1080*gameHeight,getWidth()/1920*gameWidth,getHeight()/1080*gameHeight);
     }
 
     @Override
     public void render(Graphics2D g) {
         g.setColor(new Color(70,120,255));
-        g.fill(hitbox);
+        g.fill(renderHitbox);
     }
 
 
@@ -69,6 +75,10 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
 
     public void setHitbox(Rectangle2D.Double hitbox) {
         this.hitbox = hitbox;
+    }
+
+    public Rectangle2D.Double getRenderHitbox() {
+        return renderHitbox;
     }
 
     public Line2D[] getDownLines() {

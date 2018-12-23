@@ -24,6 +24,9 @@ public abstract class Player extends GravitationalObject {
     protected int playerNumber;
     protected boolean playable;
 
+    protected boolean renderHurtboxes = true;
+    protected Rectangle2D renderHurtbox;
+
     /**
      * Konstruktor der abstrakten Klasse Player
      * @param playable entscheided, ob der Player spielbar, also von Tastatur-Inputs kontrolliert wird
@@ -41,6 +44,7 @@ public abstract class Player extends GravitationalObject {
         //setY(200);
         //setX(Math.random()*300+400);
         jumpsAvailable = 2;
+        renderHurtbox = new Rectangle2D.Double(0,0,0,0);
     }
 
     /**
@@ -50,18 +54,21 @@ public abstract class Player extends GravitationalObject {
     @Override
     public void render(Graphics2D g){
         super.render(g);
+        if(renderHurtboxes) {
 
-        if(hurtbox.isHurting()){
-            g.setColor(new Color(255,0,0,100));
-        }else{
-            g.setColor(new Color(0,255,0,100));
+            if (hurtbox.isHurting()) {
+                g.setColor(new Color(255, 0, 0, 100));
+            } else {
+                g.setColor(new Color(0, 255, 0, 100));
+            }
+
+            g.fill(renderHurtbox);
         }
-        g.fill(hurtbox);
         g.setColor(new Color(70,120,255));
         if(shieldActive) {
             g.setColor(new Color(150,150,150));
         }
-        g.fill(hitbox);
+        g.fill(renderHitbox);
 
     }
 
@@ -79,6 +86,9 @@ public abstract class Player extends GravitationalObject {
         removeProjectiles();
         if(!inAir){
             jumpsAvailable = 2;
+        }
+        if(renderHurtboxes){
+            renderHurtbox.setRect(hurtbox.x/1920*gameWidth, hurtbox.y/1080*gameHeight, hurtbox.width/1920*gameWidth, hurtbox.height/1080*gameHeight);
         }
     }
 

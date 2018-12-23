@@ -20,7 +20,7 @@ public class IngameScreen extends GameScreen {
     @Override
     public void render(final Graphics2D g){
         super.render(g);
-        renderGravObjects(g);
+        //renderGravObjects(g);
     }
 
     public void renderGravObjects(final Graphics2D g){
@@ -35,7 +35,7 @@ public class IngameScreen extends GameScreen {
             }
             g.setColor(new Color(70,120,255));
             if(gravObjects.get(i) instanceof Player)if(((Player) gravObjects.get(i)).isShieldActive()) g.setColor(new Color(150,150,150));
-            g.fill(gravObjects.get(i).getHitbox());
+            g.fill(gravObjects.get(i).getRenderHitbox());
         }
     }
 
