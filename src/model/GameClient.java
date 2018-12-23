@@ -1,5 +1,6 @@
 package model;
 
+import control.PhysicsController;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.IEntity;
@@ -12,14 +13,18 @@ import model.abitur.netz.Client;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static control.Timer.dt;
+
 public class GameClient extends Client implements IUpdateable {
 
     private Player player;
     private boolean ready;
     private boolean gameStarted;
     private int playerNumber;
+    private double coolDown;
 
     private List<Player> others;
+
 
     /**
      * Konstruktor der Klasse GameClient.
@@ -73,32 +78,23 @@ public class GameClient extends Client implements IUpdateable {
     @Override
     public void update(){
         if(player != null)
-        if(player.getY()>2000){
-            player.setY(50);
-        }
-        if (gameStarted && player.isMoving()) {
-           // send("POSITION"+playerNumber+"#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
-            send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
-        }
-        /*
-        if(gameStarted && player.getHurtbox().isHurting()){
-            //Also ... 0=player,1=x,2=y,3=width,4=height,5=isHurting,6=knockback,7=damage,8=relativeX,9=relativeY ...ufff...
-            send("HURT"+player.getPlayerNumber()+"#"+player.getHurtbox().getX()+"#"+player.getHurtbox().getY()+"#"+player.getHurtbox().width+"#"+player.getHurtbox().height+"#"+player.getHurtbox().isHurting()+"#"+player.getHurtbox().getKnockback()+"#"+player.getHurtbox().getDamage()+"#"+player.getHurtbox().getRelativeX()+"#"+player.getHurtbox().getRelativeY());
-        }
-        if(gameStarted ){
-            send("SHIELD"+player.getPlayerNumber()+"#"+player.isShieldActive());
-        }
-        if(gameStarted && player.getProjectile() != null){
-            //Das selbe wie bei Hurtbox nur mit dem Projectile
-            send("PROJECTILE"+player.getPlayerNumber()+"#"+player.getProjectile().getHurtbox().getX()+"#"+player.getProjectile().getHurtbox().getY()+"#"+player.getProjectile().getHurtbox().width+"#"+player.getProjectile().getHurtbox().height);//+"#"+player.getProjectile().getHurtbox().isHurting()+"#"+player.getProjectile().getHurtbox().getKnockback()+"#"+player.getProjectile().getHurtbox().getDamage()+"#"+player.getProjectile().getHurtbox().getRelativeX()+"#"+player.getProjectile().getHurtbox().getRelativeY());
-        }*/
 
-        //System.out.println(player.getActiveAttack());
+        if (gameStarted && player.isMoving()) {
+            send("POSITION"+playerNumber+"#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
+           // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
+        }
+        if(coolDown<=0){
+            send("POSITIONXY"+playerNumber+"#"+player.getX()+"#"+player.getY());
+            coolDown = 1;
+        }
         if (playerNumber != 0 && player != null) {
             player.setPlayerNumber(playerNumber);
 
         }
 
+        if(coolDown>0){
+            coolDown = coolDown-1*dt;
+        }
         if(gameStarted){
             processInputs();
         }
@@ -114,6 +110,7 @@ public class GameClient extends Client implements IUpdateable {
      *                 //-pMessage mit "CHOOSE"
      *                 -pMessage mit "ALL" bekommt der Client alle Spieler vom Server
      *                 -pMessage mit "POSITION" bekommt der Client die Position eines bestimmten Clients und aktualisiert sie bei sich
+     *                 -pMessage mit "ATTACK" bekommt der Client eine Attacke, die ein anderer Client ausführt
      */
     @Override
     public void processMessage(String pMessage) {
@@ -174,78 +171,41 @@ public class GameClient extends Client implements IUpdateable {
                 }
             } else if (pMessage.contains("POSITION")) {
                 String[] temp = pMessage.split("POSITION");
-                temp = temp[1].split("#");
-                if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
+                if (temp[1].contains("XY")) {
+                    temp = temp[1].split("XY");
+                    temp = temp[1].split("#");
+                    if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
-                    int posInList = Integer.parseInt(temp[0]) - 2;
-                    others.toFirst();
-                    while (posInList > 0) {
-                        others.next();
-                        posInList--;
-                    }
-                    if (others.hasAccess()) {
-                        others.getContent().setX(Double.parseDouble(temp[1]));
-                       // others.getContent().setY(Double.parseDouble(temp[2]));
-                     //   others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
-                     //   others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
-                    }
-                }
-            }/*else if(pMessage.contains("HURT")){
-                String[] temp = pMessage.split("HURT");
-                temp = temp[1].split("#");
-                if(Integer.parseInt(temp[0])!= player.getPlayerNumber()){
-                    int posInList = Integer.parseInt(temp[0]) - 2;
-                    others.toFirst();
-                    while (posInList > 0) {
-                        others.next();
-                        posInList--;
-                    }
-                    if (others.hasAccess()) {
-                        others.getContent().setHurtbox(new Hurtbox(Double.parseDouble(temp[1]),Double.parseDouble(temp[2]),(int)Double.parseDouble(temp[3]),(int)Double.parseDouble(temp[4])));
-                        if(temp[5].equals("true")){
-                            others.getContent().getHurtbox().setHurting(true);
-                        }else{
-                            others.getContent().getHurtbox().setHurting(false);
+                        int posInList = Integer.parseInt(temp[0]) - 2;
+                        others.toFirst();
+                        while (posInList > 0) {
+                            others.next();
+                            posInList--;
                         }
-                        others.getContent().getHurtbox().setKnockback((int)Double.parseDouble(temp[6]));
-                        others.getContent().getHurtbox().setDamage((int)Double.parseDouble(temp[7]));
-                        others.getContent().getHurtbox().setRelativeX(Double.parseDouble(temp[8]));
-                        others.getContent().getHurtbox().setRelativeY(Double.parseDouble(temp[9]));
-                    }
-                }
-            }else if(pMessage.contains("SHIELD")){
-                String[] temp = pMessage.split("SHIELD");
-                temp = temp[1].split("#");
-                if(Integer.parseInt(temp[0])!= player.getPlayerNumber()) {
-                    int posInList = Integer.parseInt(temp[0]) - 2;
-                    others.toFirst();
-                    while (posInList > 0) {
-                        others.next();
-                        posInList--;
-                    }
-                    if (others.hasAccess()) {
-                        others.getContent().setShieldActive(true);
-                    }
-                }
-            }else if(pMessage.contains("PROJECTILE")){
-                String[] temp = pMessage.split("PROJECTILE");
-                temp = temp[1].split("#");
-                if(Integer.parseInt(temp[0])!= player.getPlayerNumber()) {
-                    int posInList = Integer.parseInt(temp[0]) - 2;
-                    others.toFirst();
-                    while (posInList > 0) {
-                        others.next();
-                        posInList--;
-                    }
-                    if (others.hasAccess()) {
-                        if (others.getContent().getProjectile() == null) {
-                            others.getContent().shoot(Double.parseDouble(temp[0]), Double.parseDouble(temp[1]), (int) Double.parseDouble(temp[2]), (int) Double.parseDouble(temp[3]));
+                        if (others.hasAccess()) {
+                              others.getContent().setX(Double.parseDouble(temp[1]));
+                             others.getContent().setY(Double.parseDouble(temp[2]));
                         }
+                    }
+                }else {
+                    temp = temp[1].split("#");
+                    if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
+                        int posInList = Integer.parseInt(temp[0]) - 2;
+                        others.toFirst();
+                        while (posInList > 0) {
+                            others.next();
+                            posInList--;
+                        }
+                        if (others.hasAccess()) {
+                            //  others.getContent().setX(Double.parseDouble(temp[1]));
+                            // others.getContent().setY(Double.parseDouble(temp[2]));
+                            others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
+                            others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
+                        }
                     }
                 }
-            }*/
-            else if(pMessage.contains("ATTACK")){
+            } else if(pMessage.contains("ATTACK")){
                 String[] temp = pMessage.split("ATTACK");
                 temp = temp[1].split("#");
                 if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
