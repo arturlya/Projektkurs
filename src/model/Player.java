@@ -3,9 +3,13 @@ package model;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
+import view.PlayerRenderer;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.IOException;
 
 import static control.Timer.dt;
 
@@ -25,6 +29,11 @@ public abstract class Player extends GravitationalObject {
 
     protected boolean renderHurtboxes = true;
     protected Rectangle2D renderHurtbox;
+    protected double rx, ry, rwidth, rheight, offScreenX, offScreenY, offScreenWidth, offScreenHeight;
+    protected Point corner;
+    protected Image[] offScreenCircles;
+    protected Image activeOffScreenCircle;
+    protected double circleX, circleY;
 
     /**
      * Konstruktor der abstrakten Klasse Player
@@ -45,12 +54,35 @@ public abstract class Player extends GravitationalObject {
         //setX(Math.random()*300+400);
         jumpsAvailable = 2;
         renderHurtbox = new Rectangle2D.Double(0,0,0,0);
+        corner = new Point(0,0);
+        //createCircleImages();
+        PlayerRenderer pr = new PlayerRenderer(this);
+        Game.getEnvironment().add(pr,RenderType.NORMAL);
+        Game.getLoop().attach(pr);
+
     }
 
+    /*private void createCircleImages(){
+        offScreenCircles = new Image[8];
+        try {
+            offScreenCircles[0] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleDown.png"));
+            offScreenCircles[1] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleLeftDown.png"));
+            offScreenCircles[2] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleLeft.png"));
+            offScreenCircles[3] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleLeftUp.png"));
+            offScreenCircles[4] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleUp.png"));
+            offScreenCircles[5] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleRightUp.png"));
+            offScreenCircles[6] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleRight.png"));
+            offScreenCircles[7] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleRightDown.png"));
+        } catch (IOException ex) {
+            System.out.println("Bild konnte nicht geladen werden!");
+        }
+        activeOffScreenCircle = offScreenCircles[0];
+    }*/
+/*
     /**
      * Methode, um den Spieler graphisch darzustellen
      * @param g übergebene Graphics2D, um das Zeichnen zu ermöglichen
-     */
+     *//*
     @Override
     public void render(Graphics2D g){
         super.render(g);
@@ -68,9 +100,12 @@ public abstract class Player extends GravitationalObject {
         if(shieldActive) {
             g.setColor(new Color(150,150,150));
         }
+        
         g.fill(renderHitbox);
-
-    }
+        if(!hitbox.intersects(0,0,1920,1080)){
+            g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
+        }
+    }*/
 
     /**
      * Diese Methode wird mehrmals pro Sekunde aufgerufen um andere Update-Methoden aufzurufen
@@ -82,13 +117,11 @@ public abstract class Player extends GravitationalObject {
         setShapes();
         horizontalMovement();
         horizontalDecelerate();
-       // processInputs();
+        // processInputs();
         removeProjectiles();
-        if(!inAir){
+        //adjustRenderHitbox();
+        if (!inAir) {
             jumpsAvailable = 2;
-        }
-        if(renderHurtboxes){
-            renderHurtbox.setRect(hurtbox.x/1920*gameWidth, hurtbox.y/1080*gameHeight, hurtbox.width/1920*gameWidth, hurtbox.height/1080*gameHeight);
         }
     }
 
@@ -136,7 +169,7 @@ public abstract class Player extends GravitationalObject {
      */
     private void removeProjectiles(){
         if (projectile != null) {
-            if (!projectile.getHitbox().intersects(Game.getScreenManager().getBounds())) {
+            if (!projectile.getHitbox().intersects(new Rectangle(0,0,1920,1080))) {
                 Game.getEnvironment().remove(projectile);
                 Game.getEnvironment().removeRenderable(projectile);
                 projectile = null;
@@ -200,8 +233,89 @@ public abstract class Player extends GravitationalObject {
                 moving = false;
             }
             invincibilityTimer = 0.5;
+            attackWindUp = 0;
+            attackHurtTime = 0;
+            attackWindDown = 0;
         }
     }
+/*
+    /**
+     * Methode, die die RenderHurtbox auf die Größe des Fensters anpasst
+     *//*
+    private void adjustRenderHitbox(){
+        rx = hitbox.x/1920*gameWidth;
+        ry = hitbox.y/1080*gameHeight;
+        rwidth = hitbox.width/1920*gameWidth;
+        rheight = hitbox.height/1080*gameHeight;
+        if(!hitbox.intersects(0,0,1920,1080)){
+            double factor = 0;
+            if(hitbox.intersects(-200,-200,200,200) || hitbox.intersects(1920,-200,200,200) || hitbox.intersects(-200,1080,200,200) || hitbox.intersects(1920,1080,200,200)) {
+                if(hitbox.intersects(-200,-200,200,200)){
+                    circleX = 0;
+                    circleY = 0;
+                    activeOffScreenCircle = offScreenCircles[3];
+                    offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
+                    offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
+                    corner.setLocation(0,0);
+                }else if(hitbox.intersects(1920,-200,200,200)){
+                    circleX = 1770;
+                    circleY = 0;
+                    activeOffScreenCircle = offScreenCircles[5];
+                    offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
+                    offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
+                    corner.setLocation(1920,0);
+                }else if(hitbox.intersects(-200,1080,200,200)){
+                    circleX = 0;
+                    circleY = 930;
+                    activeOffScreenCircle = offScreenCircles[1];
+                    offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
+                    offScreenY = 1005.0/1080*gameHeight - offScreenHeight * 0.5;
+                    corner.setLocation(0,1080);
+                }else if(hitbox.intersects(1920,1080,200,200)){
+                    circleX = 1770;
+                    circleY = 930;
+                    activeOffScreenCircle = offScreenCircles[7];
+                    offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
+                    offScreenY = 1005.0/1080*gameHeight - offScreenHeight * 0.5;
+                    corner.setLocation(1920,1080);
+                }
+                factor = corner.distance(getX(),getY()) * -0.0029 + 1.32;
+            }else{
+                if(hitbox.intersects(0,-200,1920,200)){
+                    circleX = getX() - 50;
+                    circleY = 0;
+                    activeOffScreenCircle = offScreenCircles[4];
+                    offScreenX = rx + 0.5 * rwidth - offScreenWidth * 0.5;
+                    offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
+                    factor = Math.abs(getY()) * -0.005 + 1.5;
+                }else if(hitbox.intersects(0,1080,1920,200)){
+                    circleX = getX() - 50;
+                    circleY = 930;
+                    activeOffScreenCircle = offScreenCircles[0];
+                    offScreenX = rx + 0.5 * rwidth - offScreenWidth * 0.5;
+                    offScreenY = 1005.0/1080*gameHeight - offScreenHeight * 0.5;
+                    factor = (getY()-1080) * -0.005 + 1.5;
+                }else if(hitbox.intersects(-200,0,200,1080)){
+                    circleX = 0;
+                    circleY = getY() - 25;
+                    activeOffScreenCircle = offScreenCircles[2];
+                    offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
+                    offScreenY = ry + 0.5 * rheight - offScreenHeight * 0.5;
+                    factor = (Math.abs(getX())) * -0.005 + 1.5;
+                }else if(hitbox.intersects(1920,0,200,1080)){
+                    circleX = 1770;
+                    circleY = getY() - 25;
+                    activeOffScreenCircle = offScreenCircles[6];
+                    offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
+                    offScreenY = ry + 0.5 * rheight - offScreenHeight * 0.5;
+                    factor = (Math.abs(getX()-1920)) * -0.005 + 1.5;
+                }
+            }
+            offScreenWidth = rwidth * factor;
+            offScreenHeight = rheight * factor;
+            renderHitbox.setRect(offScreenX, offScreenY, offScreenWidth, offScreenHeight);
+        }
+    }*/
 
     /**
      * Methode, die ein Projektil erstellt

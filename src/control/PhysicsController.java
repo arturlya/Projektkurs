@@ -78,6 +78,7 @@ public class PhysicsController implements IUpdateable {
                 }
             }
         }
+        gravObjects.removeIf(g -> !Game.getEnvironment().getEntities().contains(g));
         entityAmount = Game.getEnvironment().getEntities().size();
         updatePlayers();
     }
@@ -87,10 +88,11 @@ public class PhysicsController implements IUpdateable {
             if(g instanceof Player){
                 if(!players.contains(g)){
                     players.add((Player)g);
-                    ((Player)g).spawn(map.getSpawnpoints().get(((Player)g).getPlayerNumber()));
+                    ((Player)g).spawn(map.getSpawnpoints().get(((Player)g).getPlayerNumber()-1));
                 }
             }
         }
+        players.removeIf(p -> !gravObjects.contains(p));
     }
 
     private void initializeMap(){

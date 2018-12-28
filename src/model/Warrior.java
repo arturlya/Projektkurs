@@ -39,21 +39,16 @@ public class Warrior extends Player{
         //Schlag von oben nach unten
         //schaden mittel
         //knockback schwach
-        if(!inAir) {
-            directionLR = -1;
-            if (lookingAt == 1) {
-                hurtbox.setRelativeRect(hitbox.width,0,hitbox.width,hitbox.height);
-
-
-            } else {
-                hurtbox.setRelativeRect(-hitbox.width,0,hitbox.width,hitbox.height);
-            }
-            hurtbox.setDamage(0);
-            hurtbox.setKnockback(0);
-            attackWindUp = 0.1;
-            attackHurtTime = 0.3;
-            attackWindDown  =0.2;
+        if (lookingAt == 1) {
+            hurtbox.setRelativeRect(hitbox.width,0,hitbox.width,hitbox.height);
+        } else {
+            hurtbox.setRelativeRect(-hitbox.width,0,hitbox.width,hitbox.height);
         }
+        hurtbox.setDamage(8);
+        hurtbox.setKnockback(3);
+        attackWindUp = 0.05;
+        attackHurtTime = 0.15;
+        attackWindDown  =0.2;
     }
 
     @Override
@@ -61,19 +56,17 @@ public class Warrior extends Player{
         //Sticht nach vorne, danach nach hinten
         //schaden mittel
         //knockback schach
-        if(!inAir){
-            if(lookingAt == 0) {
-                hurtbox.setRelativeRect(-hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
-            }else{
-                hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
-            }
-            hurtbox.setDamage(0);
-            hurtbox.setKnockback(0);
-            attackWindUp = 0.5;
-            attackHurtTime = 0.3;
-            attackWindDown = 0.2;
-            downNormalAttackActive = true;
+        if(lookingAt == 0) {
+            hurtbox.setRelativeRect(-hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
+        }else{
+            hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width, hitbox.height * 0.2);
         }
+        hurtbox.setDamage(0);
+        hurtbox.setKnockback(0);
+        attackWindUp = 0.5;
+        attackHurtTime = 0.3;
+        attackWindDown = 0.2;
+        downNormalAttackActive = true;
     }
 
     private void secondDownAttack() {
@@ -95,14 +88,12 @@ public class Warrior extends Player{
         //sticht nach oben
         //schaden mittel
         //knockback schwach
-        if(!inAir){
-            hurtbox.setRelativeRect(-hitbox.width*0.1, -hitbox.height*0.5,hitbox.width+hitbox.width*0.2,hitbox.height*0.5);
-            hurtbox.setDamage(0);
-            hurtbox.setKnockback(0);
-            attackWindUp = 0.3;
-            attackHurtTime = 0.3;
-            attackWindDown = 0.2;
-        }
+        hurtbox.setRelativeRect(-hitbox.width*0.1, -hitbox.height*0.5,hitbox.width+hitbox.width*0.2,hitbox.height*0.5);
+        hurtbox.setDamage(0);
+        hurtbox.setKnockback(0);
+        attackWindUp = 0.3;
+        attackHurtTime = 0.3;
+        attackWindDown = 0.2;
     }
 
     @Override
@@ -138,18 +129,16 @@ public class Warrior extends Player{
     @Override
     public void specialAttackDown() {
         //blockt
-        if(!inAir){
-            attackWindUp = 0.5;
-            shieldActive = true;
-            attackWindDown = 1;
-        }
+        attackWindUp = 0.5;
+        shieldActive = true;
+        attackWindDown = 1;
     }
 
     @Override
     public void specialAttackUp() {
         //schießt haken
         //schaden schwach
-        if(hook == null) {
+        if(projectile == null) {
             shootGrapplingHook();
         }
     }
@@ -157,7 +146,7 @@ public class Warrior extends Player{
     @Override
     public void specialAttackStand() {
         //wirft messer
-        //schaden schach
+        //schaden schwach
         //knockback schwach
         attackWindUp = 0.2;
         shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10);
@@ -165,23 +154,21 @@ public class Warrior extends Player{
     }
 
     protected void shootGrapplingHook(){
-        hook = new GrapplingHook(this,getX(),getY());
-        Game.getEnvironment().add(hook);
-        Game.getEnvironment().add(hook, RenderType.NORMAL);
+        System.out.println(1);
+        projectile = new GrapplingHook(this,getX(),getY());
+        Game.getEnvironment().add(projectile);
+        Game.getEnvironment().add(projectile, RenderType.NORMAL);
     }
 
-    private class GrapplingHook extends GravitationalObject{
+    private class GrapplingHook extends Projectile{
 
         boolean directionChosen;
         boolean isActive;
         Warrior owner;
 
         public GrapplingHook(Warrior owner, double x, double y){
+            super(owner,x,y,5,5);
             this.owner = owner;
-            setX(x);
-            setY(y);
-            setWidth(5);
-            setHeight(5);
             hitbox = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
             isActive = false;
             directionChosen = false;

@@ -8,6 +8,7 @@ import de.gurkenlabs.litiengine.util.geom.Vector2D;
 import model.GravitationalObject;
 import model.Maps.Map;
 import model.Player;
+import model.Projectile;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -19,6 +20,7 @@ public class CollisionController implements IUpdateable {
 
     private ArrayList<GravitationalObject> gravObjects;
     private ArrayList<Player> players;
+    private ArrayList<Projectile> projectiles;
     private int gravObjectAmount;
     private Map map;
 
@@ -26,6 +28,8 @@ public class CollisionController implements IUpdateable {
         Game.getLoop().attach(this);
         gravObjects = physicsController.getGravObjects();
         players = physicsController.getPlayers();
+        gravObjectAmount = gravObjects.size();
+        projectiles = new ArrayList<>();
         initializeMap();
     }
 
@@ -33,11 +37,15 @@ public class CollisionController implements IUpdateable {
     public void update() {
         checkHurtboxToPlayerCollision();
         checkPlayerOffScreen();
+        if(gravObjectAmount != gravObjects.size()){
+            updateProjectiles();
+        }
+        gravObjectAmount = gravObjects.size();
     }
 
     private void checkPlayerOffScreen(){
         for(Player player : players){
-            if(!player.getHitbox().intersects(0,0,1920,1080)){
+            if(!player.getHitbox().intersects(-200,-200,2320,1480)){
                 player.spawn(getFarthestSpawnpointFromPlayers());
             }
         }
@@ -92,5 +100,16 @@ public class CollisionController implements IUpdateable {
         Vector2D smallDir = new Vector2D(attackerCoords,defender.getCenter());
         Vector2D scaledDir = smallDir.scale(100/smallDir.length());
         defender.registerHit(scaledDir, attacker.getHurtbox());
+    }
+
+    private void updateProjectiles(){
+        for(GravitationalObject g : gravObjects){
+            if(g instanceof Projectile){
+                if(!projectiles.contains(g)) {
+                    projectiles.add((Projectile) g);
+                }
+            }
+        }
+        projectiles.removeIf(p -> !gravObjects.contains(p));
     }
 }
