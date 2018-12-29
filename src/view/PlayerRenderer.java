@@ -109,7 +109,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         if (renderHurtboxes) {
             renderHurtbox.setRect(player.getHurtbox().x / 1920 * gameWidth, player.getHurtbox().y / 1080 * gameHeight, player.getHurtbox().width / 1920 * gameWidth, player.getHurtbox().height / 1080 * gameHeight);
         }
-        updateStandingAnimationLoop();
+        if(player instanceof Mage) {
+            updateStandingAnimationLoop();
+        }
     }
 
     private void updateStandingAnimationLoop(){
