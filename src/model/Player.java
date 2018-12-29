@@ -18,7 +18,7 @@ public abstract class Player extends GravitationalObject {
     protected double attackWindUp, attackHurtTime, attackWindDown, maxSpeed, speed, invincibilityTimer, jumpCooldown;
     protected int directionLR, directionUD, lookingAt, jumpsAvailable;
     protected Hurtbox hurtbox;
-    protected boolean attackTriggered;
+    protected boolean attackTriggered, attacking;
     protected int knockbackPercentage;
 
     protected boolean shieldActive;
@@ -41,7 +41,7 @@ public abstract class Player extends GravitationalObject {
      */
     public Player(double x, double y, boolean playable){
         super();
-        hitbox = new Rectangle2D.Double(0,0,50,100);
+        hitbox = new Rectangle2D.Double(0,0,96,96);
         hurtbox = new Hurtbox(50,50,50,50);
         directionLR = -1;
         directionUD = -1;
@@ -82,10 +82,10 @@ public abstract class Player extends GravitationalObject {
     /**
      * Methode, um den Spieler graphisch darzustellen
      * @param g übergebene Graphics2D, um das Zeichnen zu ermöglichen
-     *//*
+     */
     @Override
     public void render(Graphics2D g){
-        super.render(g);
+        /*super.render(g);
         if(renderHurtboxes) {
 
             if (hurtbox.isHurting()) {
@@ -104,8 +104,8 @@ public abstract class Player extends GravitationalObject {
         g.fill(renderHitbox);
         if(!hitbox.intersects(0,0,1920,1080)){
             g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
-        }
-    }*/
+        }*/
+    }
 
     /**
      * Diese Methode wird mehrmals pro Sekunde aufgerufen um andere Update-Methoden aufzurufen
@@ -148,6 +148,11 @@ public abstract class Player extends GravitationalObject {
         }
         if(jumpCooldown > 0){
             jumpCooldown -= dt;
+        }
+        if(attackWindDown > 0){
+            attacking = true;
+        }else{
+            attacking = false;
         }
     }
 
@@ -360,6 +365,10 @@ public abstract class Player extends GravitationalObject {
 
     public Hurtbox getHurtbox() {
         return hurtbox;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
     }
 
     public void setHurtbox(Hurtbox hurtbox) {

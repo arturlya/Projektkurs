@@ -1,8 +1,10 @@
 package view;
 
+import control.Timer;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.graphics.IRenderable;
+import model.Mage;
 import model.Player;
 
 import javax.imageio.ImageIO;
@@ -11,8 +13,12 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 
+import static control.Timer.dt;
+
 public class PlayerRenderer implements IUpdateable, IRenderable {
 
+
+    private String pathToImageFolder;
     private Player player;
     private boolean renderHurtboxes = true;
     private Rectangle2D renderHurtbox;
@@ -23,12 +29,38 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     private double circleX, circleY;
     private double gameWidth = Game.getConfiguration().graphics().getResolutionWidth();
     private double gameHeight = Game.getConfiguration().graphics().getResolutionHeight();
+    private Image[] playerImages;
+    private Image currentPlayerImage;
+    private double standingAnimationTimer;
 
-    public PlayerRenderer(Player player){
+    public PlayerRenderer(Player player) {
         this.player = player;
-        renderHurtbox = new Rectangle2D.Double(0,0,0,0);
-        corner = new Point(0,0);
+        renderHurtbox = new Rectangle2D.Double(0, 0, 0, 0);
+        corner = new Point(0, 0);
         createCircleImages();
+        pathToImageFolder = "assets/img/ingame/players";
+        if (player instanceof Mage) {
+            pathToImageFolder += "/mage";
+            createMageImages();
+        }
+    }
+
+    private void createMageImages(){
+        playerImages = new Image[10];
+        try {
+            playerImages[0] = ImageIO.read(new File(pathToImageFolder + "/Standing1Left.png"));
+            playerImages[1] = ImageIO.read(new File(pathToImageFolder + "/Standing2Left.png"));
+            playerImages[2] = ImageIO.read(new File(pathToImageFolder + "/Standing3Left.png"));
+            playerImages[3] = ImageIO.read(new File(pathToImageFolder + "/Standing4Left.png"));
+            playerImages[4] = ImageIO.read(new File(pathToImageFolder + "/Standing5Left.png"));
+            playerImages[5] = ImageIO.read(new File(pathToImageFolder + "/Standing1Right.png"));
+            playerImages[6] = ImageIO.read(new File(pathToImageFolder + "/Standing2Right.png"));
+            playerImages[7] = ImageIO.read(new File(pathToImageFolder + "/Standing3Right.png"));
+            playerImages[8] = ImageIO.read(new File(pathToImageFolder + "/Standing4Right.png"));
+            playerImages[9] = ImageIO.read(new File(pathToImageFolder + "/Standing5Right.png"));
+        } catch (IOException ex) {
+            System.out.println("Bild konnte nicht geladen werden!");
+        }
     }
 
     private void createCircleImages(){
@@ -63,6 +95,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             g.setColor(new Color(150,150,150));
         }
         g.fill(player.getRenderHitbox());
+        if(player instanceof Mage) {
+            g.drawImage(currentPlayerImage, (int) player.getRenderHitbox().getX(), (int) player.getRenderHitbox().getY(), (int) player.getRenderHitbox().getWidth(), (int) player.getRenderHitbox().getHeight(), null);
+        }
         if(!player.getHitbox().intersects(0,0,1920,1080)){
             g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
         }
@@ -74,6 +109,22 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         if (renderHurtboxes) {
             renderHurtbox.setRect(player.getHurtbox().x / 1920 * gameWidth, player.getHurtbox().y / 1080 * gameHeight, player.getHurtbox().width / 1920 * gameWidth, player.getHurtbox().height / 1080 * gameHeight);
         }
+        if(player instanceof Mage) {
+            updateStandingAnimationLoop();
+        }
+    }
+
+    private void updateStandingAnimationLoop(){
+        if(standingAnimationTimer > 1.5){
+            standingAnimationTimer = 0;
+        }
+        int i = 0;
+        if(player.getLookingAt() == 1){
+            i += 5;
+        }
+        i += (int)(standingAnimationTimer * (5/1.5));
+        currentPlayerImage = playerImages[i];
+        standingAnimationTimer += dt;
     }
 
     private void adjustRenderHitbox(){
@@ -116,14 +167,14 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
                 factor = corner.distance(player.getX(),player.getY()) * -0.0029 + 1.32;
             }else{
                 if(player.getHitbox().intersects(0,-200,1920,200)){
-                    circleX = player.getX() - 50;
+                    circleX = player.getX() - (150-player.getWidth())/2;
                     circleY = 0;
                     activeOffScreenCircle = offScreenCircles[4];
                     offScreenX = rx + 0.5 * rwidth - offScreenWidth * 0.5;
                     offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
                     factor = Math.abs(player.getY()) * -0.005 + 1.5;
                 }else if(player.getHitbox().intersects(0,1080,1920,200)){
-                    circleX = player.getX() - 50;
+                    circleX = player.getX() - (150-player.getWidth())/2;
                     circleY = 930;
                     activeOffScreenCircle = offScreenCircles[0];
                     offScreenX = rx + 0.5 * rwidth - offScreenWidth * 0.5;
@@ -131,14 +182,14 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
                     factor = (player.getY()-1080) * -0.005 + 1;
                 }else if(player.getHitbox().intersects(-200,0,200,1080)){
                     circleX = 0;
-                    circleY = player.getY() - 25;
+                    circleY = player.getY() - (150-player.getHeight())/2;
                     activeOffScreenCircle = offScreenCircles[2];
                     offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
                     offScreenY = ry + 0.5 * rheight - offScreenHeight * 0.5;
                     factor = (Math.abs(player.getX())) * -0.0033 + 1.1667;
                 }else if(player.getHitbox().intersects(1920,0,200,1080)){
                     circleX = 1770;
-                    circleY = player.getY() - 25;
+                    circleY = player.getY() - (150-player.getHeight())/2;
                     activeOffScreenCircle = offScreenCircles[6];
                     offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
                     offScreenY = ry + 0.5 * rheight - offScreenHeight * 0.5;

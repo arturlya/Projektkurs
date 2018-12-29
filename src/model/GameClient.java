@@ -277,6 +277,15 @@ public class GameClient extends Client implements IUpdateable {
                         others.getContent().setLookingAt(Integer.parseInt(temp[1]));
                     }
                 }
+            }else if(pMessage.contains("QUIT")){
+                String temp = pMessage.split("QUIT")[1];
+                int posInList = Integer.parseInt(temp) - 2;
+                others.toFirst();
+                while (posInList > 0) {
+                    others.next();
+                    posInList--;
+                }
+                others.remove();
             }
             max++;
         }

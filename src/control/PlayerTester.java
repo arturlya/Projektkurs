@@ -45,7 +45,7 @@ public class PlayerTester{
         Game.getRenderEngine().setBaseRenderScale(1);
 
 
-        Player player = new Warrior(100,100,true);
+        Player player = new Mage(100,100,true);
         player.setPlayerNumber(1);
         Player dummy = new Mage(500,500,false);
         dummy.setPlayerNumber(2);

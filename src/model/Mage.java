@@ -6,8 +6,8 @@ public class Mage extends Player{
 
     public Mage(double x, double y, boolean playable){
         super(x,y,playable);
-        setWidth(50);
-        setHeight(100);
+        setWidth(96);
+        setHeight(96);
         setName("Mage");
     }
 
