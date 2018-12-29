@@ -10,6 +10,8 @@ public class GameServer extends Server {
 
     private Player[] players;
 
+    private String[][] playerIP;
+
 
     private String allPlayer = "ALL";
 
@@ -22,6 +24,7 @@ public class GameServer extends Server {
         startVote = 0;
         maxPlayers = 4;
         players = new Player[maxPlayers];
+        playerIP = new String[maxPlayers][2];
         System.out.println("Created new GameServer");
     }
 
@@ -37,9 +40,13 @@ public class GameServer extends Server {
         if(numberOfPlayers ==1){
             System.out.println("Waiting for Players");
             send(pClientIP,pClientPort,"PLAYER"+numberOfPlayers);
+            playerIP[numberOfPlayers-1][0] = pClientIP;
+            playerIP[numberOfPlayers-1][1] = Integer.toString(pClientPort);
         }else if(numberOfPlayers <= maxPlayers){
             System.out.println("Waiting for start");
             send(pClientIP,pClientPort,"PLAYER"+numberOfPlayers);
+            playerIP[numberOfPlayers-1][0] = pClientIP;
+            playerIP[numberOfPlayers-1][1] = Integer.toString(pClientPort);
         }else{
             System.out.println("Server is already full");
         }
@@ -165,8 +172,27 @@ public class GameServer extends Server {
      */
     @Override
     public void processClosingConnection(String pClientIP, int pClientPort) {
-        System.out.println("Player left the game");
-        sendToAll("QUIT");
+        //System.out.println("Player left the game");
+        System.out.println(""+pClientIP+" at port "+pClientPort+" lefted");
+
+        for(int i=0;i<playerIP.length;i++){
+            for(int j=0;j<playerIP[i].length;j++){
+                System.out.println(playerIP[i][j]);
+            }
+            System.out.println("~~~~~");
+        }
+
+        for(int i=0;i<playerIP.length;i++){
+            if(playerIP[i] != null) {
+                if (playerIP[i][0].equals(pClientIP) && playerIP[i][1].equals(Integer.toString(pClientPort))) {
+                    sendToAll("QUIT" + (i + 1));
+                    System.out.println("Player " + (i + 1) + " left the game!");
+                }
+            }
+        }
+
+
+        //sendToAll("QUIT");
     }
 
     /**
