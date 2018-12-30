@@ -28,7 +28,8 @@ public class MenuScreen extends Screen implements IUpdateable {
     public static int playerPick;
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
     private boolean connected;
-    private static boolean chooseKey,ready;
+    public static boolean ready;
+    private static boolean chooseKey;
     private Image bg,trans,join,options,exit,mageName,warriorName;
     private ArrayList<Image> playerImages;
     private BufferedImage textfield,create;
