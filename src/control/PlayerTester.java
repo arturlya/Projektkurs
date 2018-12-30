@@ -10,6 +10,8 @@ import model.Maps.Map1;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class PlayerTester{
         Game.getRenderEngine().setBaseRenderScale(1);
 
 
-        Player player = new Mage(100,100,true);
+        Player player = new Warrior(100,100,true);
         player.setPlayerNumber(1);
         Player dummy = new Warrior(500,500,false);
         dummy.setPlayerNumber(2);
@@ -55,7 +57,6 @@ public class PlayerTester{
         Game.getEnvironment().add(dummy,RenderType.NORMAL);
 
         new InputProcessor(player);
-
 
         Game.start();
     }
@@ -90,39 +91,37 @@ public class PlayerTester{
         private void processInputsDirections(){
             Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
                 if(i == 1) {
-                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                    if(!player.isAttacking() || player.isInAir()) {
                         player.setDirectionLR(0);
-                        player.setLookingAt(0);
-                        player.setMoving(true);
+                        if(!player.isInAir()) {
+                            player.setLookingAt(0);
+                        }
+                        player.setDecelerating(false);
                     }
                     i = 0;
                 }
             });
             Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
                 if(i == 1) {
-                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
-                        player.setMoving(false);
-                        player.setDirectionLR(-1);
-                    }
+                        player.setDecelerating(true);
                     i = 2;
                 }
             });
             Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
                 if(i == 1) {
-                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                    if(!player.isAttacking() || player.isInAir()) {
                         player.setDirectionLR(1);
-                        player.setLookingAt(1);
-                        player.setMoving(true);
+                        if(!player.isInAir()) {
+                            player.setLookingAt(1);
+                        }
+                        player.setDecelerating(false);
                     }
                     i = 0;
                 }
             });
             Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> {
                 if(i == 1) {
-                    if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
-                        player.setMoving(false);
-                        player.setDirectionLR(-1);
-                    }
+                        player.setDecelerating(true);
                     i = 0;
                 }
             });
@@ -146,34 +145,36 @@ public class PlayerTester{
          * Methode, die die Inputs für die Angriffe verarbeitet
          */
         private void processInputsAttacks(){
-            Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
-                if (player.getAttackWindDown() <= 0) {
-                    player.setHorizontalSpeed(0);
-                    if (player.getDirectionLR() != -1) {
-                        player.normalAttackRun();
-                    } else if (player.getDirectionUD() == 1) {
-                        player.normalAttackDown();
-                    } else if (player.getDirectionUD() == 0) {
-                        player.normalAttackUp();
-                    } else {
-                        player.normalAttackStand();
+            if(!(player instanceof Warrior && (((Warrior) player).isGettingHooked()))) {
+                Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
+                    if (player.getAttackWindDown() <= 0) {
+                        //player.setHorizontalSpeed(0);
+                        if (player.getDirectionLR() != -1) {
+                            player.normalAttackRun();
+                        } else if (player.getDirectionUD() == 1) {
+                            player.normalAttackDown();
+                        } else if (player.getDirectionUD() == 0) {
+                            player.normalAttackUp();
+                        } else {
+                            player.normalAttackStand();
+                        }
                     }
-                }
-            });
-            Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
-                if (player.getAttackWindDown() <= 0) {
-                    player.setHorizontalSpeed(0);
-                    if (player.getDirectionUD() == 0) {
-                        player.specialAttackUp();
-                    } else if (player.getDirectionLR() != -1) {
-                        player.specialAttackRun();
-                    } else if (player.getDirectionUD() == 1) {
-                        player.specialAttackDown();
-                    } else {
-                        player.specialAttackStand();
+                });
+                Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
+                    if (player.getAttackWindDown() <= 0) {
+                        //player.setHorizontalSpeed(0);
+                        if (player.getDirectionUD() == 0) {
+                            player.specialAttackUp();
+                        } else if (player.getDirectionLR() != -1) {
+                            player.specialAttackRun();
+                        } else if (player.getDirectionUD() == 1) {
+                            player.specialAttackDown();
+                        } else {
+                            player.specialAttackStand();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         /**
@@ -186,7 +187,7 @@ public class PlayerTester{
                         player.setVerticalSpeed(-700);
                         player.setInAir(true);
                         player.setJumpsAvailable(player.getJumpsAvailable()-1);
-                        player.setJumpCooldown(0.5);
+                        player.setJumpCooldown(0.2);
                     }
                 }
             });

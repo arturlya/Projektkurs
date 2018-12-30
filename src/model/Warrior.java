@@ -1,15 +1,20 @@
 package model;
 
 
+import control.Timer;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
+import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
 import java.awt.geom.Rectangle2D;
 
+import static control.Timer.dt;
+
 public class Warrior extends Player{
 
-    private boolean downNormalAttackActive;
+    private boolean downNormalAttackActive, gettingHooked, hookingTimerSet;
     private GrapplingHook hook;
+    private double hookingTimer;
 
     public Warrior(double x, double y, boolean playable){
         super(x,y,playable);
@@ -21,16 +26,24 @@ public class Warrior extends Player{
 
     @Override
     public void update() {
-        super.update();
-        if(hook != null){
-            if(!hook.getHitbox().intersects(Game.getScreenManager().getBounds())){
-                Game.getEnvironment().removeRenderable(hook);
-                Game.getEnvironment().remove(hook);
-                hook = null;
-            }
-        }
+        System.out.println(horizontalSpeed);
         if(downNormalAttackActive && attackWindDown <= 0){
             secondDownAttack();
+        }
+        if(gettingHooked && !hookingTimerSet){
+            hookingTimer = 0.5;
+            hookingTimerSet = true;
+        }
+        if(hookingTimer > 0){
+            hookingTimer -= dt;
+        }else{
+            if(gettingHooked) {
+                gettingHooked = false;
+                hookingTimerSet = false;
+                decelerating = true;
+                horizontalSpeed = horizontalSpeed / 2;
+                verticalSpeed = verticalSpeed / 1.3;
+            }
         }
     }
 
@@ -149,44 +162,49 @@ public class Warrior extends Player{
         //schaden schwach
         //knockback schwach
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(1000,0));
         attackWindDown = 0.3;
     }
 
     protected void shootGrapplingHook(){
-        System.out.println(1);
         projectile = new GrapplingHook(this,getX(),getY());
         Game.getEnvironment().add(projectile);
         Game.getEnvironment().add(projectile, RenderType.NORMAL);
     }
 
-    private class GrapplingHook extends Projectile{
+    public void pullToHook(){
+        if(projectile != null) {
+            gettingHooked = true;
+            horizontalSpeed = (projectile.getX() - getX()) * 2;
+            verticalSpeed = (projectile.getY() - getY()) * 2;
+        }
+    }
+
+    public class GrapplingHook extends Projectile{
 
         boolean directionChosen;
         boolean isActive;
         Warrior owner;
 
         public GrapplingHook(Warrior owner, double x, double y){
-            super(owner,x,y,5,5);
+            super(owner,x,y,5,5, new Vector2D(400,-750));
             this.owner = owner;
             hitbox = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
             isActive = false;
             directionChosen = false;
             inAir = true;
-            setVerticalSpeed(-350);
         }
+    }
 
-        @Override
-        public void update(){
-            super.update();
-            if(!directionChosen) {
-                if (owner.getLookingAt() == 1) {
-                    setHorizontalSpeed(700);
-                } else {
-                    setHorizontalSpeed(-700);
-                }
-                directionChosen = true;
-            }
-        }
+    public void setHookingTimer(double hookingTimer) {
+        this.hookingTimer = hookingTimer;
+    }
+
+    public boolean isGettingHooked() {
+        return gettingHooked;
+    }
+
+    public void setGettingHooked(boolean gettingHooked) {
+        this.gettingHooked = gettingHooked;
     }
 }

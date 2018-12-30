@@ -2,16 +2,15 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
-import de.gurkenlabs.litiengine.entities.Entity;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 import model.GravitationalObject;
 import model.Maps.Map;
 import model.Player;
 import model.Projectile;
+import model.Warrior;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -36,6 +35,7 @@ public class CollisionController implements IUpdateable {
     @Override
     public void update() {
         checkHurtboxToPlayerCollision();
+        checkProjectileCollision();
         checkPlayerOffScreen();
         if(gravObjectAmount != gravObjects.size()){
             updateProjectiles();
@@ -61,6 +61,19 @@ public class CollisionController implements IUpdateable {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void checkProjectileCollision(){
+        for(Projectile projectile : projectiles){
+            if(!projectile.isInAir()){
+                if(projectile instanceof Warrior.GrapplingHook){
+                    ((Warrior)projectile.getPlayer()).pullToHook();
+                }
+                Game.getEnvironment().remove(projectile);
+                Game.getEnvironment().removeRenderable(projectile);
+                projectile.getPlayer().setProjectile(null);
             }
         }
     }
@@ -99,7 +112,7 @@ public class CollisionController implements IUpdateable {
         Point attackerCoords = new Point((int)attacker.getCenter().getX(), (int)attacker.getHurtbox().getCenterY());
         Vector2D smallDir = new Vector2D(attackerCoords,defender.getCenter());
         Vector2D scaledDir = smallDir.scale(100/smallDir.length());
-        defender.registerHit(scaledDir, attacker.getHurtbox());
+        defender.registerHit(scaledDir, attacker.getHurtbox().getDamage(), attacker.getHurtbox().getKnockback());
     }
 
     private void updateProjectiles(){
