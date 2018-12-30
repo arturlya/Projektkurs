@@ -103,8 +103,10 @@ public class GameClient extends Client implements IUpdateable {
                 ready = MenuScreen.ready;
                 if (ready) {
                     send("STARTtrue");
+                    System.out.println("You are ready");
                 } else {
                     send("STARTfalse");
+                    System.out.println("You are not ready");
                 }
             }
             chosenPlayer = MenuScreen.playerPick;
