@@ -1,6 +1,5 @@
 package model;
 
-import com.dosse.upnp.UPnP;
 import control.PhysicsController;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.gui.GuiComponent;

@@ -88,7 +88,7 @@ public class PhysicsController implements IUpdateable {
             if(g instanceof Player){
                 if(!players.contains(g)){
                     players.add((Player)g);
-                    ((Player)g).spawn(map.getSpawnpoints().get(((Player)g).getPlayerNumber()-1));
+                    ((Player)g).spawn(map.getSpawnpoints().get(((Player)g).getPlayerNumber()));
                 }
             }
         }

@@ -1,6 +1,5 @@
 package model;
 
-import com.dosse.upnp.UPnP;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import model.Screens.MenuScreen;

@@ -21,7 +21,7 @@ public class GameController {
         Game.getEnvironment().add(new Timer());
         CollisionController collisionController = new CollisionController(physicsController);
         Game.getRenderEngine().setBaseRenderScale(1);
-/*
+
         int switchFunction =2;
 
         if(switchFunction == 1) {
@@ -37,11 +37,11 @@ public class GameController {
 
         }else if (switchFunction == 2){
             User user2 = new User();
-            user2.joinGame("178.201.129.203", 8888);
+            user2.joinGame("192.168.0.122", 5432);
             //user2.init();
 
         }
-        */
+
 
         //IMap map = Game.getEnvironment().getMap();
 
