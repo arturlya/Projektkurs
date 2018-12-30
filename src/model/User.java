@@ -54,36 +54,6 @@ public class User extends GuiComponent {
         }
     }
 
-    /**
-     * Der Nutzer erstellt einen GameServer den er mit seinem Client betritt.
-     *
-     * @param port Port des neuen Servers
-     */
-    public void hostGame(int port){
-        /*
-        System.out.println("IP test : Loakal : "+UPnP.getLocalIP()+"/n Global :"+UPnP.getExternalIP());
-        if(UPnP.isUPnPAvailable()) {
-            if(UPnP.isMappedTCP(port)) {
-                System.out.println("Port already mapped");
-            }else {
-                UPnP.openPortTCP(port);
-                if (UPnP.openPortTCP(port)) { //try to map port
-                    System.out.println("UPnP port forwarding enabled");
-                    this.port = port;
-                    server = new GameServer(port);
-                    client = new GameClient(StaticData.ip, port);
-                    System.out.println("Hosting Server at " + port);
-                    clientActive = true;
-                } else {
-                    System.out.println("UPnP port forwarding failed");
-                }
-
-            }
-        }else{
-            System.out.println("UPNP not available");
-        }
-        */
-    }
 
     /**
      * Der Nutzer verlässt den aktuellen Server.
@@ -93,20 +63,6 @@ public class User extends GuiComponent {
             client.close();
         }
     }
-
-    /*@Override
-    public void mousePressed(MouseEvent e) {
-        super.mousePressed(e);
-        System.out.println(1);
-        if (e.getX() >= 645*1920/Game.getConfiguration().graphics().getResolutionWidth() && e.getX() <= 1270*1920/Game.getConfiguration().graphics().getResolutionWidth()) {
-            System.out.println(1);
-        }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        System.out.println(1);
-    }*/
 
     @Override
     public void mouseMoved(MouseEvent e) {
