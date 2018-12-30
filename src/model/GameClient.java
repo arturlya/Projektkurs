@@ -289,7 +289,6 @@ public class GameClient extends Client implements IUpdateable {
                     Game.getEnvironment().removeRenderable(others.getContent());
                     Game.getEnvironment().remove(others.getContent());
                     others.getContent().removeRenderer();
-                    others.remove();
                     System.out.println("Deleted Player " + temp);
                 }else {
                     System.out.println("error");
