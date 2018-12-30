@@ -8,8 +8,6 @@ public class GameServer extends Server {
     private int maxPlayers;
     private int startVote;
 
-    private Player[] players;
-
     private String[][] playerIP;
 
 
@@ -23,7 +21,6 @@ public class GameServer extends Server {
         super(port);
         startVote = 0;
         maxPlayers = 4;
-        players = new Player[maxPlayers];
         playerIP = new String[maxPlayers][2];
         System.out.println("Created new GameServer");
     }
@@ -175,17 +172,18 @@ public class GameServer extends Server {
         //System.out.println("Player left the game");
         System.out.println(""+pClientIP+" at port "+pClientPort+" lefted");
 
-        for(int i=0;i<playerIP.length;i++){
+      /*  for(int i=0;i<playerIP.length;i++){
             for(int j=0;j<playerIP[i].length;j++){
                 System.out.println(playerIP[i][j]);
             }
             System.out.println("~~~~~");
         }
-
+*/
         for(int i=0;i<playerIP.length;i++){
-            if(playerIP[i] != null) {
+            if(playerIP[i][0] != null) {
                 if (playerIP[i][0].equals(pClientIP) && playerIP[i][1].equals(Integer.toString(pClientPort))) {
                     sendToAll("QUIT" + (i + 1));
+                    System.out.println("QUIT"+(i+1));
                     System.out.println("Player " + (i + 1) + " left the game!");
                 }
             }
@@ -206,19 +204,4 @@ public class GameServer extends Server {
         }
     }
 
-    /**
-     * @return Gibt einen String mit allen Spieler Unterklassen der einzelnen Clients mit dem Schlüsselwort "ALL"
-     */
-    private String getAllPlayers(){
-        String temp = "ALL"+numberOfPlayers+"NEXT";
-        for(int i=0;i<players.length;i++){
-            if(players[i] != null){
-                temp = temp+(i+1)+"#"+players[i].getName();
-                if(i != numberOfPlayers-1)
-                    temp = temp+"NEXT";
-            }
-        }
-        return temp;
-
-    }
 }

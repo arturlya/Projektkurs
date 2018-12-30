@@ -39,7 +39,7 @@ public class GameClient extends Client implements IUpdateable {
         super(ip,port);
         ready = false;
         others = new List<>();
-        choosePlayer(1);
+        choosePlayer(2);
         player.setY(10);
         player.setX(600);
         Game.getEnvironment().add(player);
@@ -285,7 +285,15 @@ public class GameClient extends Client implements IUpdateable {
                     others.next();
                     posInList--;
                 }
-                others.remove();
+                if(others.hasAccess()) {
+                    Game.getEnvironment().removeRenderable(others.getContent());
+                    Game.getEnvironment().remove(others.getContent());
+                    others.getContent().removeRenderer();
+                    others.remove();
+                    System.out.println("Deleted Player " + temp);
+                }else {
+                    System.out.println("error");
+                }
             }
             max++;
         }

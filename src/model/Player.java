@@ -35,6 +35,8 @@ public abstract class Player extends GravitationalObject {
     protected Image activeOffScreenCircle;
     protected double circleX, circleY;
 
+    protected PlayerRenderer pr;
+
     /**
      * Konstruktor der abstrakten Klasse Player
      * @param playable entscheided, ob der Player spielbar, also von Tastatur-Inputs kontrolliert wird
@@ -56,7 +58,7 @@ public abstract class Player extends GravitationalObject {
         renderHurtbox = new Rectangle2D.Double(0,0,0,0);
         corner = new Point(0,0);
         //createCircleImages();
-        PlayerRenderer pr = new PlayerRenderer(this);
+        pr = new PlayerRenderer(this);
         Game.getEnvironment().add(pr,RenderType.NORMAL);
         Game.getLoop().attach(pr);
 
@@ -446,5 +448,9 @@ public abstract class Player extends GravitationalObject {
 
     public int getDirectionUD() {
         return directionUD;
+    }
+
+    public void removeRenderer(){
+        Game.getEnvironment().removeRenderable(pr);
     }
 }
