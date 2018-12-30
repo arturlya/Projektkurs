@@ -1,11 +1,11 @@
 package view;
 
-import control.Timer;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.graphics.IRenderable;
 import model.Mage;
 import model.Player;
+import model.Warrior;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -41,11 +41,13 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         pathToImageFolder = "assets/img/ingame/players";
         if (player instanceof Mage) {
             pathToImageFolder += "/mage";
-            createMageImages();
+        }else if(player instanceof Warrior) {
+            pathToImageFolder += "/warrior";
         }
+        createImages();
     }
 
-    private void createMageImages(){
+    private void createImages(){
         playerImages = new Image[10];
         try {
             playerImages[0] = ImageIO.read(new File(pathToImageFolder + "/Standing1Left.png"));
