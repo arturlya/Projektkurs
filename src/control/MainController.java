@@ -35,16 +35,17 @@ public class MainController {
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
         } catch (IOException ex) {
-            System.out.println("Bild konnte nicht geladen werden!");
+            System.err.println(ex);
+            //System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
         screenController = new ScreenController();
-        screenController.setIngameScreen(new Map1());
-        //screenController.setMenuScreen();
-        //User user = new User();
-        //user.init();
+        //screenController.setIngameScreen(new Map1());
+        screenController.setMenuScreen();
+        User user = new User();
+        user.init();
 
-        new GameController();
+
         /**
          * Wer von euch lit ist uncommented!
          */

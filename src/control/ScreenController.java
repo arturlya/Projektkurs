@@ -17,6 +17,7 @@ public class ScreenController extends Entity implements IUpdateable {
     private MenuScreen menuScreen;
     private IngameScreen ingameScreen;
     private ArrayList<Environment> environments = new ArrayList<>();
+    private GameController gameController;
 
     public ScreenController(){
         environments.add(new Environment("assets/maps/blank.tmx"));
@@ -37,12 +38,16 @@ public class ScreenController extends Entity implements IUpdateable {
     public void setMenuScreen(){
         Game.loadEnvironment(environments.get(0));
         Game.getScreenManager().displayScreen(menuScreen);
+        gameController = null;
     }
 
     public void setIngameScreen(Map map){
         Game.loadEnvironment(environments.get(1));
         Game.getScreenManager().displayScreen(ingameScreen);
         Game.getEnvironment().add(map, RenderType.BACKGROUND);
+        if(gameController==null) {
+            gameController = new GameController();
+        }
     }
 
     public MenuScreen getMenuScreen() {
