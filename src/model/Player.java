@@ -23,7 +23,7 @@ public abstract class Player extends GravitationalObject {
 
     protected boolean shieldActive;
     protected Projectile projectile;
-    protected boolean moving;
+    protected boolean moving, decelerating;
     protected int playerNumber;
     protected boolean playable;
 
@@ -117,8 +117,10 @@ public abstract class Player extends GravitationalObject {
         super.update();
         regulateTimers();
         setShapes();
-        horizontalMovement();
-        horizontalDecelerate();
+        if(!(this instanceof Warrior && (((Warrior) this).isGettingHooked()))) {
+            horizontalMovement();
+            horizontalDecelerate();
+        }
         // processInputs();
         removeProjectiles();
         //adjustRenderHitbox();
@@ -162,11 +164,11 @@ public abstract class Player extends GravitationalObject {
      * Methode, um HurtBox zu den Koordinaten des Players zu setzen
      */
     private void setShapes(){
-        if(attackWindDown <= 0){
+        if(!attacking){
             hurtbox.setRect(-100,-100,0,0);
         }
 
-        if(attackWindDown > 0){
+        if(attacking){
             hurtbox.setRect(getX() + hurtbox.getRelativeX(), getY() + hurtbox.getRelativeY(), hurtbox.getWidth(), hurtbox.getHeight());
         }
     }
@@ -174,9 +176,9 @@ public abstract class Player extends GravitationalObject {
     /**
      * Methode, um Projektile zu entfernen, falls sie außerhalb des Screens sind
      */
-    private void removeProjectiles(){
+    public void removeProjectiles(){
         if (projectile != null) {
-            if (!projectile.getHitbox().intersects(new Rectangle(0,0,1920,1080))) {
+            if (!projectile.getHitbox().intersects(new Rectangle(-200,-200,2320,1480))) {
                 Game.getEnvironment().remove(projectile);
                 Game.getEnvironment().removeRenderable(projectile);
                 projectile = null;
@@ -188,15 +190,23 @@ public abstract class Player extends GravitationalObject {
      * Methode, die die horizontale Bewegung durchführt
      */
     private void horizontalMovement(){
-        if(attackWindDown <= 0 || inAir) {
+        if((!attacking || inAir) && !decelerating) {
             if (directionLR == 0) {
                 if (horizontalSpeed > -maxSpeed) {
-                    horizontalSpeed -= dt * speed;
+                    if(!inAir) {
+                        horizontalSpeed -= dt * speed;
+                    }else{
+                        horizontalSpeed -= dt * speed / 3;
+                    }
                     moving = true;
                 }
             } else if (directionLR == 1) {
                 if (horizontalSpeed < maxSpeed) {
-                    horizontalSpeed += dt * speed;
+                    if(!inAir) {
+                        horizontalSpeed += dt * speed;
+                    }else{
+                        horizontalSpeed += dt * speed / 3;
+                    }
                     moving = true;
                 }
             } else if (directionLR == -1) {
@@ -209,29 +219,40 @@ public abstract class Player extends GravitationalObject {
      * Methode, die den Player horizontal abbremst
      */
     private void horizontalDecelerate(){
-        if(horizontalSpeed < 50 && horizontalSpeed > -50){
-            horizontalSpeed = 0;
-        }else if(horizontalSpeed > 50){
-            horizontalSpeed -= 1000*dt;
-        }else if(horizontalSpeed < -50){
-            horizontalSpeed += 1000*dt;
+        if(decelerating) {
+            if (horizontalSpeed < 15 && horizontalSpeed > -15) {
+                horizontalSpeed = 0;
+                directionLR = -1;
+                decelerating = false;
+            } else if (horizontalSpeed >= 15) {
+                if (!inAir) {
+                    horizontalSpeed -= 1000 * dt;
+                } else {
+                    horizontalSpeed -= 300 * dt;
+                }
+            } else if (horizontalSpeed <= -15) {
+                if (!inAir) {
+                    horizontalSpeed += 1000 * dt;
+                } else {
+                    horizontalSpeed += 300 * dt;
+                }
+            }
         }
     }
 
     /**
      * Methode, die den Player zurückschlagen, wenn er von einem Angriff getroffen wird
      * @param direction Vector, der die Richtung des Schlages angibt
-     * @param hurtbox HurtBox, von dem der Player getroffen wird
      */
-    public void registerHit(Vector2D direction, Hurtbox hurtbox){
+    public void registerHit(Vector2D direction, int damage, int knockback){
         if(invincibilityTimer <= 0) {
-            knockbackPercentage += hurtbox.getDamage();
+            knockbackPercentage += damage;
             if(knockbackPercentage < 10){
-                verticalSpeed = direction.getY() * hurtbox.getKnockback() * 1.1;
-                horizontalSpeed = direction.getX() * hurtbox.getKnockback() * 1.1;
+                verticalSpeed = direction.getY() * knockback * 1.1;
+                horizontalSpeed = direction.getX() * knockback * 1.1;
             }
-            verticalSpeed = direction.getY() * hurtbox.getKnockback() * Math.pow(1.1, knockbackPercentage/10);
-            horizontalSpeed = direction.getX() * hurtbox.getKnockback() * Math.pow(1.1, knockbackPercentage/10);
+            verticalSpeed = direction.getY() * knockback * Math.pow(1.1, knockbackPercentage/10);
+            horizontalSpeed = direction.getX() * knockback * Math.pow(1.1, knockbackPercentage/10);
             //Später rausnehmen
             if(verticalSpeed != 0){
                 inAir = true;
@@ -243,6 +264,7 @@ public abstract class Player extends GravitationalObject {
             attackWindUp = 0;
             attackHurtTime = 0;
             attackWindDown = 0;
+            decelerating = true;
         }
     }
 /*
@@ -331,9 +353,9 @@ public abstract class Player extends GravitationalObject {
      * @param width Breite des Projektils
      * @param height Höhe des Projektils
      */
-    public void shoot(double paramX,double paramY,int width,int height) {
+    public void shoot(double paramX,double paramY,int width,int height, Vector2D direction) {
         if (projectile == null){
-            projectile = new Projectile(this, paramX, paramY, width, height);
+            projectile = new Projectile(this, paramX, paramY, width, height, direction);
             Game.getEnvironment().add(projectile);
             Game.getEnvironment().add(projectile,RenderType.NORMAL);
         }
@@ -365,6 +387,14 @@ public abstract class Player extends GravitationalObject {
 
     public abstract void specialAttackStand();
 
+    public boolean isDecelerating() {
+        return decelerating;
+    }
+
+    public void setDecelerating(boolean decelerating) {
+        this.decelerating = decelerating;
+    }
+
     public Hurtbox getHurtbox() {
         return hurtbox;
     }
@@ -383,6 +413,10 @@ public abstract class Player extends GravitationalObject {
 
     public int getLookingAt() {
         return lookingAt;
+    }
+
+    public void setProjectile(Projectile projectile) {
+        this.projectile = projectile;
     }
 
     public boolean isMoving() {

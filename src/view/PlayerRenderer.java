@@ -98,9 +98,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             g.setColor(new Color(150,150,150));
         }
         g.fill(player.getRenderHitbox());
-        if(player instanceof Mage) {
-            g.drawImage(currentPlayerImage, (int) player.getRenderHitbox().getX(), (int) player.getRenderHitbox().getY(), (int) player.getRenderHitbox().getWidth(), (int) player.getRenderHitbox().getHeight(), null);
-        }
+        g.drawImage(currentPlayerImage, (int) player.getRenderHitbox().getX(), (int) player.getRenderHitbox().getY(), (int) player.getRenderHitbox().getWidth(), (int) player.getRenderHitbox().getHeight(), null);
         if(!player.getHitbox().intersects(0,0,1920,1080)){
             g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
         }
@@ -112,9 +110,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         if (renderHurtboxes) {
             renderHurtbox.setRect(player.getHurtbox().x / 1920 * gameWidth, player.getHurtbox().y / 1080 * gameHeight, player.getHurtbox().width / 1920 * gameWidth, player.getHurtbox().height / 1080 * gameHeight);
         }
-        if(player instanceof Mage) {
-            updateStandingAnimationLoop();
-        }
+        updateStandingAnimationLoop();
     }
 
     private void updateStandingAnimationLoop(){

@@ -7,6 +7,7 @@ import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.GravitationalObject;
 import model.Maps.Map;
 import model.Player;
+import model.Warrior;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -54,6 +55,9 @@ public class PhysicsController implements IUpdateable {
                         colliding = true;
                         g.setY(map.getLines().get(i).getY1() - g.getHeight());
                         g.setInAir(false);
+                        if(g instanceof Warrior){
+                            ((Warrior) g).setHookingTimer(0);
+                        }
                     }
                 }
                 if (!colliding) {
@@ -61,7 +65,9 @@ public class PhysicsController implements IUpdateable {
                 }
             }
             if(g.isInAir()){
-                g.setVerticalSpeed(g.getVerticalSpeed() + 1000 * dt);
+                if(!(g instanceof Warrior && ((Warrior) g).isGettingHooked())) {
+                    g.setVerticalSpeed(g.getVerticalSpeed() + 1000 * dt);
+                }
             }else{
                 g.setVerticalSpeed(0);
             }

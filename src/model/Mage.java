@@ -1,5 +1,7 @@
 package model;
 
+import de.gurkenlabs.litiengine.util.geom.Vector2D;
+
 public class Mage extends Player{
 
     private boolean teleUsed;
@@ -70,7 +72,7 @@ public class Mage extends Player{
     @Override
     public void specialAttackRun() {
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(500,-50));
         attackWindDown = 0.3;
     }
 

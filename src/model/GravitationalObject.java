@@ -35,7 +35,7 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
         downLines[0].setLine(getX(), getY() + getHeight() - 5, getX(), getY() + getHeight() + 20);
         downLines[1].setLine(getX() + getWidth(), getY() + getHeight() - 5, getX() + getWidth(), getY() + getHeight() + 20);
 
-        if(hitbox.intersects(0, 0, 1920, 1080)) {
+        if((this instanceof Player && this.hitbox.intersects(0,0,1920,1080)) || (!(this instanceof Player) && this.hitbox.intersects(-200,-200,2320,1480))) {
             renderHitbox.setRect(getX() / 1920 * gameWidth, getY() / 1080 * gameHeight, getWidth() / 1920 * gameWidth, getHeight() / 1080 * gameHeight);
         }
     }
