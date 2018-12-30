@@ -27,7 +27,8 @@ public class MenuScreen extends Screen implements IUpdateable {
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
     private static boolean chooseKey;
-    private Image bg,trans,join,options,exit;
+    private Image bg,trans,join,options,exit,mageName,warriorName;
+    private ArrayList<Image> playerImages;
     private BufferedImage textfield,create;
     private ArrayList<ImageComponent> buttons = new ArrayList<>();
     private ArrayList<TextFieldComponent> textFields = new ArrayList<>();
@@ -49,6 +50,7 @@ public class MenuScreen extends Screen implements IUpdateable {
             join = ImageIO.read(new File("assets/img/Buttons/join.png"));
             options = ImageIO.read(new File("assets/img/Buttons/options.png"));
             exit = ImageIO.read(new File("assets/img/Buttons/exit.png"));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right")));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
@@ -178,6 +180,10 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawString("Volume: ",width/2-200,height/2-117);
             g.drawString(""+audio.getCurrentValue(),width/2+200,height/2-117);
         }else if (menuName.equalsIgnoreCase("overall")) {
+            g.drawImage(trans,0,0,width,height,null);
+            g.drawImage(trans,0,0,width,height,null);
+        }else if (menuName.equalsIgnoreCase("playerpick")) {
+            g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
         }

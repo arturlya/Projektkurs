@@ -38,13 +38,14 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         renderHurtbox = new Rectangle2D.Double(0, 0, 0, 0);
         corner = new Point(0, 0);
         createCircleImages();
-        pathToImageFolder = "assets/img/ingame/players";
+        pathToImageFolder = "assets/img/ingame/Players";
         if (player instanceof Mage) {
-            pathToImageFolder += "/mage";
+            pathToImageFolder += "/Mage";
+            createImages();
         }else if(player instanceof Warrior) {
-            pathToImageFolder += "/warrior";
+            pathToImageFolder += "/Warrior";
+            createImages();
         }
-        createImages();
     }
 
     private void createImages(){
