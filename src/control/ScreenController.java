@@ -9,6 +9,7 @@ import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.Maps.Map;
 import model.Screens.IngameScreen;
 import model.Screens.MenuScreen;
+import model.User;
 
 import java.util.ArrayList;
 
@@ -18,11 +19,13 @@ public class ScreenController extends Entity implements IUpdateable {
     private IngameScreen ingameScreen;
     private ArrayList<Environment> environments = new ArrayList<>();
     private GameController gameController;
+    private User user;
 
-    public ScreenController(){
+    public ScreenController(User user){
+        this.user = user;
         environments.add(new Environment("assets/maps/blank.tmx"));
         Game.loadEnvironment(environments.get(0));
-        menuScreen = new MenuScreen();
+        menuScreen = new MenuScreen(user);
         Game.getScreenManager().addScreen(menuScreen);
         environments.add(new Environment("assets/maps/blank.tmx"));
         Game.loadEnvironment(environments.get(1));

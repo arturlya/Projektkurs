@@ -27,7 +27,8 @@ public class MenuScreen extends Screen implements IUpdateable {
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
     public static int playerPick;
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
-    private static boolean chooseKey;
+    private boolean connected;
+    private static boolean chooseKey,ready;
     private Image bg,trans,join,options,exit,mageName,warriorName;
     private ArrayList<Image> playerImages;
     private BufferedImage textfield,create;
@@ -36,12 +37,14 @@ public class MenuScreen extends Screen implements IUpdateable {
     private Menu optionsMenu,keyNameMenu,keyMenu;
     private KeyChecker keyChecker = new KeyChecker();
     private HorizontalSlider audio;
-    private CheckBox fullscreen;
+    private CheckBox readyMark;
 
-    public MenuScreen(){
+    private User user;
+
+    public MenuScreen(User user){
         super("MENU");
         Game.getLoop().attach(this);
-        System.out.println(widthMultiplier);
+        this.user = user;
         menuName = "main";
         playerImages = new ArrayList<>();
         try {
@@ -62,6 +65,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         createButtons();
         createTextField();
         createSubMenus();
+        createReadyCheckMark();
         Input.keyboard().addKeyListener(keyChecker);
     }
 
@@ -99,7 +103,6 @@ public class MenuScreen extends Screen implements IUpdateable {
                 if (isNumber) {
                     joinPort = textFields.get(0).getText();
                     textFields.get(0).setText("");
-                    menuName = "playerpick";
                 }
             }else if (textFields.get(1).getText().length() == 4 && textFields.get(1).getText() != null && menuName.equalsIgnoreCase("create")) {
                 chars = textFields.get(1).getText().toCharArray();
@@ -156,6 +159,16 @@ public class MenuScreen extends Screen implements IUpdateable {
             StaticData.audioVolume = (int)audio.getCurrentValue();
             Game.getConfiguration().sound().setMusicVolume(StaticData.audioVolume/100f);
         }
+        if (user.isConnected() && !connected) {
+            connected = true;
+            menuName = "playerpick";
+        }
+        if (playerPick != 0 && readyMark.isChecked()) {
+            ready = true;
+        }
+        if (readyMark.isChecked() && !ready) {
+            readyMark.setChecked(false);
+        }
     }
 
     public void render(Graphics2D g) {
@@ -194,6 +207,7 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(playerImages.get(0),(int)(840*widthMultiplier),(int)(490*heightMultiplier),null);
             g.drawImage(playerImages.get(1),(int)(980*widthMultiplier),(int)(490*heightMultiplier),null);
+            readyMark.render(g);
         }
     }
 
@@ -216,7 +230,7 @@ public class MenuScreen extends Screen implements IUpdateable {
                     keyNameMenu.setCurrentSelection(i);
                 }
             }
-        }else if (menuName.equalsIgnoreCase("playerpick")) {
+        }else if (menuName.equalsIgnoreCase("playerpick") && !readyMark.isChecked()) {
             if (e.getX() >= 840*widthMultiplier && e.getX() <= 940*widthMultiplier && e.getY() >= 490*heightMultiplier && e.getY() <= 590*heightMultiplier) {
                 playerPick = 1;
                 System.out.println(playerPick);
@@ -275,7 +289,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         audio.setCurrentValue(StaticData.audioVolume);
     }
 
-    private void createFullscreenCheckMark(){
-
+    private void createReadyCheckMark(){
+        readyMark = new CheckBox(1800*widthMultiplier,940*heightMultiplier,100,100,null,false);
+        readyMark.prepare();
+        readyMark.setEnabled(true);
     }
 }

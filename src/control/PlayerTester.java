@@ -36,7 +36,7 @@ public class PlayerTester{
             System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
-        screenController = new ScreenController();
+        screenController = new ScreenController(new User());
         screenController.setIngameScreen(new Map1());
 
         physicsController = new PhysicsController();

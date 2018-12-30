@@ -71,6 +71,8 @@ public class User extends GuiComponent {
     }
 
     public boolean isConnected(){
-        return client.isConnected();
+        if (client != null) {
+            return client.isConnected();
+        }else return false;
     }
 }

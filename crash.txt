@@ -1,8 +1,5 @@
-main threw an exception:
-java.util.NoSuchElementException
-	at java.util.concurrent.ConcurrentHashMap$KeyIterator.next(ConcurrentHashMap.java:3416)
-	at control.PhysicsController.initializeMap(PhysicsController.java:97)
-	at control.PhysicsController.<init>(PhysicsController.java:40)
-	at control.GameController.<init>(GameController.java:17)
-	at control.MainController.<init>(MainController.java:42)
-	at control.MainController.main(MainController.java:16)
+Render Loop threw an exception:
+java.lang.NullPointerException
+	at model.Screens.MenuScreen.render(MenuScreen.java:203)
+	at de.gurkenlabs.litiengine.graphics.RenderComponent.render(RenderComponent.java:149)
+	at de.gurkenlabs.litiengine.RenderLoop.run(RenderLoop.java:23)
