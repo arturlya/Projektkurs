@@ -113,4 +113,8 @@ public class User extends GuiComponent {
         super.mouseMoved(e);
         System.out.println(1);
     }
+
+    public boolean isConnected(){
+        return client.isConnected();
+    }
 }

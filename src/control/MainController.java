@@ -39,12 +39,12 @@ public class MainController {
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
         screenController = new ScreenController();
-        screenController.setIngameScreen(new Map1());
-        //screenController.setMenuScreen();
+        //screenController.setIngameScreen(new Map1());
+        screenController.setMenuScreen();
         //User user = new User();
         //user.init();
 
-        new GameController();
+        //new GameController();
         /**
          * Wer von euch lit ist uncommented!
          */

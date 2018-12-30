@@ -25,6 +25,7 @@ public class MenuScreen extends Screen implements IUpdateable {
     public static String hostPort = "";
     private char[] chars;
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
+    public static int playerPick;
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
     private static boolean chooseKey;
     private Image bg,trans,join,options,exit,mageName,warriorName;
@@ -42,6 +43,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         Game.getLoop().attach(this);
         System.out.println(widthMultiplier);
         menuName = "main";
+        playerImages = new ArrayList<>();
         try {
             bg = ImageIO.read(new File("assets/img/Menu/bg.png"));
             trans = ImageIO.read(new File("assets/img/Menu/trans.png"));
@@ -50,7 +52,10 @@ public class MenuScreen extends Screen implements IUpdateable {
             join = ImageIO.read(new File("assets/img/Buttons/join.png"));
             options = ImageIO.read(new File("assets/img/Buttons/options.png"));
             exit = ImageIO.read(new File("assets/img/Buttons/exit.png"));
-            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right")));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Warrior/Standing1Right.png")));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right.png")));
+            mageName = ImageIO.read(new File("assets/img/ingame/Players/Mage Name.png"));
+            warriorName = ImageIO.read(new File("assets/img/ingame/Players/Warrior Name.png"));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
@@ -94,6 +99,7 @@ public class MenuScreen extends Screen implements IUpdateable {
                 if (isNumber) {
                     joinPort = textFields.get(0).getText();
                     textFields.get(0).setText("");
+                    menuName = "playerpick";
                 }
             }else if (textFields.get(1).getText().length() == 4 && textFields.get(1).getText() != null && menuName.equalsIgnoreCase("create")) {
                 chars = textFields.get(1).getText().toCharArray();
@@ -186,6 +192,8 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
+            g.drawImage(playerImages.get(0),(int)(840*widthMultiplier),(int)(490*heightMultiplier),null);
+            g.drawImage(playerImages.get(1),(int)(980*widthMultiplier),(int)(490*heightMultiplier),null);
         }
     }
 
@@ -207,6 +215,14 @@ public class MenuScreen extends Screen implements IUpdateable {
                     chooseKey = true;
                     keyNameMenu.setCurrentSelection(i);
                 }
+            }
+        }else if (menuName.equalsIgnoreCase("playerpick")) {
+            if (e.getX() >= 840*widthMultiplier && e.getX() <= 940*widthMultiplier && e.getY() >= 490*heightMultiplier && e.getY() <= 590*heightMultiplier) {
+                playerPick = 1;
+                System.out.println(playerPick);
+            }else if (e.getX() >= 980*widthMultiplier && e.getX() <= 1080*widthMultiplier && e.getY() >= 490*heightMultiplier && e.getY() <= 590*heightMultiplier) {
+                playerPick = 2;
+                System.out.println(playerPick);
             }
         }
     }

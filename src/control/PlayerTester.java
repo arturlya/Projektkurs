@@ -47,7 +47,7 @@ public class PlayerTester{
 
         Player player = new Mage(100,100,true);
         player.setPlayerNumber(1);
-        Player dummy = new Mage(500,500,false);
+        Player dummy = new Warrior(500,500,false);
         dummy.setPlayerNumber(2);
         Game.getEnvironment().add(player);
         Game.getEnvironment().add(player, RenderType.NORMAL);
