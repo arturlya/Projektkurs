@@ -36,8 +36,10 @@ public class GameClient extends Client implements IUpdateable {
      */
     public GameClient(String ip, int port){
         super(ip,port);
+        System.out.println("Running GameClient");
         ready = false;
         others = new List<>();
+        Input.getLoop().attach(this);
         //choosePlayer(1);
 
         //init();
@@ -76,6 +78,7 @@ public class GameClient extends Client implements IUpdateable {
      */
     @Override
     public void update(){
+
         i = 1;
         if(player != null)
 
@@ -83,7 +86,7 @@ public class GameClient extends Client implements IUpdateable {
             send("POSITION"+playerNumber+"#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
            // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
         }
-        if(coolDown<=0){
+        if(gameStarted && coolDown<=0){
             send("POSITIONXY"+playerNumber+"#"+player.getX()+"#"+player.getY());
             coolDown = 1;
         }
@@ -98,10 +101,10 @@ public class GameClient extends Client implements IUpdateable {
         if(gameStarted){
             processInputs();
         }
+
         if(!gameStarted){
             if(ready != MenuScreen.ready) {
-                ready = MenuScreen.ready;
-                if (ready) {
+                if (MenuScreen.ready) {
                     send("STARTtrue");
                     System.out.println("You are ready");
                 } else {

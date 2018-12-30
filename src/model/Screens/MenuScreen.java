@@ -166,7 +166,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
         if (playerPick != 0 && readyMark.isChecked()) {
             ready = true;
-        }
+        }else ready = false;
         if (readyMark.isChecked() && !ready) {
             readyMark.setChecked(false);
         }
