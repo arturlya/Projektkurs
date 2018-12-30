@@ -1,12 +1,11 @@
 package model;
 
-import control.PhysicsController;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.IEntity;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.input.Input;
-import model.Screens.IngameScreen;
+import model.Screens.MenuScreen;
 import model.abitur.datenstrukturen.List;
 import model.abitur.netz.Client;
 
@@ -23,7 +22,7 @@ public class GameClient extends Client implements IUpdateable {
     private int playerNumber;
     private double coolDown;
     private int i;
-    int j;
+    private int chosenPlayer;
 
     private List<Player> others;
 
@@ -39,12 +38,10 @@ public class GameClient extends Client implements IUpdateable {
         super(ip,port);
         ready = false;
         others = new List<>();
-        choosePlayer(2);
-        player.setY(10);
-        player.setX(600);
-        Game.getEnvironment().add(player);
-        Game.getEnvironment().add(player,RenderType.NORMAL);
+        //choosePlayer(1);
+
         //init();
+        /*
         Input.getLoop().attach(this);
         Input.keyboard().addKeyListener(new KeyListener() {
             @Override
@@ -70,7 +67,7 @@ public class GameClient extends Client implements IUpdateable {
             public void keyReleased(KeyEvent e) {
 
             }
-        });
+        });*/
 
     }
 
@@ -101,6 +98,17 @@ public class GameClient extends Client implements IUpdateable {
         if(gameStarted){
             processInputs();
         }
+        if(!gameStarted){
+            if(ready != MenuScreen.ready) {
+                ready = MenuScreen.ready;
+                if (ready) {
+                    send("STARTtrue");
+                } else {
+                    send("STARTfalse");
+                }
+            }
+            chosenPlayer = MenuScreen.playerPick;
+        }
     }
 
 
@@ -126,12 +134,13 @@ public class GameClient extends Client implements IUpdateable {
                 } else {
                     gameStarted = false;
                 }
-            } else if (pMessage.contains("PLAYER")) {
-                String[] temp = pMessage.split("PLAYER");
+            } else if (pMessage.contains("NUMBER")) {
+                String[] temp = pMessage.split("NUMBER");
                 playerNumber = Integer.parseInt(temp[1]);
-                choosePlayer(1);
-            } else if(pMessage.contains("CHOOSE")){
-                //choosePlayer(1);
+
+
+            } else if(pMessage.contains("PLAYER")){
+                choosePlayer(chosenPlayer);
             } else if (pMessage.contains("ALL")) {
                 String[] temp = pMessage.split("ALL");
                 temp = temp[1].split("NEXT");
@@ -150,7 +159,7 @@ public class GameClient extends Client implements IUpdateable {
                                 others.next();
                             }
                             if(!alreadyKnown) {
-                                if (charInfo[1].equals("Warrior")) {
+                                if (charInfo[1].equals("warrior")) {
                                     Player otherPlayer = new Warrior(400,50,false);
                                     otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
                                     others.append(otherPlayer);
@@ -345,14 +354,18 @@ public class GameClient extends Client implements IUpdateable {
             switch (number) {
                 case 1:
                     player = new Warrior(400,50,true);
+                    send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 1);
                     break;
                 case 2:
                     player = new Mage(400,50,true);
-
-
+                    send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 2);
                     break;
             }
-        }else{
+            player.setY(10);
+            player.setX(600);
+            Game.getEnvironment().add(player);
+            Game.getEnvironment().add(player,RenderType.NORMAL);
+        }/*else{
             switch (number) {
                 case 1:
                     send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 1);
@@ -361,7 +374,7 @@ public class GameClient extends Client implements IUpdateable {
                     send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 2);
                     break;
             }
-        }
+        }*/
     }
     /**
      * Methode, die, falls der Player spielbar ist, die anderen Input-Mathoden aufruft
