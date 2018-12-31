@@ -462,41 +462,39 @@ public class GameClient extends Client implements IUpdateable {
     private void processInputsDirections(){
         Input.keyboard().onKeyPressed(StaticData.moveLeft, (key) -> {
             if(i == 1) {
-                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                if (!player.isAttacking() || player.isInAir()) {
                     player.setDirectionLR(0);
-                    player.setLookingAt(0);
-                    send("LOOKING" + playerNumber + "#" + player.getLookingAt());
-                    player.setMoving(true);
+                    if(!player.isInAir()) {
+                        player.setLookingAt(0);
+                        send("LOOKING" + playerNumber + "#" + player.getLookingAt());
+                    }
+                    player.setDecelerating(false);
                 }
                 i = 0;
             }
         });
         Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
             if(i == 1) {
-                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
-                    player.setDirectionLR(-1);
-                    player.setMoving(false);
-                }
+                player.setDecelerating(true);
                 i = 0;
             }
         });
         Input.keyboard().onKeyPressed(StaticData.moveRight, (key) -> {
             if(i == 1) {
-                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
+                if (!player.isAttacking() || player.isInAir()) {
                     player.setDirectionLR(1);
-                    player.setLookingAt(1);
-                    send("LOOKING" + playerNumber + "#" + player.getLookingAt());
-                    player.setMoving(true);
+                    if(!player.isInAir()) {
+                        player.setLookingAt(1);
+                        send("LOOKING" + playerNumber + "#" + player.getLookingAt());
+                    }
+                    player.setMoving(false);
                 }
                 i = 0;
             }
         });
         Input.keyboard().onKeyReleased(StaticData.moveRight, (key) -> {
             if(i == 1) {
-                if (!(player.getAttackWindDown() > 0 && player.isInAir())) {
-                    player.setDirectionLR(-1);
-                    player.setMoving(false);
-                }
+                player.setDecelerating(true);
                 i = 2;
             }
         });
@@ -512,7 +510,8 @@ public class GameClient extends Client implements IUpdateable {
     private void processInputsAttacks(){
         Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
             if (player.getAttackWindDown() <= 0) {
-                player.setHorizontalSpeed(0);
+                //player.setHorizontalSpeed(0);
+                player.setDecelerating(true);
                 if (player.getDirectionLR() != -1) {
                     player.normalAttackRun();
                     send("ATTACK"+playerNumber+"#nAR");
@@ -530,7 +529,8 @@ public class GameClient extends Client implements IUpdateable {
         });
         Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
             if (player.getAttackWindDown() <= 0) {
-                player.setHorizontalSpeed(0);
+                //player.setHorizontalSpeed(0);
+                player.setDecelerating(true);
                 if (player.getAttackWindDown() <= 0) {
                     player.setHorizontalSpeed(0);
                     if (player.getDirectionUD() == 0) {

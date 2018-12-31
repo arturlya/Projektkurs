@@ -12,7 +12,7 @@ public class Projectile extends GravitationalObject {
     private Hurtbox hurtbox;
     private Player player;
 
-    public Projectile(Player player, double x, double y, int width, int height, Vector2D direction){
+    public Projectile(Player player, double x, double y, int width, int height, Vector2D direction, int damage, int knockback){
         super();
         this.player = player;
         setX(x);
@@ -21,8 +21,8 @@ public class Projectile extends GravitationalObject {
         setHeight(height);
         hitbox = new Rectangle2D.Double(x,y,width,height);
         hurtbox = new Hurtbox(x,y,width,height);
-        hurtbox.setDamage(0);
-        hurtbox.setKnockback(0);
+        hurtbox.setDamage(damage);
+        hurtbox.setKnockback(knockback);
         if(player.getLookingAt() == 0) {
             setHorizontalSpeed(-direction.getX());
         }else{
@@ -30,6 +30,12 @@ public class Projectile extends GravitationalObject {
         }
         setVerticalSpeed(direction.getY());
         inAir = true;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        hurtbox.setRect(getX(),getY(),getWidth(),getHeight());
     }
 
     public Hurtbox getHurtbox() {

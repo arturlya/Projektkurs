@@ -74,6 +74,17 @@ public class CollisionController implements IUpdateable {
                 Game.getEnvironment().remove(projectile);
                 Game.getEnvironment().removeRenderable(projectile);
                 projectile.getPlayer().setProjectile(null);
+            }else{
+                for(Player player : players){
+                    if(player != projectile.getPlayer()) {
+                        if (projectile.getHurtbox().intersects(player.getHitbox())) {
+                            System.out.println(2);
+                            Vector2D smallDir = new Vector2D(projectile.getCenter(), player.getCenter());
+                            Vector2D scaledDir = smallDir.scale(100 / smallDir.length());
+                            player.registerHit(scaledDir, projectile.getHurtbox().getDamage(), projectile.getHurtbox().getKnockback());
+                        }
+                    }
+                }
             }
         }
     }

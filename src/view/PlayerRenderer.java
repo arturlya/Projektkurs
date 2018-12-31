@@ -44,7 +44,6 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             createImages();
         }else if(player instanceof Warrior) {
             pathToImageFolder += "/Warrior";
-            System.out.println(pathToImageFolder);
             createImages();
         }
     }

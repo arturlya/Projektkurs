@@ -72,7 +72,7 @@ public class Mage extends Player{
     @Override
     public void specialAttackRun() {
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(500,-50));
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(500,-50),5,2);
         attackWindDown = 0.3;
     }
 

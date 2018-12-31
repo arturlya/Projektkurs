@@ -127,6 +127,9 @@ public abstract class Player extends GravitationalObject {
         if (!inAir) {
             jumpsAvailable = 2;
         }
+        if(attacking){
+            decelerating = true;
+        }
     }
 
     /**
@@ -245,6 +248,7 @@ public abstract class Player extends GravitationalObject {
      * @param direction Vector, der die Richtung des Schlages angibt
      */
     public void registerHit(Vector2D direction, int damage, int knockback){
+        System.out.println(1);
         if(invincibilityTimer <= 0) {
             knockbackPercentage += damage;
             if(knockbackPercentage < 10){
@@ -353,9 +357,9 @@ public abstract class Player extends GravitationalObject {
      * @param width Breite des Projektils
      * @param height Höhe des Projektils
      */
-    public void shoot(double paramX,double paramY,int width,int height, Vector2D direction) {
+    public void shoot(double paramX,double paramY,double width,double height, Vector2D direction, int damage, int knockback) {
         if (projectile == null){
-            projectile = new Projectile(this, paramX, paramY, width, height, direction);
+            projectile = new Projectile(this, paramX, paramY, (int)width, (int)height, direction, damage, knockback);
             Game.getEnvironment().add(projectile);
             Game.getEnvironment().add(projectile,RenderType.NORMAL);
         }

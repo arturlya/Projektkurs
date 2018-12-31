@@ -2,11 +2,13 @@ package control;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
+import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.input.Input;
 import de.gurkenlabs.litiengine.sound.Sound;
 import model.*;
 import model.Maps.Map1;
+import model.Screens.IngameScreen;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,7 +24,6 @@ public class PlayerTester{
         new PlayerTester();
     }
 
-    private ScreenController screenController;
     private Image cursor;
     private PhysicsController physicsController;
     private int i;
@@ -38,8 +39,12 @@ public class PlayerTester{
             System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
-        screenController = new ScreenController(new User());
-        screenController.setIngameScreen(new Map1());
+
+        Game.loadEnvironment(new Environment("assets/maps/blank.tmx"));
+        IngameScreen ingameScreen = new IngameScreen();
+        Game.getScreenManager().addScreen(ingameScreen);
+        Game.getScreenManager().displayScreen(ingameScreen);
+        Game.getEnvironment().add(new Map1(), RenderType.BACKGROUND);
 
         physicsController = new PhysicsController();
         new CollisionController(physicsController);
@@ -49,7 +54,7 @@ public class PlayerTester{
 
         Player player = new Warrior(100,100,true);
         player.setPlayerNumber(1);
-        Player dummy = new Warrior(500,500,false);
+        Player dummy = new Mage(500,500,false);
         dummy.setPlayerNumber(2);
         Game.getEnvironment().add(player);
         Game.getEnvironment().add(player, RenderType.NORMAL);
@@ -103,7 +108,7 @@ public class PlayerTester{
             });
             Input.keyboard().onKeyReleased(StaticData.moveLeft, (key) -> {
                 if(i == 1) {
-                        player.setDecelerating(true);
+                    player.setDecelerating(true);
                     i = 2;
                 }
             });
@@ -149,6 +154,7 @@ public class PlayerTester{
                 Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
                     if (player.getAttackWindDown() <= 0) {
                         //player.setHorizontalSpeed(0);
+                        player.setDecelerating(true);
                         if (player.getDirectionLR() != -1) {
                             player.normalAttackRun();
                         } else if (player.getDirectionUD() == 1) {
@@ -163,6 +169,7 @@ public class PlayerTester{
                 Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
                     if (player.getAttackWindDown() <= 0) {
                         //player.setHorizontalSpeed(0);
+                        player.setDecelerating(true);
                         if (player.getDirectionUD() == 0) {
                             player.specialAttackUp();
                         } else if (player.getDirectionLR() != -1) {
