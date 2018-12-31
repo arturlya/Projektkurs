@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class ScreenController extends Entity implements IUpdateable {
 
     private MenuScreen menuScreen;
-    private IngameScreen ingameScreen;
-    private ArrayList<Environment> environments = new ArrayList<>();
+    private static IngameScreen ingameScreen;
+    private static ArrayList<Environment> environments = new ArrayList<>();
     private Map currentMap;
     private GameController gameController;
     private User user;
@@ -81,4 +81,13 @@ public class ScreenController extends Entity implements IUpdateable {
     public void setCurrentMap(Map currentMap) {
         this.currentMap = currentMap;
     }
+
+    public static boolean isIngame(){
+        if(Game.getScreenManager().getCurrentScreen() == ingameScreen){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
