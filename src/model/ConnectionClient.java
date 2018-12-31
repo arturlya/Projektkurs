@@ -21,7 +21,7 @@ public class ConnectionClient extends Client implements IUpdateable {
 
     public ConnectionClient(User user,int port){
         //super("localhost",port);
-         super("178.201.129.203",port);
+        super("178.201.129.203",port);
         Game.getLoop().attach(this);
         foundServer = false;
         this.user = user;
@@ -53,6 +53,8 @@ public class ConnectionClient extends Client implements IUpdateable {
         if(pMessage.contains("SERVER") && !connected){
             String[] temp = pMessage.split("SERVER");
             temp = temp[1].split("#");
+            //serverIP = "192.168.178.61";
+
             serverIP = temp[0];
             //serverIP = "178.201.129.203";
             serverPort = Integer.parseInt(temp[1]);
