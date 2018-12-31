@@ -1,11 +1,13 @@
 package model;
 
+import control.ScreenController;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.IEntity;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.input.Input;
 import model.Maps.Map;
+import model.Screens.IngameScreen;
 import model.Screens.MenuScreen;
 import model.abitur.datenstrukturen.List;
 import model.abitur.netz.Client;
@@ -25,7 +27,8 @@ public class GameClient extends Client implements IUpdateable {
     private int i;
     private int chosenPlayer;
 
-    private boolean finalChoose;
+    private boolean finalChoose,drawnPlayer;
+    private String allPlayer = "";
 
     private List<Player> others;
     private Map currentMap;
@@ -84,11 +87,59 @@ public class GameClient extends Client implements IUpdateable {
     public void update(){
 
         i = 1;
-        if(player != null)
+        if(player != null) {
 
-        if (gameStarted && player.isMoving()) {
-            send("POSITION"+playerNumber+"#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
-           // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
+            if (gameStarted && player.isMoving()) {
+                send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
+                // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
+            }
+        }
+        System.out.println(ScreenController.isIngame());
+        System.out.println(allPlayer);
+        if(ScreenController.isIngame() && !drawnPlayer && allPlayer.contains("ALL")){
+
+            System.out.println(allPlayer);
+            String[] temp = allPlayer.split("ALL");
+            temp = temp[1].split("NEXT");
+            if(getNumberOfOtherPlayers() < Integer.parseInt(temp[0])) {
+                for (int i = 1; i < temp.length; i++) {
+                    //Aufpassen temp0
+                    String[] charInfo = temp[i].split("#", 2);
+                    if(Integer.parseInt(charInfo[0]) != playerNumber){
+                        // if (Integer.parseInt(charInfo[0]) != player.getPlayerNumber()) {
+                        boolean alreadyKnown = false;
+                        others.toFirst();
+                        while(others.hasAccess()){
+                            if(others.getContent().getPlayerNumber() == Integer.parseInt(charInfo[0])){
+                                alreadyKnown = true;
+                            }
+                            others.next();
+                        }
+                        if(!alreadyKnown) {
+                            if (charInfo[1].equals("warrior")) {
+                                Player otherPlayer = new Warrior(400,50,false);
+                                otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
+                                others.append(otherPlayer);
+                                Game.getEnvironment().add(otherPlayer);
+                                Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
+                                //ingameScreen.addGravObject(otherPlayer);
+
+                                System.out.println("Added other player");
+                            } else if (charInfo[1].equals("Mage")) {
+                                Player otherPlayer = new Mage(400,50,false);
+                                otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
+                                others.append(otherPlayer);
+                                Game.getEnvironment().add(otherPlayer);
+                                Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
+                                //ingameScreen.addGravObject(otherPlayer);
+                                System.out.println("Added other player");
+                            }
+                        }
+                    }
+                }
+            }
+            drawnPlayer = true;
+            System.out.println("Added Players");
         }
         if(gameStarted && coolDown<=0){
             send("POSITIONXY"+playerNumber+"#"+player.getX()+"#"+player.getY());
@@ -158,14 +209,16 @@ public class GameClient extends Client implements IUpdateable {
             } else if(pMessage.contains("PLAYER")){
                 choosePlayer(chosenPlayer);
             } else if (pMessage.contains("ALL")) {
-                String[] temp = pMessage.split("ALL");
+                allPlayer = pMessage;
+               /* System.out.println(allPlayer);
+                String[] temp = allPlayer.split("ALL");
                 temp = temp[1].split("NEXT");
                 if(getNumberOfOtherPlayers() < Integer.parseInt(temp[0])) {
                     for (int i = 1; i < temp.length; i++) {
                         //Aufpassen temp0
                         String[] charInfo = temp[i].split("#", 2);
                         if(Integer.parseInt(charInfo[0]) != playerNumber){
-                        // if (Integer.parseInt(charInfo[0]) != player.getPlayerNumber()) {
+                            // if (Integer.parseInt(charInfo[0]) != player.getPlayerNumber()) {
                             boolean alreadyKnown = false;
                             others.toFirst();
                             while(others.hasAccess()){
@@ -183,7 +236,7 @@ public class GameClient extends Client implements IUpdateable {
                                     Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
                                     //ingameScreen.addGravObject(otherPlayer);
 
-                                    System.out.println("Added player");
+                                    System.out.println("Added other player");
                                 } else if (charInfo[1].equals("Mage")) {
                                     Player otherPlayer = new Mage(400,50,false);
                                     otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
@@ -191,13 +244,15 @@ public class GameClient extends Client implements IUpdateable {
                                     Game.getEnvironment().add(otherPlayer);
                                     Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
                                     //ingameScreen.addGravObject(otherPlayer);
-                                    System.out.println("Added player");
+                                    System.out.println("Added other player");
                                 }
                             }
+                        }else{
 
                         }
                     }
-                }
+                }*/
+
             } else if (pMessage.contains("POSITION")) {
                 String[] temp = pMessage.split("POSITION");
                 if (temp[1].contains("XY")) {
@@ -382,6 +437,8 @@ public class GameClient extends Client implements IUpdateable {
             player.setX(600);
             Game.getEnvironment().add(player);
             Game.getEnvironment().add(player,RenderType.NORMAL);
+            System.out.println("Created own player");
+
         }/*else{
             switch (number) {
                 case 1:
