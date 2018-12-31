@@ -19,7 +19,7 @@ public class ScreenController extends Entity implements IUpdateable {
 
     private MenuScreen menuScreen;
     private static IngameScreen ingameScreen;
-    private static ArrayList<Environment> environments = new ArrayList<>();
+    public static ArrayList<Environment> environments = new ArrayList<>();
     private Map currentMap;
     private GameController gameController;
     private User user;
@@ -59,7 +59,10 @@ public class ScreenController extends Entity implements IUpdateable {
         Game.getEnvironment().add(map, RenderType.BACKGROUND);
         if(gameController==null) {
             gameController = new GameController();
+            System.out.println("Controller erstellt");
+
         }
+        System.out.println("Created own player");
     }
 
     public MenuScreen getMenuScreen() {

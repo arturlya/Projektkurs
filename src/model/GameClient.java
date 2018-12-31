@@ -94,8 +94,6 @@ public class GameClient extends Client implements IUpdateable {
                 // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
             }
         }
-        System.out.println(ScreenController.isIngame());
-        System.out.println(allPlayer);
         if(ScreenController.isIngame() && !drawnPlayer && allPlayer.contains("ALL")){
 
             System.out.println(allPlayer);
@@ -120,8 +118,8 @@ public class GameClient extends Client implements IUpdateable {
                                 Player otherPlayer = new Warrior(400,50,false);
                                 otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
                                 others.append(otherPlayer);
-                                Game.getEnvironment().add(otherPlayer);
-                                Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
+                                ScreenController.environments.get(1).add(otherPlayer);
+                                ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
                                 //ingameScreen.addGravObject(otherPlayer);
 
                                 System.out.println("Added other player");
@@ -129,8 +127,8 @@ public class GameClient extends Client implements IUpdateable {
                                 Player otherPlayer = new Mage(400,50,false);
                                 otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
                                 others.append(otherPlayer);
-                                Game.getEnvironment().add(otherPlayer);
-                                Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
+                                ScreenController.environments.get(1).add(otherPlayer);
+                                ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
                                 //ingameScreen.addGravObject(otherPlayer);
                                 System.out.println("Added other player");
                             }
@@ -435,8 +433,7 @@ public class GameClient extends Client implements IUpdateable {
             }
             player.setY(10);
             player.setX(600);
-            Game.getEnvironment().add(player);
-            Game.getEnvironment().add(player,RenderType.NORMAL);
+            ScreenController.environments.get(1).add(player,RenderType.NORMAL);
             System.out.println("Created own player");
 
         }/*else{
