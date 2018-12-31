@@ -26,7 +26,7 @@ public class Warrior extends Player{
 
     @Override
     public void update() {
-        System.out.println(horizontalSpeed);
+        super.update();
         if(downNormalAttackActive && attackWindDown <= 0){
             secondDownAttack();
         }

@@ -5,6 +5,7 @@ import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.IEntity;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.input.Input;
+import model.Maps.Map;
 import model.Screens.MenuScreen;
 import model.abitur.datenstrukturen.List;
 import model.abitur.netz.Client;
@@ -18,7 +19,7 @@ public class GameClient extends Client implements IUpdateable {
 
     private Player player;
     private boolean ready;
-    private boolean gameStarted;
+    public static boolean gameStarted;
     private int playerNumber;
     private double coolDown;
     private int i;
@@ -27,6 +28,7 @@ public class GameClient extends Client implements IUpdateable {
     private boolean finalChoose;
 
     private List<Player> others;
+    private Map currentMap;
 
 
     /**
@@ -180,6 +182,7 @@ public class GameClient extends Client implements IUpdateable {
                                     Game.getEnvironment().add(otherPlayer);
                                     Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
                                     //ingameScreen.addGravObject(otherPlayer);
+
                                     System.out.println("Added player");
                                 } else if (charInfo[1].equals("Mage")) {
                                     Player otherPlayer = new Mage(400,50,false);

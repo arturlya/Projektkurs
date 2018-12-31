@@ -6,7 +6,9 @@ import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;
 import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.graphics.RenderType;
+import model.GameClient;
 import model.Maps.Map;
+import model.Maps.Map1;
 import model.Screens.IngameScreen;
 import model.Screens.MenuScreen;
 import model.User;
@@ -18,10 +20,13 @@ public class ScreenController extends Entity implements IUpdateable {
     private MenuScreen menuScreen;
     private IngameScreen ingameScreen;
     private ArrayList<Environment> environments = new ArrayList<>();
+    private Map currentMap;
     private GameController gameController;
     private User user;
+    private boolean ingame;
 
     public ScreenController(User user){
+        Game.getLoop().attach(this);
         this.user = user;
         environments.add(new Environment("assets/maps/blank.tmx"));
         Game.loadEnvironment(environments.get(0));
@@ -35,7 +40,10 @@ public class ScreenController extends Entity implements IUpdateable {
 
     @Override
     public void update() {
-
+        if (GameClient.gameStarted && !ingame) {
+            setIngameScreen(new Map1());
+            ingame = true;
+        }
     }
 
     public void setMenuScreen(){
@@ -47,6 +55,7 @@ public class ScreenController extends Entity implements IUpdateable {
     public void setIngameScreen(Map map){
         Game.loadEnvironment(environments.get(1));
         Game.getScreenManager().displayScreen(ingameScreen);
+        currentMap = map;
         Game.getEnvironment().add(map, RenderType.BACKGROUND);
         if(gameController==null) {
             gameController = new GameController();
@@ -63,5 +72,13 @@ public class ScreenController extends Entity implements IUpdateable {
 
     public ArrayList<Environment> getEnvironments() {
         return environments;
+    }
+
+    public Map getCurrentMap() {
+        return currentMap;
+    }
+
+    public void setCurrentMap(Map currentMap) {
+        this.currentMap = currentMap;
     }
 }
