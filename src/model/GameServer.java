@@ -36,12 +36,12 @@ public class GameServer extends Server {
         numberOfPlayers++;
         if(numberOfPlayers ==1){
             System.out.println("Waiting for Players");
-            send(pClientIP,pClientPort,"PLAYER"+numberOfPlayers);
+            send(pClientIP,pClientPort,"NUMBER"+numberOfPlayers);
             playerIP[numberOfPlayers-1][0] = pClientIP;
             playerIP[numberOfPlayers-1][1] = Integer.toString(pClientPort);
         }else if(numberOfPlayers <= maxPlayers){
             System.out.println("Waiting for start");
-            send(pClientIP,pClientPort,"PLAYER"+numberOfPlayers);
+            send(pClientIP,pClientPort,"NUMBER"+numberOfPlayers);
             playerIP[numberOfPlayers-1][0] = pClientIP;
             playerIP[numberOfPlayers-1][1] = Integer.toString(pClientPort);
         }else{
@@ -58,7 +58,8 @@ public class GameServer extends Server {
      * @param pClientPort Port des Clients
      * @param pMessage Nachricht des Clients.
      *                 - Bei "START" wertet der Server den Vote des Clients aus
-     *                 - bei "PLAYER" merkt er sich den neuen Spieler und gibt ihm eine Spielernummer
+     *                 - bei "NUMBER" gibt dem Spieler eine Spielernummer
+     *                 - bei "PLAYER" merkt er sich die Figur des Spielers
      *                 - bei "POSITION" leitet er die Position eines bewegenden Spielers weiter
      *                 - bei "HURT" leitet er die HurtBox eines Spielers weiter
      */
@@ -80,7 +81,7 @@ public class GameServer extends Server {
                 String[] temp = pMessage.split("PLAYER", 3);
                 switch (Integer.parseInt(temp[2])) {
                     case 1:
-                    //    players[Integer.parseInt(temp[1]) ] = new Warrior(false);
+                    //    players[Integer.parseInt(temp[1]) ] = new warrior(false);
                     //    players[Integer.parseInt(temp[1]) ].setPlayerNumber(Integer.parseInt(temp[1]));
                         if(numberOfPlayers>1) {
                             String tmp[] = allPlayer.split("NEXT");
@@ -93,8 +94,8 @@ public class GameServer extends Server {
                                    // }
                                 }
                             }
-                            allPlayer = allPlayer + numberOfPlayers + "#"+"Warrior";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Warrior";}
+                            allPlayer = allPlayer + numberOfPlayers + "#"+"warrior";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"warrior";}
                         break;
                     case 2:
                     //    players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
@@ -152,7 +153,7 @@ public class GameServer extends Server {
                 System.out.println("Nicht alle haben einen Spieler gewählt");
                 sendToAll("CHOOSE");
             }*/
-
+            sendToAll("PLAYER");
             sendToAll(allPlayer);
             sendToAll("STARTtrue");
             startVote = Integer.MAX_VALUE;

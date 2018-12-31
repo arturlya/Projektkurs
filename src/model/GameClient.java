@@ -24,6 +24,8 @@ public class GameClient extends Client implements IUpdateable {
     private int i;
     private int chosenPlayer;
 
+    private boolean finalChoose;
+
     private List<Player> others;
 
 
@@ -93,6 +95,7 @@ public class GameClient extends Client implements IUpdateable {
         if (playerNumber != 0 && player != null) {
             player.setPlayerNumber(playerNumber);
 
+
         }
 
         if(coolDown>0){
@@ -103,12 +106,16 @@ public class GameClient extends Client implements IUpdateable {
         }
 
         if(!gameStarted){
+
             if(ready != MenuScreen.ready) {
-                if (MenuScreen.ready) {
+                ready = MenuScreen.ready;
+                if (MenuScreen.ready && !finalChoose) {
                     send("STARTtrue");
+                    finalChoose = true;
                     System.out.println("You are ready");
-                } else {
+                } else if(finalChoose){
                     send("STARTfalse");
+                    finalChoose = false;
                     System.out.println("You are not ready");
                 }
             }
@@ -136,12 +143,14 @@ public class GameClient extends Client implements IUpdateable {
                 String[] temp = pMessage.split("START", 2);
                 if (temp[1].contains("true")) {
                     gameStarted = true;
+                    System.out.println("Das Spiel startet!!!");
                 } else {
                     gameStarted = false;
                 }
             } else if (pMessage.contains("NUMBER")) {
                 String[] temp = pMessage.split("NUMBER");
                 playerNumber = Integer.parseInt(temp[1]);
+                System.out.println("Playernumber : "+playerNumber);
 
 
             } else if(pMessage.contains("PLAYER")){
@@ -359,11 +368,11 @@ public class GameClient extends Client implements IUpdateable {
             switch (number) {
                 case 1:
                     player = new Warrior(400,50,true);
-                    send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 1);
+                    send("PLAYER" + playerNumber + "PLAYER" + 1);
                     break;
                 case 2:
                     player = new Mage(400,50,true);
-                    send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 2);
+                    send("PLAYER" + playerNumber + "PLAYER" + 2);
                     break;
             }
             player.setY(10);

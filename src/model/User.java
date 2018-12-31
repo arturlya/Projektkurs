@@ -67,7 +67,7 @@ public class User extends GuiComponent {
     @Override
     public void mouseMoved(MouseEvent e) {
         super.mouseMoved(e);
-        System.out.println(1);
+        //System.out.println(1);
     }
 
     public boolean isConnected(){
