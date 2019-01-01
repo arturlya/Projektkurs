@@ -90,7 +90,7 @@ public class GameClient extends Client implements IUpdateable {
         if(player != null) {
 
             if (gameStarted && player.isMoving()) {
-                send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed());
+                send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed()+"#"+player.directionLR+"#"+player.decelerating);
                 // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
             }
         }
@@ -133,6 +133,10 @@ public class GameClient extends Client implements IUpdateable {
                                 System.out.println("Added other player");
                             }
                         }
+                    }else{
+                        ScreenController.environments.get(1).add(player);
+                        ScreenController.environments.get(1).add(player,RenderType.NORMAL);
+                        System.out.println("Created own player");
                     }
                 }
             }
@@ -140,7 +144,7 @@ public class GameClient extends Client implements IUpdateable {
             System.out.println("Added Players");
         }
         if(gameStarted && coolDown<=0){
-            send("POSITIONXY"+playerNumber+"#"+player.getX()+"#"+player.getY());
+            send("POSITIONXY"+playerNumber+"#"+player.getX()+"#"+player.getY()+"#"+player.directionLR+"#"+player.decelerating);
             coolDown = 1;
         }
         if (playerNumber != 0 && player != null) {
@@ -267,6 +271,8 @@ public class GameClient extends Client implements IUpdateable {
                         if (others.hasAccess()) {
                               others.getContent().setX(Double.parseDouble(temp[1]));
                              others.getContent().setY(Double.parseDouble(temp[2]));
+                            others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
+                            others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
                         }
                     }
                 }else {
@@ -284,6 +290,8 @@ public class GameClient extends Client implements IUpdateable {
                             // others.getContent().setY(Double.parseDouble(temp[2]));
                             others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
                             others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
+                            others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
+                            others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
                         }
                     }
                 }
@@ -433,8 +441,7 @@ public class GameClient extends Client implements IUpdateable {
             }
             player.setY(10);
             player.setX(600);
-            ScreenController.environments.get(1).add(player,RenderType.NORMAL);
-            System.out.println("Created own player");
+
 
         }/*else{
             switch (number) {
