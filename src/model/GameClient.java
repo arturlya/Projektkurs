@@ -131,6 +131,13 @@ public class GameClient extends Client implements IUpdateable {
                                 ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
                                 //ingameScreen.addGravObject(otherPlayer);
                                 System.out.println("Added other player");
+                            }else if(charInfo[1].equals("Gambler")){
+                                Player otherPlayer = new Gambler(400,50,false);
+                                otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
+                                others.append(otherPlayer);
+                                ScreenController.environments.get(1).add(otherPlayer);
+                                ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
+                                System.out.println("Added other player");
                             }
                         }
                     }else{
@@ -437,6 +444,10 @@ public class GameClient extends Client implements IUpdateable {
                 case 2:
                     player = new Mage(400,50,true);
                     send("PLAYER" + playerNumber + "PLAYER" + 2);
+                    break;
+                case 3:
+                    player = new Gambler(400,50,true);
+                    send("PLAYER"+playerNumber+"PLAYER"+3);
                     break;
             }
             player.setY(10);

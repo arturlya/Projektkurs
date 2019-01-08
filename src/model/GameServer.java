@@ -114,6 +114,21 @@ public class GameServer extends Server {
                             allPlayer = allPlayer + numberOfPlayers + "#"+"Mage";
                         }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Mage";}
                         break;
+                    case 3:
+                        if(numberOfPlayers>1) {
+                            String tmp[] = allPlayer.split("NEXT");
+                            allPlayer = "ALL" + numberOfPlayers + "NEXT";
+                            for(int i=1;i<tmp.length;i++){
+                                if(tmp[i] != null) {
+                                    allPlayer = allPlayer + tmp[i];
+                                    //if(i<numberOfPlayers-1){
+                                    allPlayer = allPlayer +"NEXT";
+                                    // }
+                                }
+                            }
+                            allPlayer = allPlayer + numberOfPlayers + "#"+"Gambler";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Gambler";}
+                        break;
                 }
                 //System.out.println("Sended all players");
               //  sendToAll(getAllPlayers());
