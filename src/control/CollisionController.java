@@ -4,11 +4,8 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
-import model.GravitationalObject;
+import model.*;
 import model.Maps.Map;
-import model.Player;
-import model.Projectile;
-import model.Warrior;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -58,6 +55,15 @@ public class CollisionController implements IUpdateable {
                     if(attacker.getHurtbox().isHurting()) {
                         if (attacker.getHurtbox().intersects(defender.getHitbox())) {
                             playerHit(attacker, defender);
+                        }
+                        if(attacker instanceof Gambler && ((Gambler) attacker).getSlotCooldown()<=0 && ((Gambler) attacker).getBuffTimer()<=0){
+                            if (attacker.getHurtbox().intersects(defender.getHitbox())) {
+                                ((Gambler) attacker).addSlotValue(1);
+                                System.out.println("Attack hitted");
+                            }else{
+                                ((Gambler) attacker).addSlotValue(-1);
+                            }
+                            ((Gambler) attacker).setSlotCooldown(1);
                         }
                     }
                 }
