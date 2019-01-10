@@ -3,6 +3,7 @@ package view;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.graphics.IRenderable;
+import model.Gambler;
 import model.Mage;
 import model.Player;
 import model.Warrior;
@@ -42,8 +43,11 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         if (player instanceof Mage) {
             pathToImageFolder += "/Mage";
             createImages();
-        }else if(player instanceof Warrior) {
+        }else if (player instanceof Warrior) {
             pathToImageFolder += "/Warrior";
+            createImages();
+        }else if (player instanceof Gambler) {
+            pathToImageFolder += "/Gambler";
             createImages();
         }
     }
