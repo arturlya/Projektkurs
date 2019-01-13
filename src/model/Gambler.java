@@ -14,6 +14,8 @@ public class Gambler extends Player {
     private double buffTimer;
     private boolean buffed;
 
+    private boolean teleportToPlayer;
+
 
     private double slotCooldown;
     private int[] slotMachine;
@@ -27,7 +29,8 @@ public class Gambler extends Player {
         slotCooldown = 0;
         slotMachine = new int[3];
         buffed = false;
-
+        result = Math.random();
+        teleportToPlayer = false;
     }
 
 
@@ -52,7 +55,6 @@ public class Gambler extends Player {
 
     @Override
     public void normalAttackRun() {
-        result = Math.random();
         if(result<=hitPercentage){
             System.out.println("Attack succeeded");
 
@@ -76,12 +78,13 @@ public class Gambler extends Player {
             resetKombo();
             attackWindDown = 1;
             System.out.println("Attack not succeeded");
+            addSlotValue(-1);
         }
+        result = Math.random();
     }
 
     @Override
     public void normalAttackDown() {
-        result = Math.random();
         if(result<=hitPercentage){
             System.out.println("Attack succeeded");
 
@@ -100,13 +103,13 @@ public class Gambler extends Player {
             resetKombo();
             attackWindDown = 1;
             System.out.println("Attack not succeeded");
-
+            addSlotValue(-1);
         }
+        result = Math.random();
     }
 
     @Override
     public void normalAttackUp() {
-        result = Math.random();
         if(result <= hitPercentage){
             System.out.println("Attack succeeded");
             hurtbox.setRelativeRect(0,-hitbox.height*0.4,hitbox.width,hitbox.height*0.4);
@@ -123,12 +126,13 @@ public class Gambler extends Player {
             System.out.println("Attack not succeeded");
             attackWindDown = 1;
             resetKombo();
+            addSlotValue(-1);
         }
+        result = Math.random();
     }
 
     @Override
     public void normalAttackStand() {
-        result = Math.random();
         if(result<=hitPercentage){
             System.out.println("Attack succeeded");
 
@@ -150,7 +154,9 @@ public class Gambler extends Player {
             resetKombo();
             attackWindDown = 1;
             System.out.println("Attack not succeeded");
+            addSlotValue(-1);
         }
+        result = Math.random();
     }
 
     @Override
@@ -169,8 +175,19 @@ public class Gambler extends Player {
 
     @Override
     public void specialAttackUp() {
-
+        if(result*1.5 <= hitPercentage){
+            teleportToPlayer = true;
+            hitPercentage = hitPercentage -0.1;
+            attackWindDown = 2;
+        }else{
+            resetKombo();
+            System.out.println("Not succeeded");
+            attackWindDown = 3;
+        }
     }
+
+
+
 
     @Override
     public void specialAttackStand() {
@@ -268,4 +285,19 @@ public class Gambler extends Player {
         buffTimer = 30;
     }
 
+    public double getResult() {
+        return result;
+    }
+
+    public void setResult(double result) {
+        this.result = result;
+    }
+
+    public boolean isTeleportedToPlayer() {
+        return teleportToPlayer;
+    }
+
+    public void setTeleportToPlayer(boolean teleportToPlayer) {
+        this.teleportToPlayer = teleportToPlayer;
+    }
 }

@@ -39,17 +39,18 @@ public class MainController {
             //System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
-        screenController = new ScreenController(new User());
-        //screenController.setIngameScreen(new Map1());
-        screenController.setMenuScreen();
         User user = new User();
         user.init();
+        screenController = new ScreenController(user);
+        //screenController.setIngameScreen(new Map1());
+        screenController.setMenuScreen();
+
 
 
         /**
          * Wer von euch lit ist uncommented!
          */
-        Game.getSoundEngine().playMusic(Sound.get("assets/audio/Musik/bgm.mp3"));
+        //Game.getSoundEngine().playMusic(Sound.get("assets/audio/Musik/bgm.mp3"));
         Game.start();
 
     }

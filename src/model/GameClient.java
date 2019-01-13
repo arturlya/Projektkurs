@@ -31,7 +31,6 @@ public class GameClient extends Client implements IUpdateable {
     private String allPlayer = "";
 
     private List<Player> others;
-    private Map currentMap;
 
 
     /**
@@ -47,36 +46,6 @@ public class GameClient extends Client implements IUpdateable {
         ready = false;
         others = new List<>();
         Input.getLoop().attach(this);
-        //choosePlayer(1);
-
-        //init();
-        /*
-        Input.getLoop().attach(this);
-        Input.keyboard().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER && !gameStarted){
-                    if (ready) {
-                        send("STARTfalse");
-                        ready = false;
-                    }else {
-                        choosePlayer(1);
-                        send("STARTtrue");
-                        ready = true;
-                    }
-                }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });*/
 
     }
 
@@ -315,16 +284,36 @@ public class GameClient extends Client implements IUpdateable {
                     if (others.hasAccess()) {
                         switch (temp[1]){
                             case "nAS":
-                                others.getContent().normalAttackStand();
+                                if(others.getContent() instanceof Gambler) {
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                    others.getContent().normalAttackStand();
+                                }else{
+                                    others.getContent().normalAttackStand();
+                                }
                                 break;
                             case "nAR":
-                                others.getContent().normalAttackRun();
+                                if(others.getContent() instanceof Gambler) {
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                    others.getContent().normalAttackRun();
+                                }else{
+                                    others.getContent().normalAttackRun();
+                                }
                                 break;
                             case "nAD":
-                                others.getContent().normalAttackDown();
+                                if(others.getContent() instanceof Gambler) {
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                    others.getContent().normalAttackDown();
+                                }else{
+                                    others.getContent().normalAttackDown();
+                                }
                                 break;
                             case "nAU":
-                                others.getContent().normalAttackUp();
+                                if(others.getContent() instanceof Gambler) {
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                    others.getContent().normalAttackUp();
+                                }else{
+                                    others.getContent().normalAttackUp();
+                                }
                                 break;
                             case "sAS":
                                 others.getContent().specialAttackStand();
@@ -336,7 +325,12 @@ public class GameClient extends Client implements IUpdateable {
                                 others.getContent().specialAttackDown();
                                 break;
                             case "sAU":
-                                others.getContent().specialAttackUp();
+                                if(others.getContent() instanceof Gambler) {
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                    others.getContent().specialAttackUp();
+                                }else{
+                                    others.getContent().specialAttackUp();
+                                }
                                 break;
                         }
                     }
@@ -531,17 +525,33 @@ public class GameClient extends Client implements IUpdateable {
                 //player.setHorizontalSpeed(0);
                 player.setDecelerating(true);
                 if (player.getDirectionLR() != -1) {
+                    if(player instanceof Gambler) {
+                        send("ATTACK" + playerNumber + "#nAR#"+((Gambler) player).getResult());
+                    }else{
+                        send("ATTACK" + playerNumber + "#nAR");
+                    }
                     player.normalAttackRun();
-                    send("ATTACK"+playerNumber+"#nAR");
                 } else if (player.getDirectionUD() == 1) {
+                    if(player instanceof Gambler){
+                        send("ATTACK"+playerNumber+"#nAD#"+((Gambler) player).getResult());
+                    }else{
+                        send("ATTACK"+playerNumber+"#nAD");
+                    }
                     player.normalAttackDown();
-                    send("ATTACK"+playerNumber+"#nAD");
                 } else if (player.getDirectionUD() == 0) {
+                    if(player instanceof Gambler){
+                        send("ATTACK"+playerNumber+"#nAU#"+((Gambler) player).getResult());
+                    }else{
+                        send("ATTACK"+playerNumber+"#nAU");
+                    }
                     player.normalAttackUp();
-                    send("ATTACK"+playerNumber+"#nAU");
                 } else {
+                    if(player instanceof Gambler){
+                        send("ATTACK"+playerNumber+"#nAS#"+((Gambler) player).getResult());
+                    }else{
+                        send("ATTACK"+playerNumber+"#nAS");
+                    }
                     player.normalAttackStand();
-                    send("ATTACK"+playerNumber+"#nAS");
                 }
             }
         });
@@ -552,8 +562,12 @@ public class GameClient extends Client implements IUpdateable {
                 if (player.getAttackWindDown() <= 0) {
                     player.setHorizontalSpeed(0);
                     if (player.getDirectionUD() == 0) {
+                        if(player instanceof Gambler){
+                            send("ATTACK"+playerNumber+"#sAU#"+((Gambler) player).getResult());
+                        }else{
+                            send("ATTACK"+playerNumber+"#sAU");
+                        }
                         player.specialAttackUp();
-                        send("ATTACK"+playerNumber+"#sAU");
                     } else if (player.getDirectionLR() != -1) {
                         player.specialAttackRun();
                         send("ATTACK"+playerNumber+"#sAR");

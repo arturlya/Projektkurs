@@ -1,5 +1,6 @@
 package model;
 
+import control.ScreenController;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
@@ -59,7 +60,9 @@ public abstract class Player extends GravitationalObject {
         corner = new Point(0,0);
         //createCircleImages();
         pr = new PlayerRenderer(this);
-        Game.getEnvironment().add(pr,RenderType.NORMAL);
+        //Das da unten muss für Online Modus engefügt werden(das da drunter weg)!!!!!!!!!!!!!!!!
+        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
+       // Game.getEnvironment().add(pr,RenderType.NORMAL);
         Game.getLoop().attach(pr);
 
     }

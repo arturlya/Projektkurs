@@ -4,6 +4,7 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Entity;
 import de.gurkenlabs.litiengine.graphics.RenderType;
+import model.Gambler;
 import model.GravitationalObject;
 import model.Maps.Map;
 import model.Player;
@@ -64,6 +65,18 @@ public class PhysicsController implements IUpdateable {
                     g.setInAir(true);
                 }
             }
+            if(g instanceof Gambler) {
+                if (((Gambler) g).isTeleportedToPlayer()) {
+                    while(((Gambler) g).isTeleportedToPlayer()) {
+                        int randomPort = (int) (Math.random() * players.size());
+                        if (players.get(randomPort) != g) {
+                            g.setX(players.get(randomPort).getX() - 100);
+                            g.setY(players.get(randomPort).getY()-50);
+                            ((Gambler) g).setTeleportToPlayer(false);
+                        }
+                    }
+                }
+            }
             if(g.isInAir()){
                 if(!(g instanceof Warrior && ((Warrior) g).isGettingHooked())) {
                     g.setVerticalSpeed(g.getVerticalSpeed() + 1000 * dt);
@@ -96,9 +109,12 @@ public class PhysicsController implements IUpdateable {
                     players.add((Player)g);
                     ((Player)g).spawn(map.getSpawnpoints().get(((Player)g).getPlayerNumber()));
                 }
+
             }
         }
+
         players.removeIf(p -> !gravObjects.contains(p));
+
     }
 
     private void initializeMap(){
@@ -114,4 +130,6 @@ public class PhysicsController implements IUpdateable {
     public ArrayList<Player> getPlayers() {
         return players;
     }
+
+    public Map getMap(){return map;}
 }

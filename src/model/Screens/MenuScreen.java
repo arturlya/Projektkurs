@@ -58,6 +58,7 @@ public class MenuScreen extends Screen implements IUpdateable {
             exit = ImageIO.read(new File("assets/img/Buttons/exit.png"));
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Warrior/Standing1Right.png")));
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right.png")));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Gambler/Standing1Right.png")));
             mageName = ImageIO.read(new File("assets/img/ingame/Players/Mage Name.png"));
             warriorName = ImageIO.read(new File("assets/img/ingame/Players/Warrior Name.png"));
         } catch (IOException ex) {
@@ -208,6 +209,8 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(playerImages.get(0),(int)(840*widthMultiplier),(int)(490*heightMultiplier),null);
             g.drawImage(playerImages.get(1),(int)(980*widthMultiplier),(int)(490*heightMultiplier),null);
+            g.drawImage(playerImages.get(2),(int)(1120*widthMultiplier),(int)(490*heightMultiplier),null);
+
             readyMark.render(g);
         }
     }
@@ -237,6 +240,9 @@ public class MenuScreen extends Screen implements IUpdateable {
                 System.out.println(playerPick);
             }else if (e.getX() >= 980*widthMultiplier && e.getX() <= 1080*widthMultiplier && e.getY() >= 490*heightMultiplier && e.getY() <= 590*heightMultiplier) {
                 playerPick = 2;
+                System.out.println(playerPick);
+            }else if(e.getX() >= 1120*widthMultiplier && e.getX()<= 1220*widthMultiplier && e.getY() >= 490*heightMultiplier && e.getY() <= 590*heightMultiplier){
+                playerPick = 3;
                 System.out.println(playerPick);
             }
         }

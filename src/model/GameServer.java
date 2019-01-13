@@ -94,8 +94,8 @@ public class GameServer extends Server {
                                    // }
                                 }
                             }
-                            allPlayer = allPlayer + numberOfPlayers + "#"+"warrior";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"warrior";}
+                            allPlayer = allPlayer + temp[1] + "#"+"warrior";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"warrior";}
                         break;
                     case 2:
                     //    players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
@@ -111,8 +111,8 @@ public class GameServer extends Server {
                                     // }
                                 }
                             }
-                            allPlayer = allPlayer + numberOfPlayers + "#"+"Mage";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Mage";}
+                            allPlayer = allPlayer + temp[1] + "#"+"Mage";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"Mage";}
                         break;
                     case 3:
                         if(numberOfPlayers>1) {
@@ -126,8 +126,8 @@ public class GameServer extends Server {
                                     // }
                                 }
                             }
-                            allPlayer = allPlayer + numberOfPlayers + "#"+"Gambler";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+numberOfPlayers+"#"+"Gambler";}
+                            allPlayer = allPlayer + temp[1] + "#"+"Gambler";
+                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"Gambler";}
                         break;
                 }
                 //System.out.println("Sended all players");

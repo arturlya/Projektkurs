@@ -62,7 +62,6 @@ public class ScreenController extends Entity implements IUpdateable {
             System.out.println("Controller erstellt");
 
         }
-        System.out.println("Created own player");
     }
 
     public MenuScreen getMenuScreen() {
