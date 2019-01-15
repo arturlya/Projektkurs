@@ -46,7 +46,6 @@ public class GameClient extends Client implements IUpdateable {
         ready = false;
         others = new List<>();
         Input.getLoop().attach(this);
-
     }
 
     /**
@@ -56,13 +55,7 @@ public class GameClient extends Client implements IUpdateable {
     public void update(){
 
         i = 1;
-        if(player != null) {
 
-            if (gameStarted && player.isMoving()) {
-                send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed()+"#"+player.directionLR+"#"+player.decelerating);
-                // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
-            }
-        }
         if(ScreenController.isIngame() && !drawnPlayer && allPlayer.contains("ALL")){
 
             System.out.println(allPlayer);
@@ -125,7 +118,13 @@ public class GameClient extends Client implements IUpdateable {
         }
         if (playerNumber != 0 && player != null) {
             player.setPlayerNumber(playerNumber);
+        }
+        if(player != null) {
 
+            if (gameStarted ) {
+                send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed()+"#"+player.directionLR+"#"+player.decelerating);
+                // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
+            }
 
         }
 
@@ -188,49 +187,6 @@ public class GameClient extends Client implements IUpdateable {
                 choosePlayer(chosenPlayer);
             } else if (pMessage.contains("ALL")) {
                 allPlayer = pMessage;
-               /* System.out.println(allPlayer);
-                String[] temp = allPlayer.split("ALL");
-                temp = temp[1].split("NEXT");
-                if(getNumberOfOtherPlayers() < Integer.parseInt(temp[0])) {
-                    for (int i = 1; i < temp.length; i++) {
-                        //Aufpassen temp0
-                        String[] charInfo = temp[i].split("#", 2);
-                        if(Integer.parseInt(charInfo[0]) != playerNumber){
-                            // if (Integer.parseInt(charInfo[0]) != player.getPlayerNumber()) {
-                            boolean alreadyKnown = false;
-                            others.toFirst();
-                            while(others.hasAccess()){
-                                if(others.getContent().getPlayerNumber() == Integer.parseInt(charInfo[0])){
-                                    alreadyKnown = true;
-                                }
-                                others.next();
-                            }
-                            if(!alreadyKnown) {
-                                if (charInfo[1].equals("warrior")) {
-                                    Player otherPlayer = new Warrior(400,50,false);
-                                    otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
-                                    others.append(otherPlayer);
-                                    Game.getEnvironment().add(otherPlayer);
-                                    Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
-                                    //ingameScreen.addGravObject(otherPlayer);
-
-                                    System.out.println("Added other player");
-                                } else if (charInfo[1].equals("Mage")) {
-                                    Player otherPlayer = new Mage(400,50,false);
-                                    otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
-                                    others.append(otherPlayer);
-                                    Game.getEnvironment().add(otherPlayer);
-                                    Game.getEnvironment().add(otherPlayer, RenderType.NORMAL);
-                                    //ingameScreen.addGravObject(otherPlayer);
-                                    System.out.println("Added other player");
-                                }
-                            }
-                        }else{
-
-                        }
-                    }
-                }*/
-
             } else if (pMessage.contains("POSITION")) {
                 String[] temp = pMessage.split("POSITION");
                 if (temp[1].contains("XY")) {
@@ -253,6 +209,7 @@ public class GameClient extends Client implements IUpdateable {
                     }
                 }else {
                     temp = temp[1].split("#");
+                    System.out.println(temp[0]);
                     if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
                         int posInList = Integer.parseInt(temp[0]) - 2;
@@ -386,26 +343,6 @@ public class GameClient extends Client implements IUpdateable {
         }
     }
 
-
-    /**
-     * Methode zum Initialisieren.
-     */
-    protected void init(){
-        List<IEntity> entityList = new List<>();
-        entityList.append(player);
-        entityList.toFirst();
-        while(entityList.hasAccess()){
-            Game.getEnvironment().add(entityList.getContent());
-            //Game.getEnvironment().add(e);
-
-            if(entityList.getContent() instanceof GravitationalObject){
-                Game.getEnvironment().add((GravitationalObject)entityList.getContent(),RenderType.NORMAL);
-                //ingameScreen.addGravObject((GravitationalObject)entityList.getContent());
-            }
-            entityList.next();
-        }
-    }
-
     /**
      * @return Gibt die Anzahl an gegnerischen Spielern, die der Client kennt.
      */
@@ -448,16 +385,7 @@ public class GameClient extends Client implements IUpdateable {
             player.setX(600);
 
 
-        }/*else{
-            switch (number) {
-                case 1:
-                    send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 1);
-                    break;
-                case 2:
-                    send("PLAYER" + player.getPlayerNumber() + "PLAYER" + 2);
-                    break;
-            }
-        }*/
+        }
     }
     /**
      * Methode, die, falls der Player spielbar ist, die anderen Input-Mathoden aufruft
