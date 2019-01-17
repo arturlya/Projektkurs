@@ -61,8 +61,8 @@ public abstract class Player extends GravitationalObject {
         //createCircleImages();
         pr = new PlayerRenderer(this);
         //Das da unten muss für Online Modus engefügt werden(das da drunter weg)!!!!!!!!!!!!!!!!
-        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
-       // Game.getEnvironment().add(pr,RenderType.NORMAL);
+//        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
+        Game.getEnvironment().add(pr,RenderType.NORMAL);
         Game.getLoop().attach(pr);
 
     }

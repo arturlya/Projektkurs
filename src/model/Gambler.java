@@ -57,7 +57,7 @@ public class Gambler extends Player {
     public void normalAttackRun() {
         if(result<=hitPercentage){
             System.out.println("Attack succeeded");
-
+            setSlotCooldown(0);
             if(lookingAt == 1) {
                 hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.8,hitbox.width*0.4,hitbox.height*0.2);
             }else{
@@ -70,11 +70,12 @@ public class Gambler extends Player {
             attackWindUp = 0.1;
             attackHurtTime = 0.4;
             attackWindDown = 0.2;
-            setSlotCooldown(0);
-            hitPercentage = hitPercentage-0.05;
-            damage++;
+
+            hitPercentage = hitPercentage-0.2;
+            damage = damage +2;
             System.out.println("Current Damage : "+damage);
         }else{
+            setSlotCooldown(0);
             resetKombo();
             attackWindDown = 1;
             System.out.println("Attack not succeeded");
@@ -87,21 +88,22 @@ public class Gambler extends Player {
     public void normalAttackDown() {
         if(result<=hitPercentage){
             System.out.println("Attack succeeded");
-
-            hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width+hitbox.width*1.4,hitbox.height*0.8);
             setSlotCooldown(0);
+            hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width+hitbox.width*1.4,hitbox.height*0.8);
+
             hurtbox.setDamage(damage);
             hurtbox.setKnockback(3/damage);
             attackWindUp = 0.1;
             attackHurtTime = 0.3;
             attackWindDown = 0.3;
-            hitPercentage = hitPercentage-0.1;
-            damage++;
+            hitPercentage = hitPercentage-0.2;
+            damage = damage +2;
             System.out.println("Current Damage : "+damage);
 
         }else{
             resetKombo();
             attackWindDown = 1;
+            setSlotCooldown(0);
             System.out.println("Attack not succeeded");
             addSlotValue(-1);
         }
@@ -112,19 +114,21 @@ public class Gambler extends Player {
     public void normalAttackUp() {
         if(result <= hitPercentage){
             System.out.println("Attack succeeded");
+            setSlotCooldown(0);
             hurtbox.setRelativeRect(0,-hitbox.height*0.4,hitbox.width,hitbox.height*0.4);
             hurtbox.setDamage(damage);
             hurtbox.setKnockback(3/damage);
             attackWindUp = 0.1;
             attackHurtTime = 0.2;
             attackWindDown = 0.4;
-            setSlotCooldown(0);
-            hitPercentage = hitPercentage-0.06;
-            damage++;
+
+            hitPercentage = hitPercentage-0.2;
+            damage = damage +2;
             System.out.println("Current Damage : "+damage);
         }else{
             System.out.println("Attack not succeeded");
             attackWindDown = 1;
+            setSlotCooldown(0);
             resetKombo();
             addSlotValue(-1);
         }
@@ -135,7 +139,7 @@ public class Gambler extends Player {
     public void normalAttackStand() {
         if(result<=hitPercentage){
             System.out.println("Attack succeeded");
-
+            setSlotCooldown(0);
             if(lookingAt == 1) {
                 hurtbox.setRelativeRect(hitbox.width , hitbox.height * 0.4, hitbox.width *0.4, hitbox.height * 0.6);
             }else{
@@ -146,14 +150,15 @@ public class Gambler extends Player {
             attackWindUp = 0.015;
             attackHurtTime = 0.2;
             attackWindDown = 0.015;
-            setSlotCooldown(0);
-            hitPercentage = hitPercentage-0.02;
-            damage++;
+
+            hitPercentage = hitPercentage-0.2;
+            damage = damage +2;
             System.out.println("Current Damage : "+damage);
         }else{
             resetKombo();
             attackWindDown = 1;
             System.out.println("Attack not succeeded");
+            setSlotCooldown(0);
             addSlotValue(-1);
         }
         result = Math.random();
@@ -197,8 +202,8 @@ public class Gambler extends Player {
     }
 
     private void resetKombo(){
-        hitPercentage = 0.8;
-        damage = 2;
+        hitPercentage = 0.9;
+        damage = 4;
     }
 
     private void throwCoins(){
@@ -221,7 +226,7 @@ public class Gambler extends Player {
      * @param sign Wert für die Slotmachine -> Darf nur 1 für 'gut' und -1 für 'schlecht' beinhalten!
      */
     public void addSlotValue(int sign){
-        if(slotCooldown <= 0) {
+        if(slotCooldown <= 0 && !buffed) {
             if (sign == 1 || sign == -1)
                 for (int i = 0; i < slotMachine.length; i++) {
                     if (slotMachine[i] == 0) {
@@ -234,6 +239,7 @@ public class Gambler extends Player {
                 }
             System.out.println("");
         }
+        slotCooldown = 1;
     }
 
     private void clearSlotMachine(){
@@ -277,7 +283,7 @@ public class Gambler extends Player {
                 speed = speed + 100;
                 break;
             case 3:
-                hitPercentage = hitPercentage + 0.5;
+                hitPercentage = hitPercentage + 0.7;
                 break;
         }
         System.out.println("added buffs");
