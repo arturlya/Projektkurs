@@ -65,7 +65,7 @@ public class Gambler extends Player {
             }
 
             hurtbox.setDamage(damage);
-            hurtbox.setKnockback(2/damage);
+            hurtbox.setKnockback(damage/2);
 
             attackWindUp = 0.1;
             attackHurtTime = 0.4;
@@ -92,7 +92,7 @@ public class Gambler extends Player {
             hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width+hitbox.width*1.4,hitbox.height*0.8);
 
             hurtbox.setDamage(damage);
-            hurtbox.setKnockback(3/damage);
+            hurtbox.setKnockback(damage/2);
             attackWindUp = 0.1;
             attackHurtTime = 0.3;
             attackWindDown = 0.3;
@@ -117,7 +117,7 @@ public class Gambler extends Player {
             setSlotCooldown(0);
             hurtbox.setRelativeRect(0,-hitbox.height*0.4,hitbox.width,hitbox.height*0.4);
             hurtbox.setDamage(damage);
-            hurtbox.setKnockback(3/damage);
+            hurtbox.setKnockback(damage/2);
             attackWindUp = 0.1;
             attackHurtTime = 0.2;
             attackWindDown = 0.4;
@@ -146,7 +146,7 @@ public class Gambler extends Player {
                 hurtbox.setRelativeRect(-hitbox.width*0.4 , hitbox.height * 0.4, hitbox.width *0.4, hitbox.height * 0.6);
             }
             hurtbox.setDamage(damage);
-            hurtbox.setKnockback(3/damage);
+            hurtbox.setKnockback(damage/2);
             attackWindUp = 0.015;
             attackHurtTime = 0.2;
             attackWindDown = 0.015;
