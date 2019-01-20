@@ -49,23 +49,29 @@ public class CollisionController implements IUpdateable {
     }
 
     private void checkHurtboxToPlayerCollision(){
+        Player gamblerDefender = null;
+        boolean gamblerHit = false;
         for(Player attacker : players){
             for(Player defender : players){
                 if(attacker != defender){
                     if(attacker.getHurtbox().isHurting()) {
                         if (attacker.getHurtbox().intersects(defender.getHitbox())) {
                             playerHit(attacker, defender);
-                        }
-                        if(attacker instanceof Gambler && ((Gambler) attacker).getSlotCooldown()<=0 && ((Gambler) attacker).getBuffTimer()<=0){
-                            if (attacker.getHurtbox().intersects(defender.getHitbox())) {
-                                ((Gambler) attacker).addSlotValue(1);
-                                System.out.println("Attack hitted");
-                            }else{
-                                ((Gambler) attacker).addSlotValue(-1);
-                            }
-                            ((Gambler) attacker).setSlotCooldown(1);
+                            gamblerDefender = defender;
+                            gamblerHit = true;
                         }
                     }
+                }
+            }
+            if(gamblerHit) {
+                if (attacker instanceof Gambler && ((Gambler) attacker).getSlotCooldown() <= 0 && ((Gambler) attacker).getBuffTimer() <= 0) {
+                    if (attacker.getHurtbox().intersects(gamblerDefender.getHitbox())) {
+                        ((Gambler) attacker).addSlotValue(1);
+                        System.out.println("Attack hitted");
+                    } else {
+                        ((Gambler) attacker).addSlotValue(-1);
+                    }
+                    ((Gambler) attacker).setSlotCooldown(1);
                 }
             }
         }
