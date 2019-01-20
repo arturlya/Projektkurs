@@ -58,7 +58,6 @@ public class GameClient extends Client implements IUpdateable {
 
         if(ScreenController.isIngame() && !drawnPlayer && allPlayer.contains("ALL")){
 
-            System.out.println(allPlayer);
             String[] temp = allPlayer.split("ALL");
             temp = temp[1].split("NEXT");
             if(getNumberOfOtherPlayers() < Integer.parseInt(temp[0])) {
@@ -209,7 +208,6 @@ public class GameClient extends Client implements IUpdateable {
                     }
                 }else {
                     temp = temp[1].split("#");
-                    System.out.println(temp[0]);
                     if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
                         int posInList = Integer.parseInt(temp[0]) - 2;
@@ -219,8 +217,6 @@ public class GameClient extends Client implements IUpdateable {
                             posInList--;
                         }
                         if (others.hasAccess()) {
-                            //  others.getContent().setX(Double.parseDouble(temp[1]));
-                            // others.getContent().setY(Double.parseDouble(temp[2]));
                             others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
                             others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
                             others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
@@ -242,32 +238,40 @@ public class GameClient extends Client implements IUpdateable {
                         switch (temp[1]){
                             case "nAS":
                                 if(others.getContent() instanceof Gambler) {
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackStand();
+                                    if(!temp[2].equals("")) {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackStand();
+                                    }
                                 }else{
                                     others.getContent().normalAttackStand();
                                 }
                                 break;
                             case "nAR":
                                 if(others.getContent() instanceof Gambler) {
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackRun();
+                                    if(!temp[2].equals("")) {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackRun();
+                                    }
                                 }else{
                                     others.getContent().normalAttackRun();
                                 }
                                 break;
                             case "nAD":
                                 if(others.getContent() instanceof Gambler) {
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackDown();
+                                    if(!temp[2].equals("")) {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackDown();
+                                    }
                                 }else{
                                     others.getContent().normalAttackDown();
                                 }
                                 break;
                             case "nAU":
                                 if(others.getContent() instanceof Gambler) {
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackUp();
+                                    if(!temp[2].equals("")) {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackUp();
+                                    }
                                 }else{
                                     others.getContent().normalAttackUp();
                                 }
