@@ -1,6 +1,7 @@
 package model.Maps;
 
 import de.gurkenlabs.litiengine.Game;
+import model.StaticData;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,6 +16,7 @@ public class Map1 extends Map {
         super();
         try {
             map = ImageIO.read(new File("assets/maps/map1.png"));
+            bg = ImageIO.read(new File("assets/maps/bg1.png"));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
@@ -22,16 +24,13 @@ public class Map1 extends Map {
         spawnpoints = new ArrayList<>();
         createHitBoxes();
         createSpawnpoints();
+        width = StaticData.ScreenWidth;
+        height = StaticData.ScreenHeight;
     }
 
     @Override
     public void render(Graphics2D graphics2D) {
-        if (Game.getConfiguration().graphics().isFullscreen()) {
-            width = (int) Game.getConfiguration().graphics().getResolution().getWidth();
-            height = (int) Game.getConfiguration().graphics().getResolution().getHeight();
-        } else width = Game.getConfiguration().graphics().getResolutionWidth();
-        height = Game.getConfiguration().graphics().getResolutionHeight();
-
+        graphics2D.drawImage(bg, 0, 0, width, height, null);
         graphics2D.drawImage(map, 0, 0, width, height, null);
     }
 
