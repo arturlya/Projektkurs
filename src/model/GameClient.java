@@ -237,42 +237,38 @@ public class GameClient extends Client implements IUpdateable {
                     if (others.hasAccess()) {
                         switch (temp[1]){
                             case "nAS":
-                                if(others.getContent() instanceof Gambler) {
-                                    if(!temp[2].equals("")) {
-                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                        others.getContent().normalAttackStand();
-                                    }
+                                if(!(others.getContent() instanceof Gambler)) {
+                                    others.getContent().normalAttackStand();
+
                                 }else{
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
                                     others.getContent().normalAttackStand();
                                 }
                                 break;
                             case "nAR":
-                                if(others.getContent() instanceof Gambler) {
-                                    if(!temp[2].equals("")) {
-                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                        others.getContent().normalAttackRun();
-                                    }
+                                if(!(others.getContent() instanceof Gambler)) {
+                                    others.getContent().normalAttackRun();
+
                                 }else{
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
                                     others.getContent().normalAttackRun();
                                 }
                                 break;
                             case "nAD":
-                                if(others.getContent() instanceof Gambler) {
-                                    if(!temp[2].equals("")) {
-                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                        others.getContent().normalAttackDown();
-                                    }
+                                if(!(others.getContent() instanceof Gambler)) {
+                                    others.getContent().normalAttackDown();
+
                                 }else{
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
                                     others.getContent().normalAttackDown();
                                 }
                                 break;
                             case "nAU":
-                                if(others.getContent() instanceof Gambler) {
-                                    if(!temp[2].equals("")) {
-                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                        others.getContent().normalAttackUp();
-                                    }
+                                if(!(others.getContent() instanceof Gambler)) {
+                                    others.getContent().normalAttackUp();
+
                                 }else{
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
                                     others.getContent().normalAttackUp();
                                 }
                                 break;
@@ -286,10 +282,11 @@ public class GameClient extends Client implements IUpdateable {
                                 others.getContent().specialAttackDown();
                                 break;
                             case "sAU":
-                                if(others.getContent() instanceof Gambler) {
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                if(!(others.getContent() instanceof Gambler)) {
                                     others.getContent().specialAttackUp();
+
                                 }else{
+                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
                                     others.getContent().specialAttackUp();
                                 }
                                 break;
