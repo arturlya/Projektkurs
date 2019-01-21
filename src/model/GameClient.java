@@ -57,7 +57,7 @@ public class GameClient extends Client implements IUpdateable {
         i = 1;
 
         if(ScreenController.isIngame() && !drawnPlayer && allPlayer.contains("ALL")){
-
+            System.out.println(allPlayer);
             String[] temp = allPlayer.split("ALL");
             temp = temp[1].split("NEXT");
             if(getNumberOfOtherPlayers() < Integer.parseInt(temp[0])) {
@@ -193,12 +193,15 @@ public class GameClient extends Client implements IUpdateable {
                     temp = temp[1].split("#");
                     if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
-                        int posInList = Integer.parseInt(temp[0]) - 2;
+                        int playerIndex = Integer.parseInt(temp[0]);
                         others.toFirst();
-                        while (posInList > 0) {
+                        while(others.hasAccess()){
+                            if(others.getContent().getPlayerNumber() == playerIndex){
+                                break;
+                            }
                             others.next();
-                            posInList--;
                         }
+
                         if (others.hasAccess()) {
                               others.getContent().setX(Double.parseDouble(temp[1]));
                              others.getContent().setY(Double.parseDouble(temp[2]));
@@ -210,11 +213,13 @@ public class GameClient extends Client implements IUpdateable {
                     temp = temp[1].split("#");
                     if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
-                        int posInList = Integer.parseInt(temp[0]) - 2;
+                        int playerIndex = Integer.parseInt(temp[0]);
                         others.toFirst();
-                        while (posInList > 0) {
+                        while(others.hasAccess()){
+                            if(others.getContent().getPlayerNumber() == playerIndex){
+                                break;
+                            }
                             others.next();
-                            posInList--;
                         }
                         if (others.hasAccess()) {
                             others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
@@ -228,11 +233,14 @@ public class GameClient extends Client implements IUpdateable {
                 String[] temp = pMessage.split("ATTACK");
                 temp = temp[1].split("#");
                 if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
-                    int posInList = Integer.parseInt(temp[0]) - 2;
+
+                    int playerIndex = Integer.parseInt(temp[0]);
                     others.toFirst();
-                    while (posInList > 0) {
+                    while(others.hasAccess()){
+                        if(others.getContent().getPlayerNumber() == playerIndex){
+                            break;
+                        }
                         others.next();
-                        posInList--;
                     }
                     if (others.hasAccess()) {
                         switch (temp[1]){
@@ -296,11 +304,14 @@ public class GameClient extends Client implements IUpdateable {
             }else if(pMessage.contains("JUMP")){
                 String[] temp = pMessage.split("JUMP");
                 if (Integer.parseInt(temp[1]) != playerNumber) {
-                    int posInList = Integer.parseInt(temp[1]) - 2;
+
+                    int playerIndex = Integer.parseInt(temp[1]);
                     others.toFirst();
-                    while (posInList > 0) {
+                    while(others.hasAccess()){
+                        if(others.getContent().getPlayerNumber() == playerIndex){
+                            break;
+                        }
                         others.next();
-                        posInList--;
                     }
                     if (others.hasAccess()) {
                         others.getContent().setVerticalSpeed(-700);
@@ -313,11 +324,14 @@ public class GameClient extends Client implements IUpdateable {
                 String[] temp = pMessage.split("LOOKING");
                 temp = temp[1].split("#");
                 if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
-                    int posInList = Integer.parseInt(temp[0]) - 2;
+
+                    int playerIndex = Integer.parseInt(temp[0]);
                     others.toFirst();
-                    while (posInList > 0) {
+                    while(others.hasAccess()){
+                        if(others.getContent().getPlayerNumber() == playerIndex){
+                            break;
+                        }
                         others.next();
-                        posInList--;
                     }
                     if (others.hasAccess()) {
                         others.getContent().setLookingAt(Integer.parseInt(temp[1]));
@@ -325,11 +339,14 @@ public class GameClient extends Client implements IUpdateable {
                 }
             }else if(pMessage.contains("QUIT")){
                 String temp = pMessage.split("QUIT")[1];
-                int posInList = Integer.parseInt(temp) - 2;
+
+                int playerIndex = Integer.parseInt(temp);
                 others.toFirst();
-                while (posInList > 0) {
+                while(others.hasAccess()){
+                    if(others.getContent().getPlayerNumber() == playerIndex){
+                        break;
+                    }
                     others.next();
-                    posInList--;
                 }
                 if(others.hasAccess()) {
                     Game.getEnvironment().removeRenderable(others.getContent());
