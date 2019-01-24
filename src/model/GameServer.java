@@ -8,7 +8,7 @@ public class GameServer extends Server {
     private int maxPlayers;
     private int startVote;
 
-    private String[][] playerIP;
+    private String[][] users;
 
 
     private String allPlayer = "ALL";
@@ -21,8 +21,7 @@ public class GameServer extends Server {
         super(port);
         startVote = 0;
         maxPlayers = 4;
-        playerIP = new String[maxPlayers][2];
-        System.out.println("Created new GameServer");
+        users = new String[maxPlayers][2];
     }
 
     /**
@@ -37,18 +36,16 @@ public class GameServer extends Server {
         if(numberOfPlayers ==1){
             System.out.println("Waiting for Players");
             send(pClientIP,pClientPort,"NUMBER"+numberOfPlayers);
-            playerIP[numberOfPlayers-1][0] = pClientIP;
-            playerIP[numberOfPlayers-1][1] = Integer.toString(pClientPort);
+            users[numberOfPlayers-1][0] = pClientIP;
+            users[numberOfPlayers-1][1] = Integer.toString(pClientPort);
         }else if(numberOfPlayers <= maxPlayers){
             System.out.println("Waiting for start");
             send(pClientIP,pClientPort,"NUMBER"+numberOfPlayers);
-            playerIP[numberOfPlayers-1][0] = pClientIP;
-            playerIP[numberOfPlayers-1][1] = Integer.toString(pClientPort);
+            users[numberOfPlayers-1][0] = pClientIP;
+            users[numberOfPlayers-1][1] = Integer.toString(pClientPort);
         }else{
             System.out.println("Server is already full");
         }
-
-
     }
 
     /**
@@ -65,109 +62,73 @@ public class GameServer extends Server {
      */
     @Override
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
-            if (pMessage.contains("START") && numberOfPlayers > 1) {
-                String[] temp = pMessage.split("START", 2);
-                if (temp[1].contains("true")) {
-                    startVote++;
-                    System.out.println("Player ready");
-                } else if (temp[1].contains("false")) {
-                    startVote--;
-                    System.out.println("Player must prepare");
-                } else {
-                    System.err.println("Couldn't handle : " + temp[1]);
-                }
-            } else if (pMessage.contains("PLAYER")) {
-
-                String[] temp = pMessage.split("PLAYER", 3);
-                switch (Integer.parseInt(temp[2])) {
-                    case 1:
-                    //    players[Integer.parseInt(temp[1]) ] = new warrior(false);
-                    //    players[Integer.parseInt(temp[1]) ].setPlayerNumber(Integer.parseInt(temp[1]));
-                        if(numberOfPlayers>1) {
-                            String tmp[] = allPlayer.split("NEXT");
-                            allPlayer = "ALL" + numberOfPlayers + "NEXT";
-                            for(int i=1;i<tmp.length;i++){
-                                if(tmp[i] != null) {
-                                    allPlayer = allPlayer + tmp[i];
-                                    //if(i<numberOfPlayers-1){
-                                        allPlayer = allPlayer +"NEXT";
-                                   // }
-                                }
-                            }
-                            allPlayer = allPlayer + temp[1] + "#"+"warrior";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"warrior";}
-                        break;
-                    case 2:
-                    //    players[Integer.parseInt(temp[1]) - 1] = new Mage(false);
-                    //    players[Integer.parseInt(temp[1]) - 1].setPlayerNumber(Integer.parseInt(temp[1]));
-                        if(numberOfPlayers>1) {
-                            String tmp[] = allPlayer.split("NEXT");
-                            allPlayer = "ALL" + numberOfPlayers + "NEXT";
-                            for(int i=1;i<tmp.length;i++){
-                                if(tmp[i] != null) {
-                                    allPlayer = allPlayer + tmp[i];
-                                    //if(i<numberOfPlayers-1){
-                                    allPlayer = allPlayer +"NEXT";
-                                    // }
-                                }
-                            }
-                            allPlayer = allPlayer + temp[1] + "#"+"Mage";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"Mage";}
-                        break;
-                    case 3:
-                        if(numberOfPlayers>1) {
-                            String tmp[] = allPlayer.split("NEXT");
-                            allPlayer = "ALL" + numberOfPlayers + "NEXT";
-                            for(int i=1;i<tmp.length;i++){
-                                if(tmp[i] != null) {
-                                    allPlayer = allPlayer + tmp[i];
-                                    //if(i<numberOfPlayers-1){
-                                    allPlayer = allPlayer +"NEXT";
-                                    // }
-                                }
-                            }
-                            allPlayer = allPlayer + temp[1] + "#"+"Gambler";
-                        }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"Gambler";}
-                        break;
-                }
-                //System.out.println("Sended all players");
-              //  sendToAll(getAllPlayers());
-
-
-                sendToAll(allPlayer);
-
-            } else if (pMessage.contains("POSITION")) {
-                sendToAll(pMessage);
-                String[] temp = pMessage.split("POSITION");
-                String[] help = temp[1].split("#", 3);
-
-               /* if (players[Integer.parseInt(help[0])-1] != null) {
-                    players[Integer.parseInt(help[0])-1].setX(Double.parseDouble(help[1]));
-                    players[Integer.parseInt(help[0])-1].setY(Double.parseDouble(help[2]));
-                    //System.out.println("Refreshing");
-                }*/
-            }else if(pMessage.contains("ATTACK")){
-                sendToAll(pMessage);
-            } else if (pMessage.contains("JUMP")) {
-                sendToAll(pMessage);
-            }else if(pMessage.contains("LOOKING")){
-                sendToAll(pMessage);
+        if (pMessage.contains("START") && numberOfPlayers > 1) {
+            String[] temp = pMessage.split("START", 2);
+            if (temp[1].contains("true")) {
+                startVote++;
+                System.out.println("Player ready");
+            } else if (temp[1].contains("false")) {
+                startVote--;
+                System.out.println("Player must prepare");
+            } else {
+                System.err.println("Couldn't handle : " + temp[1]);
             }
+        } else if (pMessage.contains("PLAYER")) {
+
+            String[] temp = pMessage.split("PLAYER", 3);
+            switch (Integer.parseInt(temp[2])) {
+                case 1:
+                    if(numberOfPlayers>1) {
+                        String tmp[] = allPlayer.split("NEXT");
+                        allPlayer = "ALL" + numberOfPlayers + "NEXT";
+                        for(int i=1;i<tmp.length;i++){
+                            if(tmp[i] != null) {
+                                allPlayer = allPlayer + tmp[i];
+                                allPlayer = allPlayer +"NEXT";
+                            }
+                        }
+                        allPlayer = allPlayer + temp[1] + "#"+"warrior";
+                    }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"warrior";}
+                    break;
+                case 2:
+                    if(numberOfPlayers>1) {
+                        String tmp[] = allPlayer.split("NEXT");
+                        allPlayer = "ALL" + numberOfPlayers + "NEXT";
+                        for(int i=1;i<tmp.length;i++){
+                            if(tmp[i] != null) {
+                                allPlayer = allPlayer + tmp[i];
+                                allPlayer = allPlayer +"NEXT";
+                            }
+                        }
+                        allPlayer = allPlayer + temp[1] + "#"+"Mage";
+                    }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"Mage";}
+                    break;
+                case 3:
+                    if(numberOfPlayers>1) {
+                        String tmp[] = allPlayer.split("NEXT");
+                        allPlayer = "ALL" + numberOfPlayers + "NEXT";
+                        for(int i=1;i<tmp.length;i++){
+                            if(tmp[i] != null) {
+                                allPlayer = allPlayer + tmp[i];
+                                allPlayer = allPlayer +"NEXT";
+                            }
+                        }
+                        allPlayer = allPlayer + temp[1] + "#"+"Gambler";
+                    }else{ allPlayer = "ALL"+numberOfPlayers+"NEXT"+temp[1]+"#"+"Gambler";}
+                    break;
+            }
+            sendToAll(allPlayer);
+        } else if (pMessage.contains("POSITION")) {
+            sendToAll(pMessage);
+        }else if(pMessage.contains("ATTACK")){
+            sendToAll(pMessage);
+        } else if (pMessage.contains("JUMP")) {
+            sendToAll(pMessage);
+        }else if(pMessage.contains("LOOKING")){
+            sendToAll(pMessage);
+        }
 
         if(isStarting() && startVote<10){
-/*
-            if(players[0] != null && players[1] != null) {
-                if(players[0].getPlayerNumber()!= 0 && players[1].getPlayerNumber() != 0) {
-                    //sendToAll(getAllPlayers());
-                    sendToAll(allPlayer);
-                    sendToAll("STARTtrue");
-                    startVote = Integer.MAX_VALUE;
-                    System.out.println("Sended all players");
-                }
-            }else{
-                System.out.println("Nicht alle haben einen Spieler gewählt");
-                sendToAll("CHOOSE");
-            }*/
             sendToAll("PLAYER");
             sendToAll(allPlayer);
             sendToAll("STARTtrue");
@@ -185,28 +146,19 @@ public class GameServer extends Server {
      */
     @Override
     public void processClosingConnection(String pClientIP, int pClientPort) {
-        //System.out.println("Player left the game");
-        System.out.println(""+pClientIP+" at port "+pClientPort+" lefted");
-
-      /*  for(int i=0;i<playerIP.length;i++){
-            for(int j=0;j<playerIP[i].length;j++){
-                System.out.println(playerIP[i][j]);
-            }
-            System.out.println("~~~~~");
-        }
-*/
-        for(int i=0;i<playerIP.length;i++){
-            if(playerIP[i][0] != null) {
-                if (playerIP[i][0].equals(pClientIP) && playerIP[i][1].equals(Integer.toString(pClientPort))) {
+        for(int i=0;i<users.length;i++){
+            if(users[i][0] != null) {
+                if (users[i][0].equals(pClientIP) && users[i][1].equals(Integer.toString(pClientPort))) {
                     sendToAll("QUIT" + (i + 1));
-                    System.out.println("QUIT"+(i+1));
+                    numberOfPlayers--;
                     System.out.println("Player " + (i + 1) + " left the game!");
                 }
             }
         }
-
-
-        //sendToAll("QUIT");
+        if(numberOfPlayers <= 0) {
+            close();
+            System.out.println("Closing Server");
+        }
     }
 
     /**

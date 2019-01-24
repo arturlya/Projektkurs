@@ -166,23 +166,9 @@ public class GameClient extends Client implements IUpdateable {
      */
     @Override
     public void processMessage(String pMessage) {
-        int max = 0;
-        if(max == 0) {
-            if (pMessage.contains("START")) {
-                String[] temp = pMessage.split("START", 2);
-                if (temp[1].contains("true")) {
-                    gameStarted = true;
-                    System.out.println("Das Spiel startet!!!");
-                } else {
-                    gameStarted = false;
-                }
-            } else if (pMessage.contains("NUMBER")) {
-                String[] temp = pMessage.split("NUMBER");
-                playerNumber = Integer.parseInt(temp[1]);
-                System.out.println("Playernumber : "+playerNumber);
-
-
-            } else if(pMessage.contains("PLAYER")){
+        //int max = 0;
+        //if(max == 0) {
+            if(pMessage.contains("PLAYER")){
                 choosePlayer(chosenPlayer);
             } else if (pMessage.contains("ALL")) {
                 allPlayer = pMessage;
@@ -356,9 +342,23 @@ public class GameClient extends Client implements IUpdateable {
                 }else {
                     System.out.println("error");
                 }
+            }else if (pMessage.contains("START")) {
+                String[] temp = pMessage.split("START", 2);
+                if (temp[1].contains("true")) {
+                    gameStarted = true;
+                    System.out.println("Das Spiel startet!!!");
+                } else {
+                    gameStarted = false;
+                }
+            } else if (pMessage.contains("NUMBER")) {
+                String[] temp = pMessage.split("NUMBER");
+                playerNumber = Integer.parseInt(temp[1]);
+                System.out.println("Playernumber : "+playerNumber);
+
+
             }
-            max++;
-        }
+            //max++;
+        //}
     }
 
     /**
