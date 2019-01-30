@@ -8,7 +8,6 @@ import static control.Timer.dt;
 
 public class Gambler extends Player {
 
-    private double hitPercentage;
     private double result;
     private int damage;
     private double buffTimer;
@@ -19,9 +18,32 @@ public class Gambler extends Player {
 
     private double slotCooldown;
     private int[] slotMachine;
+    private double[][] uMatrix;
+    private double[][] verteilung;
 
     public Gambler(double x, double y,boolean playable){
         super(x,y,playable);
+        uMatrix = new double[5][5];
+        verteilung = new double[1][5];
+        verteilung[0][0] = 1;
+        for(int i =0;i<uMatrix.length;i++){
+            if(i==0){
+                uMatrix[i][0] = 0.1;
+                uMatrix[i][1] = 0.9;
+            }else if(i==1){
+                uMatrix[i][0] = 0.3;
+                uMatrix[i][2] = 0.7;
+            }else if(i==2){
+                uMatrix[i][0] = 0.5;
+                uMatrix[i][3] = 0.5;
+            }else if(i == 3){
+                uMatrix[i][0] = 0.7;
+                uMatrix[i][2] = 0.3;
+            }else if(i == 4){
+                uMatrix[i][0] = 1;
+            }
+        }
+        matrixMultiplikation(verteilung,uMatrix);
         setWidth(96);
         setHeight(96);
         setName("Gambler");
@@ -31,6 +53,8 @@ public class Gambler extends Player {
         buffed = false;
         result = Math.random();
         teleportToPlayer = false;
+
+
     }
 
 
@@ -44,7 +68,6 @@ public class Gambler extends Player {
             if(buffTimer >= 0) {
                 buffTimer = buffTimer - 1 * dt;
             } else {
-                hitPercentage = 0.8;
                 knockbackPercentage = knockbackPercentage - 10;
                 speed = speed -100;
                 System.out.println("Boosts removed");
@@ -55,7 +78,8 @@ public class Gambler extends Player {
 
     @Override
     public void normalAttackRun() {
-        if(result<=hitPercentage){
+        System.out.println(getMatrix()[0]);
+        if(result>=getMatrix()[0]){
             System.out.println("Attack succeeded");
             setSlotCooldown(0);
             if(lookingAt == 1) {
@@ -71,7 +95,8 @@ public class Gambler extends Player {
             attackHurtTime = 0.4;
             attackWindDown = 0.2;
 
-            hitPercentage = hitPercentage-0.2;
+            //hitPercentage = hitPercentage-0.2;
+            verteilung = matrixMultiplikation(verteilung,uMatrix);
             damage = damage +2;
             System.out.println("Current Damage : "+damage);
         }else{
@@ -86,7 +111,7 @@ public class Gambler extends Player {
 
     @Override
     public void normalAttackDown() {
-        if(result<=hitPercentage){
+        if(result>=getMatrix()[0]){
             System.out.println("Attack succeeded");
             setSlotCooldown(0);
             hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width+hitbox.width*1.4,hitbox.height*0.8);
@@ -96,7 +121,8 @@ public class Gambler extends Player {
             attackWindUp = 0.1;
             attackHurtTime = 0.3;
             attackWindDown = 0.3;
-            hitPercentage = hitPercentage-0.2;
+            verteilung = matrixMultiplikation(verteilung,uMatrix);
+            //hitPercentage = hitPercentage-0.2;
             damage = damage +2;
             System.out.println("Current Damage : "+damage);
 
@@ -112,7 +138,7 @@ public class Gambler extends Player {
 
     @Override
     public void normalAttackUp() {
-        if(result <= hitPercentage){
+        if(result>=getMatrix()[0]){
             System.out.println("Attack succeeded");
             setSlotCooldown(0);
             hurtbox.setRelativeRect(0,-hitbox.height*0.4,hitbox.width,hitbox.height*0.4);
@@ -121,8 +147,7 @@ public class Gambler extends Player {
             attackWindUp = 0.1;
             attackHurtTime = 0.2;
             attackWindDown = 0.4;
-
-            hitPercentage = hitPercentage-0.2;
+            verteilung = matrixMultiplikation(verteilung,uMatrix);
             damage = damage +2;
             System.out.println("Current Damage : "+damage);
         }else{
@@ -137,7 +162,7 @@ public class Gambler extends Player {
 
     @Override
     public void normalAttackStand() {
-        if(result<=hitPercentage){
+        if(result>=getMatrix()[0]){
             System.out.println("Attack succeeded");
             setSlotCooldown(0);
             if(lookingAt == 1) {
@@ -150,8 +175,7 @@ public class Gambler extends Player {
             attackWindUp = 0.015;
             attackHurtTime = 0.2;
             attackWindDown = 0.015;
-
-            hitPercentage = hitPercentage-0.2;
+            verteilung = matrixMultiplikation(verteilung,uMatrix);
             damage = damage +2;
             System.out.println("Current Damage : "+damage);
         }else{
@@ -180,9 +204,9 @@ public class Gambler extends Player {
 
     @Override
     public void specialAttackUp() {
-        if(result*1.5 <= hitPercentage){
+        if(result*1.5>=getMatrix()[0]){
             teleportToPlayer = true;
-            hitPercentage = hitPercentage -0.1;
+            verteilung = matrixMultiplikation(verteilung,uMatrix);
             attackWindDown = 2;
         }else{
             resetKombo();
@@ -202,7 +226,13 @@ public class Gambler extends Player {
     }
 
     private void resetKombo(){
-        hitPercentage = 0.9;
+        for(int i=0;i<verteilung.length;i++){
+            for(int j=0;j<verteilung[i].length;j++) {
+                verteilung[i][j] = 0;
+            }
+        }
+        verteilung[0][0] = 1;
+        verteilung = matrixMultiplikation(verteilung,uMatrix);
         damage = 4;
     }
 
@@ -283,12 +313,52 @@ public class Gambler extends Player {
                 speed = speed + 100;
                 break;
             case 3:
-                hitPercentage = hitPercentage + 0.7;
+                for(int i=0;i<verteilung.length;i++){
+                    for(int j=0;j<verteilung[i].length;j++) {
+                        verteilung[i][j] = 0;
+                    }
+                }
+                verteilung[0][0] = 1;
+                verteilung = matrixMultiplikation(verteilung,uMatrix);
                 break;
         }
         System.out.println("added buffs");
         buffed = true;
         buffTimer = 30;
+    }
+
+    public static double[][] matrixMultiplikation(double[][] v,double[][] u){
+        int vX = v.length;
+        int vY = v[0].length;
+        int uX = u.length;
+        int uY = u[0].length;
+        if(vY == uX){
+            double[][] tmp = new double[vX][uY];
+            for(int i=0;i<vX;i++){
+                for(int j=0;j<uY;j++){
+                    for(int k=0;k<vY;k++) {
+                        tmp[i][j] += v[i][k] * u[k][j];
+                    }
+                }
+
+            }
+            return tmp;
+        }else if(vX == uY) {
+            double[][] tmp = new double[uX][vY];
+
+            for(int i=0;i<uX;i++){
+                for(int j=0;j<vY;j++){
+                    for(int k=0;k<uY;k++) {
+                        tmp[i][j] += v[i][k] * u[k][j];
+                    }
+                }
+
+            }
+            return tmp;
+        }else {
+            System.err.println("Dimensionsfehler");
+            return null;
+        }
     }
 
     public double getResult() {
@@ -305,5 +375,9 @@ public class Gambler extends Player {
 
     public void setTeleportToPlayer(boolean teleportToPlayer) {
         this.teleportToPlayer = teleportToPlayer;
+    }
+
+    public double[] getMatrix(){
+        return verteilung[0];
     }
 }
