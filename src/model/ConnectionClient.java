@@ -5,14 +5,30 @@ import de.gurkenlabs.litiengine.IUpdateable;
 import model.Screens.MenuScreen;
 import model.abitur.netz.Client;
 
+/**
+ * Klasse ConnectionClient.
+ * Leitet die User über den ConnectionServer zu den Spielsitzungen weiter, ohne die IP zu benötigen.
+ */
 public class ConnectionClient extends Client implements IUpdateable {
 
+    /** Merkt sich die IP der Spielsitzung, der man beitreten will*/
     private String serverIP;
+    /** Merkt sich den Port der Spielsitzung, der man beitreten will*/
     private int serverPort;
+    /** Nutzer, für den ein ConnectionClient erstellt wird, bzw. welcher in Spielsitzungen verbunden wird*/
     private User user;
+    /** Merkt sich, ob der User mit einer Sielsitzung verbunden ist*/
     private boolean connected;
+    /** Merkt sich, ob bereits an Anfrage zum Beitritt eines Spiels gesendet wurde*/
     private boolean requestSent;
 
+    /**
+     * Konstruktor der Klasse ConnectionClient.
+     * Verbindet sich mit dem ConnectionServer auf dem Raspberry.
+     *
+     * @param user Nutzer, für den ein ConnectionClient erstellt wird, bzw. welcher in Spielsitzungen verbunden wird
+     * @param port Port des ConnectionServers
+     */
     public ConnectionClient(User user,int port){
         //super("localhost",port);
         super("178.201.129.203",port);
@@ -28,6 +44,9 @@ public class ConnectionClient extends Client implements IUpdateable {
 
     }
 
+    /**
+     * Update des Interfaces IUpdateable
+     */
     @Override
     public void update() {
         if(MenuScreen.hostPort.length() == 4 && !connected && !requestSent){
@@ -43,6 +62,11 @@ public class ConnectionClient extends Client implements IUpdateable {
 
     }
 
+    /**
+     * Verarbeitet eine Nachricht vom ConnectionServer
+     *
+     * @param pMessage Nachricht des ConnectionServers
+     */
     @Override
     public void processMessage(String pMessage) {
         if(pMessage.contains("SERVER") && !connected){

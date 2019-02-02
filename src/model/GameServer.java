@@ -2,18 +2,28 @@ package model;
 
 import model.abitur.netz.Server;
 
+/**
+ * Klasse GameServer.
+ * Arbeitet mit der Klasse GameClient zusammen.
+ * Ist für den Austausch der Daten in einer Spielsitzung zuständig.
+ */
 public class GameServer extends Server {
 
+    /** Specihert die aktuelle Anzahl an Clients*/
     private int numberOfPlayers;
+    /** Speichert die maximale Anzahl an Clients*/
     private int maxPlayers;
+    /** Speichert die Anzahl der Spieler, die bereit sind*/
     private int startVote;
 
+    /** Speichert IP und Port aller Clients*/
     private String[][] users;
 
-
+    /** Speichert alle Spieler mit ihrer Nummer und Figur*/
     private String allPlayer = "ALL";
 
     /**
+     * Konstruktor der Klasse GameServer.
      *
      * @param port Port des Servers
      */
@@ -55,10 +65,8 @@ public class GameServer extends Server {
      * @param pClientPort Port des Clients
      * @param pMessage Nachricht des Clients.
      *                 - Bei "START" wertet der Server den Vote des Clients aus
-     *                 - bei "NUMBER" gibt dem Spieler eine Spielernummer
      *                 - bei "PLAYER" merkt er sich die Figur des Spielers
-     *                 - bei "POSITION" leitet er die Position eines bewegenden Spielers weiter
-     *                 - bei "HURT" leitet er die HurtBox eines Spielers weiter
+     *                 - bei allen anderen leitet er die Nachricht an die Client nur weiter
      */
     @Override
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
@@ -139,7 +147,7 @@ public class GameServer extends Server {
     }
 
     /**
-     * Verarbeitet das Verlassen eies Spielers
+     * Verarbeitet das Verlassen eies Spielers und leitet das Verlassen an die restlichen Clients weiter.
      *
      * @param pClientIP IP des gegangenen Spielers
      * @param pClientPort Port des gegangenen Spielers

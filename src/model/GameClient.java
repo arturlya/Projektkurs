@@ -17,25 +17,39 @@ import java.awt.event.KeyListener;
 
 import static control.Timer.dt;
 
+/**
+ * Klasse GameClient.
+ * Client der sich mit dem GameServer verbindet.
+ * Ist für den Austausch der Daten in einer Spielsitzung zuständig.
+ *
+ */
 public class GameClient extends Client implements IUpdateable {
 
+    /** Speichert die Figur des Client*/
     private Player player;
+    /** Sagt aus, ob dieser Client bereit für Spielstart ist*/
     private boolean ready;
+    /** Sagt aus, ob das Spiel gestartet ist*/
     public static boolean gameStarted;
+    /** Spielernummer, die vom Server zugeteilt wurde*/
     private int playerNumber;
+    /** Sendet in Zeitabständen die X und Y Position der Figur*/
     private double coolDown;
+    /** Sichert einmaliges Verarbeiten einer Taste*/
     private int i;
+    /** Speichert die ausgesuchte Figur bis das Spiel startet*/
     private int chosenPlayer;
-
+    /** Merkt sich, ob die Spielerauswahl endgültig ist und ob die Spieler bereits erstellt wurden*/
     private boolean finalChoose,drawnPlayer;
+    /** Nachricht vom Server, die gespeichert wird, in der alle Spieler mit ihrer Nummer und Figur gespeichert werden*/
     private String allPlayer = "";
 
+    /** Speichert alle anderen Spieler*/
     private List<Player> others;
 
 
     /**
      * Konstruktor der Klasse GameClient.
-     * Besitzt einen KeyListener zum voten.
      *
      * @param ip IP des Servers
      * @param port Port des Servers
@@ -158,11 +172,14 @@ public class GameClient extends Client implements IUpdateable {
      *
      * @param pMessage Die empfangene Nachricht, wenn
      *                 -pMessage mit "START" dann beginnt das Spiel
-     *                 -pMessage mit "PLAYER" dann wird eine Spielernummer vom Server zugewiesen
-     *                 //-pMessage mit "CHOOSE"
+     *                 -pMessage mit "PLAYER" dann wird der gewählte Spieler erstellt
      *                 -pMessage mit "ALL" bekommt der Client alle Spieler vom Server
      *                 -pMessage mit "POSITION" bekommt der Client die Position eines bestimmten Clients und aktualisiert sie bei sich
-     *                 -pMessage mit "ATTACK" bekommt der Client eine Attacke, die ein anderer Client ausführt
+     *                 -pMessage mit "ATTACK" bekommt der Client eine Attacke, die ein Client ausführt
+     *                 -pMessage mit "JUMP" bekommt der Client, wenn ein anderer springt
+     *                 -pMessage mit "LOOKING" bekommt der Client die Richtung in die ein Client guckt
+     *                 -pMessage mit "QUIT" dann bekommt der Client die Information, dass ein anderer Client das Spiel verlassen hat
+     *                 -pMessage mit "NUMBER" dann bekommt der Client eine Spielernummer vom Server
      */
     @Override
     public void processMessage(String pMessage) {
@@ -357,8 +374,6 @@ public class GameClient extends Client implements IUpdateable {
 
 
             }
-            //max++;
-        //}
     }
 
     /**
@@ -378,8 +393,7 @@ public class GameClient extends Client implements IUpdateable {
     }
 
     /**
-     * Sucht einen Spieler aus.
-     * Sollte ein Spieler ausgesucht sein, sendet er bei erneutem Aufruf dem Server die Zahl des Spielers
+     * Sucht einen Spieler aus und schickt die Auswahl an den Server.
      *
      * @param number Index des gewünschten Spielers
      */

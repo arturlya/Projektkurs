@@ -6,36 +6,42 @@ import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 import view.PlayerRenderer;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.IOException;
+
 
 import static control.Timer.dt;
 
+/**
+ * Abstrakte Oberklasse Player.
+ *
+ */
 public abstract class Player extends GravitationalObject {
 
+    /** Speichert wie lange eine Attacke zum ausführen braucht, die Geschwindigkeit, und wann der Spieler wieder springen kann*/
     protected double attackWindUp, attackHurtTime, attackWindDown, maxSpeed, speed, invincibilityTimer, jumpCooldown;
+    /** Speichert in welche Richtung der Spieler sich bewegt, guckt und wie oft er noch springen kann*/
     protected int directionLR, directionUD, lookingAt, jumpsAvailable;
+    /** Speichert die Schlag-Hurtbox des Spielers*/
     protected Hurtbox hurtbox;
+    /** Merkt sich, ob eine Attacke wahrgenommen und ausgeführt wird*/
     protected boolean attackTriggered, attacking;
+    /** Speichert den Rückstoß des Spielers*/
     protected int knockbackPercentage;
 
+    /** Speichert, ob der Schild momentan aktiv ist*/
     protected boolean shieldActive;
+    /** Speichert das Projektil des Spielers*/
     protected Projectile projectile;
+    /** Merkt sich, ob der Spieler sich bewegt oder entschleunigt*/
     protected boolean moving, decelerating;
+    /** Speichert die Spielernummer des Spielers auf dem Server*/
     protected int playerNumber;
+    /** Speichert, ob der Spieler steuerbar ist*/
     protected boolean playable;
 
-    protected boolean renderHurtboxes = true;
-    protected Rectangle2D renderHurtbox;
-    protected double rx, ry, rwidth, rheight, offScreenX, offScreenY, offScreenWidth, offScreenHeight;
-    protected Point corner;
-    protected Image[] offScreenCircles;
-    protected Image activeOffScreenCircle;
-    protected double circleX, circleY;
-
+   // protected Rectangle2D renderHurtbox;
+    /** Visualisierung des Spielers*/
     protected PlayerRenderer pr;
 
     /**
@@ -53,64 +59,17 @@ public abstract class Player extends GravitationalObject {
         this.playable = playable;
         setX(x);
         setY(y);
-        //setY(200);
-        //setX(Math.random()*300+400);
         jumpsAvailable = 2;
-        renderHurtbox = new Rectangle2D.Double(0,0,0,0);
-        corner = new Point(0,0);
+      //  renderHurtbox = new Rectangle2D.Double(0,0,0,0);
         //createCircleImages();
         pr = new PlayerRenderer(this);
         //Das da unten muss für Online Modus engefügt werden(das da drunter weg)!!!!!!!!!!!!!!!!
-//        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
-        Game.getEnvironment().add(pr,RenderType.NORMAL);
+        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
+        //Game.getEnvironment().add(pr,RenderType.NORMAL);
         Game.getLoop().attach(pr);
 
     }
 
-    /*private void createCircleImages(){
-        offScreenCircles = new Image[8];
-        try {
-            offScreenCircles[0] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleDown.png"));
-            offScreenCircles[1] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleLeftDown.png"));
-            offScreenCircles[2] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleLeft.png"));
-            offScreenCircles[3] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleLeftUp.png"));
-            offScreenCircles[4] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleUp.png"));
-            offScreenCircles[5] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleRightUp.png"));
-            offScreenCircles[6] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleRight.png"));
-            offScreenCircles[7] = ImageIO.read(new File("assets/img/ingame/offScreenCircles/circleRightDown.png"));
-        } catch (IOException ex) {
-            System.out.println("Bild konnte nicht geladen werden!");
-        }
-        activeOffScreenCircle = offScreenCircles[0];
-    }*/
-/*
-    /**
-     * Methode, um den Spieler graphisch darzustellen
-     * @param g übergebene Graphics2D, um das Zeichnen zu ermöglichen
-     */
-    @Override
-    public void render(Graphics2D g){
-        /*super.render(g);
-        if(renderHurtboxes) {
-
-            if (hurtbox.isHurting()) {
-                g.setColor(new Color(255, 0, 0, 100));
-            } else {
-                g.setColor(new Color(0, 255, 0, 100));
-            }
-
-            g.fill(renderHurtbox);
-        }
-        g.setColor(new Color(70,120,255));
-        if(shieldActive) {
-            g.setColor(new Color(150,150,150));
-        }
-        
-        g.fill(renderHitbox);
-        if(!hitbox.intersects(0,0,1920,1080)){
-            g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
-        }*/
-    }
 
     /**
      * Diese Methode wird mehrmals pro Sekunde aufgerufen um andere Update-Methoden aufzurufen
@@ -274,84 +233,7 @@ public abstract class Player extends GravitationalObject {
             decelerating = true;
         }
     }
-/*
-    /**
-     * Methode, die die RenderHurtbox auf die Größe des Fensters anpasst
-     *//*
-    private void adjustRenderHitbox(){
-        rx = hitbox.x/1920*gameWidth;
-        ry = hitbox.y/1080*gameHeight;
-        rwidth = hitbox.width/1920*gameWidth;
-        rheight = hitbox.height/1080*gameHeight;
-        if(!hitbox.intersects(0,0,1920,1080)){
-            double factor = 0;
-            if(hitbox.intersects(-200,-200,200,200) || hitbox.intersects(1920,-200,200,200) || hitbox.intersects(-200,1080,200,200) || hitbox.intersects(1920,1080,200,200)) {
-                if(hitbox.intersects(-200,-200,200,200)){
-                    circleX = 0;
-                    circleY = 0;
-                    activeOffScreenCircle = offScreenCircles[3];
-                    offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
-                    offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
-                    corner.setLocation(0,0);
-                }else if(hitbox.intersects(1920,-200,200,200)){
-                    circleX = 1770;
-                    circleY = 0;
-                    activeOffScreenCircle = offScreenCircles[5];
-                    offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
-                    offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
-                    corner.setLocation(1920,0);
-                }else if(hitbox.intersects(-200,1080,200,200)){
-                    circleX = 0;
-                    circleY = 930;
-                    activeOffScreenCircle = offScreenCircles[1];
-                    offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
-                    offScreenY = 1005.0/1080*gameHeight - offScreenHeight * 0.5;
-                    corner.setLocation(0,1080);
-                }else if(hitbox.intersects(1920,1080,200,200)){
-                    circleX = 1770;
-                    circleY = 930;
-                    activeOffScreenCircle = offScreenCircles[7];
-                    offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
-                    offScreenY = 1005.0/1080*gameHeight - offScreenHeight * 0.5;
-                    corner.setLocation(1920,1080);
-                }
-                factor = corner.distance(getX(),getY()) * -0.0029 + 1.32;
-            }else{
-                if(hitbox.intersects(0,-200,1920,200)){
-                    circleX = getX() - 50;
-                    circleY = 0;
-                    activeOffScreenCircle = offScreenCircles[4];
-                    offScreenX = rx + 0.5 * rwidth - offScreenWidth * 0.5;
-                    offScreenY = 75.0/1080*gameHeight - offScreenHeight * 0.5;
-                    factor = Math.abs(getY()) * -0.005 + 1.5;
-                }else if(hitbox.intersects(0,1080,1920,200)){
-                    circleX = getX() - 50;
-                    circleY = 930;
-                    activeOffScreenCircle = offScreenCircles[0];
-                    offScreenX = rx + 0.5 * rwidth - offScreenWidth * 0.5;
-                    offScreenY = 1005.0/1080*gameHeight - offScreenHeight * 0.5;
-                    factor = (getY()-1080) * -0.005 + 1.5;
-                }else if(hitbox.intersects(-200,0,200,1080)){
-                    circleX = 0;
-                    circleY = getY() - 25;
-                    activeOffScreenCircle = offScreenCircles[2];
-                    offScreenX = 75.0/1920*gameWidth - offScreenWidth * 0.5;
-                    offScreenY = ry + 0.5 * rheight - offScreenHeight * 0.5;
-                    factor = (Math.abs(getX())) * -0.005 + 1.5;
-                }else if(hitbox.intersects(1920,0,200,1080)){
-                    circleX = 1770;
-                    circleY = getY() - 25;
-                    activeOffScreenCircle = offScreenCircles[6];
-                    offScreenX = 1845.0/1920*gameWidth - offScreenWidth * 0.5;
-                    offScreenY = ry + 0.5 * rheight - offScreenHeight * 0.5;
-                    factor = (Math.abs(getX()-1920)) * -0.005 + 1.5;
-                }
-            }
-            offScreenWidth = rwidth * factor;
-            offScreenHeight = rheight * factor;
-            renderHitbox.setRect(offScreenX, offScreenY, offScreenWidth, offScreenHeight);
-        }
-    }*/
+
 
     /**
      * Methode, die ein Projektil erstellt
@@ -368,6 +250,11 @@ public abstract class Player extends GravitationalObject {
         }
     }
 
+    /**
+     * Setzt den Spieler an einen Punkt
+     *
+     * @param point Spawnpoint des Spielers
+     */
     public void spawn(Point point){
         knockbackPercentage = 0;
         attackWindUp = 0;
@@ -378,54 +265,67 @@ public abstract class Player extends GravitationalObject {
         this.setY(point.y);
     }
 
+    /** Abstrakte Attacke*/
     public abstract void normalAttackRun();
-
+    /** Abstrakte Attacke*/
     public abstract void normalAttackDown();
 
+    /** Abstrakte Attacke*/
     public abstract void normalAttackUp();
 
+    /** Abstrakte Attacke*/
     public abstract void normalAttackStand();
 
+    /** Abstrakte Attacke*/
     public abstract void specialAttackRun();
 
+    /** Abstrakte Attacke*/
     public abstract void specialAttackDown();
 
+    /** Abstrakte Attacke*/
     public abstract void specialAttackUp();
 
+    /** Abstrakte Attacke*/
     public abstract void specialAttackStand();
 
+    /**@return Gibt zurück, ob der Spieler entschleunigt*/
     public boolean isDecelerating() {
         return decelerating;
     }
 
+    /**@param decelerating setzt decelerating auf diesen Wert*/
     public void setDecelerating(boolean decelerating) {
         this.decelerating = decelerating;
     }
 
+    /**@return Gibt die Hurtbox des Spielers zurück*/
     public Hurtbox getHurtbox() {
         return hurtbox;
     }
 
+    /**@return Gibt zurück, ob der Spieler angreift*/
     public boolean isAttacking() {
         return attacking;
     }
 
-    public void setHurtbox(Hurtbox hurtbox) {
-        this.hurtbox = hurtbox;
-    }
 
+    /**@return Gibt zurück, ob der Schild des Spielers aktiv ist*/
     public boolean isShieldActive() {
         return shieldActive;
     }
 
+    /**@return Gibt zurück, ob wohin der Spieler schaut*/
     public int getLookingAt() {
         return lookingAt;
     }
 
+    /**@param projectile Setzt das Projektil des Spielers auf dieses Projektil*/
     public void setProjectile(Projectile projectile) {
         this.projectile = projectile;
     }
 
+
+    /**@return Gibt zurück, ob der Spieler sich bewegt*/
     public boolean isMoving() {
         if(!inAir) {
             return moving;
@@ -434,63 +334,82 @@ public abstract class Player extends GravitationalObject {
         }
     }
 
+    /**@param value Setzt die Spielernummer auf diese Zahl*/
     public void setPlayerNumber(int value){
         playerNumber = value;
     }
 
+    /**@return Gibt die Spielernummer zurück*/
     public int getPlayerNumber(){
         return playerNumber;
     }
+
+    /**@param state Setzt den Schild auf diesen Zustand*/
     public void setShieldActive(boolean state){shieldActive = state;}
 
+    /**@return Gibt das Projektil des Spielers zurück */
     public Projectile getProjectile(){return projectile;}
 
 
-
+    /**@param directionLR  Setzt die horizontale Richtung des Spielers auf diesen Wert*/
     public void setDirectionLR(int directionLR) {
         this.directionLR = directionLR;
     }
 
+    /**@param lookingAt Lässt den Spieler in diese Richtung schauen*/
     public void setLookingAt(int lookingAt) {
         this.lookingAt = lookingAt;
     }
 
+    /**@param moving Setzt den Status, ob der Spieler sich bewegt auf diesen Wert */
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
-
+    /**@param directionUD  Setzt die vertikale Richtung des Spielers auf diesen Wert*/
     public void setDirectionUD(int directionUD) {
         this.directionUD = directionUD;
     }
 
+
+    /**@return Gibt die Anzahl an verfügbaren Sprüngen zurück*/
     public int getJumpsAvailable() {
         return jumpsAvailable;
     }
 
+    /**@param jumpsAvailable  Setzt die Anzahl an Sprüngen auf diesen Wert*/
     public void setJumpsAvailable(int jumpsAvailable) {
         this.jumpsAvailable = jumpsAvailable;
     }
 
+    /**@return Gibt den Cooldown für einen nächsten Sprung zurück*/
     public double getJumpCooldown() {
         return jumpCooldown;
     }
 
+    /**@param jumpCooldown  Setzt den Cooldown für Sprünge auf diesen Wert*/
     public void setJumpCooldown(double jumpCooldown) {
         this.jumpCooldown = jumpCooldown;
     }
 
+
+    /**@return Gibt den Cooldown nach einer Attacke zurück*/
     public double getAttackWindDown() {
         return attackWindDown;
     }
 
+    /**@return Gibt die horizontale Richtung des Spielers zurück*/
     public int getDirectionLR() {
         return directionLR;
     }
 
+    /**@return Gibt die vertikale Richtung des Spielers zurück*/
     public int getDirectionUD() {
         return directionUD;
     }
 
+    /**
+     * Entfernt den Renderer des Spielers
+     */
     public void removeRenderer(){
         Game.getEnvironment().removeRenderable(pr);
     }

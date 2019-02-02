@@ -6,21 +6,43 @@ import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
 import static control.Timer.dt;
 
+/**
+ * Klasse Gambler.
+ * Erbt von Player.
+ * Arbeitet mit Wahrscheinlichkeiten in Form von Matrizenrechnung.
+ * Damit sich der Zufall lohnt, steigt der Schaden mit der Trefferserie.
+ *
+ */
 public class Gambler extends Player {
 
+    /** Speichert die Zufallszahl, die bei der nächsten Attacke erreicht werden muss*/
     private double result;
+    /** Speichert den Schaden den der Gambler momentan austeilt*/
     private int damage;
+    /** Timer für die Buffs der Slotmachine*/
     private double buffTimer;
+    /** Merkt sich, ob momentan Buffs auf dem Gambler wirken*/
     private boolean buffed;
 
+    /** Speichert, ob der Gambler sich zu einem anderen Spieler teleportieren soll*/
     private boolean teleportToPlayer;
 
-
+    /** Cooldown für das Hinzufügen von Werten in der Slotmachine*/
     private double slotCooldown;
+    /** Slotmachine, die zwischen 1(Treffer) und -1(Pleite) unterscheidet, sobald 3 Werte vorhanden sind wird sie ausgewertet*/
     private int[] slotMachine;
+    /** Übergangsmatrix des stochastischen Prozesses*/
     private double[][] uMatrix;
+    /** Die Verteilung der Wahrscheinlichkeiten, wird nach Attacke mit der Übergangsmatrix multipliziert*/
     private double[][] verteilung;
 
+    /**
+     * Konstruktor der Klasse Gambler.
+     *
+     * @param x X-Position des Gamblers
+     * @param y Y-Position des Gamblers
+     * @param playable Ist diese Figur steuerbar oder nicht?
+     */
     public Gambler(double x, double y,boolean playable){
         super(x,y,playable);
         uMatrix = new double[5][5];
@@ -57,7 +79,9 @@ public class Gambler extends Player {
 
     }
 
-
+    /**
+     * Update des Interfaces IUpdateable
+     */
     @Override
     public void update() {
         super.update();
@@ -76,6 +100,10 @@ public class Gambler extends Player {
         }
     }
 
+    /**
+     * Implementation der normalAttackRun vom Player.
+     * Arbeitet mit Wahrscheinlichkeiten.
+     */
     @Override
     public void normalAttackRun() {
         System.out.println(getMatrix()[0]);
@@ -108,7 +136,10 @@ public class Gambler extends Player {
         }
         result = Math.random();
     }
-
+    /**
+     * Implementation der normalAttackDown vom Player.
+     * Arbeitet mit Wahrscheinlichkeiten.
+     */
     @Override
     public void normalAttackDown() {
         if(result>=getMatrix()[0]){
@@ -136,6 +167,10 @@ public class Gambler extends Player {
         result = Math.random();
     }
 
+    /**
+     * Implementation der normalAttackUp vom Player.
+     * Arbeitet mit Wahrscheinlichkeiten.
+     */
     @Override
     public void normalAttackUp() {
         if(result>=getMatrix()[0]){
@@ -159,7 +194,10 @@ public class Gambler extends Player {
         }
         result = Math.random();
     }
-
+    /**
+     * Implementation der normalAttackStand vom Player.
+     * Arbeitet mit Wahrscheinlichkeiten.
+     */
     @Override
     public void normalAttackStand() {
         if(result>=getMatrix()[0]){
@@ -187,21 +225,33 @@ public class Gambler extends Player {
         }
         result = Math.random();
     }
-
+    /**
+     * Implementation der specialAttackRun vom Player.
+     * Wirft Münzen auf Gegner.
+     * Arbeitet nicht mit Wahrscheinlichkeiten.
+     */
     @Override
     public void specialAttackRun() {
         attackWindUp = 0.3;
         throwCoins();
         attackWindDown = 0.4;
     }
-
+    /**
+     * Implementation der specialAttackDown vom Player.
+     * Verteidigt Angriffe.
+     * Arbeitet nicht mit Wahrscheinlichkeiten.
+     */
     @Override
     public void specialAttackDown() {
         attackWindUp = 0.5;
         shieldActive = true;
         attackWindDown = 1;
     }
-
+    /**
+     * Implementation der specialAttackUp vom Player.
+     * Teleportiert sich zu einem zufälligen Spieler.
+     * Arbeitet mit Wahrscheinlichkeiten.
+     */
     @Override
     public void specialAttackUp() {
         if(result*1.5>=getMatrix()[0]){
@@ -217,7 +267,11 @@ public class Gambler extends Player {
 
 
 
-
+    /**
+     * Implementation der specialAttackStand vom Player.
+     * Schießt Projektil.
+     * Arbeitet nicht mit Wahrscheinlichkeiten.
+     */
     @Override
     public void specialAttackStand() {
         attackWindUp = 0.2;
@@ -225,6 +279,9 @@ public class Gambler extends Player {
         attackWindDown = 0.3;
     }
 
+    /**
+     * Setzt die Verteilung und den Schaden zurück.
+     */
     private void resetKombo(){
         for(int i=0;i<verteilung.length;i++){
             for(int j=0;j<verteilung[i].length;j++) {
@@ -236,6 +293,9 @@ public class Gambler extends Player {
         damage = 4;
     }
 
+    /**
+     * Erstellt so viele Projektile, wie der momentane Schaden ist.
+     */
     private void throwCoins(){
         for(int i=0;i<damage;i++) {
             Projectile coin;
@@ -272,12 +332,18 @@ public class Gambler extends Player {
         slotCooldown = 1;
     }
 
+    /**
+     * Setzt die Slotmachine zurück.
+     */
     private void clearSlotMachine(){
         for(int i=0;i<slotMachine.length;i++){
             slotMachine[i] = 0;
         }
     }
 
+    /**
+     * @return Gibt zurück, ob die Slotmachine voll ist und ausgewertet werden muss.
+     */
     private boolean slotMachineFilled(){
         boolean tmp = true;
         for(int i=0;i<slotMachine.length;i++){
@@ -287,11 +353,20 @@ public class Gambler extends Player {
         return tmp;
     }
 
-
+    /**@return Gibt den Cooldown für die Slotmachine zurück*/
     public double getSlotCooldown(){return slotCooldown;}
+
+    /**@param value Setzt den slotCooldown auf diesen Wert.*/
     public void setSlotCooldown(double value){slotCooldown = value;}
+    /**@return Gibt den Timer für die Buffs zurück*/
     public double getBuffTimer(){return buffTimer;}
 
+    /**
+     * Zählt die Anzahl des übergebenen Wertes in der Slotmachine
+     *
+     * @param number Wert, der gezählt werden soll.
+     * @return Anzahl des Wertes in der Slotmachine.
+     */
     private int countSlotMachine(int number){
         int counter = 0;
         for(int i=0;i<slotMachine.length;i++){
@@ -301,6 +376,9 @@ public class Gambler extends Player {
         return counter;
     }
 
+    /**
+     * Wertet die Slotmachine aus und gibt Buffs.
+     */
     private void evaluateSlotMachine(){
         switch (countSlotMachine(1)){
             case 0:
@@ -327,6 +405,13 @@ public class Gambler extends Player {
         buffTimer = 30;
     }
 
+    /**
+     * Multipliziert zwei zweidimensionale Arrays, als Matrizen, miteinander.
+     *
+     * @param v Erste Matrix.
+     * @param u Zweite Matrix.
+     * @return Gibt eine Ergebnismatrix zurück.Wenn die Matrizen nicht multiplizierbar sind, gibt es null zurück.
+     */
     public static double[][] matrixMultiplikation(double[][] v,double[][] u){
         int vX = v.length;
         int vY = v[0].length;
@@ -360,23 +445,25 @@ public class Gambler extends Player {
             return null;
         }
     }
-
+    /**@return Gibt die benötigte Zufallszahl für dn nächsten Angriff zurück*/
     public double getResult() {
         return result;
     }
-
+    /**@param result Setzt die Zufallszahl auf diesen Wert*/
     public void setResult(double result) {
         this.result = result;
     }
 
+    /**@return Gibt zurück, ob der Spieler sich zu einem anderen Spieler teleportiert.*/
     public boolean isTeleportedToPlayer() {
         return teleportToPlayer;
     }
-
+    /**@param teleportToPlayer Setzt den Teleport auf diesen Wert*/
     public void setTeleportToPlayer(boolean teleportToPlayer) {
         this.teleportToPlayer = teleportToPlayer;
     }
 
+    /** Gibt die momentane Verteilung als 5x1 Matrix wieder*/
     public double[] getMatrix(){
         return verteilung[0];
     }

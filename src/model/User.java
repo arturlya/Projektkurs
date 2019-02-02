@@ -1,21 +1,22 @@
 package model;
 
-import control.PhysicsController;
-import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.gui.GuiComponent;
-import model.Screens.IngameScreen;
 
 import java.awt.event.MouseEvent;
 
+/**
+ * Klasse User.
+ * Besitzt die beiden Clients um sich mit Servern zu verbinden.
+ */
 public class User extends GuiComponent {
 
+    /** Client für eine Spielsitzung*/
     private GameClient client;
-   // private GameServer server;
+    /** Client für das Finden einer Spielsitzung beim Raspberry*/
     private ConnectionClient connector;
 
-    private int port;
+    /** Speichert, ob der GameClient verbunden ist*/
     private boolean clientActive;
-    private int cursorX,cursorY;
 
     /**
      * Nutzer der Anwendung.
@@ -27,14 +28,6 @@ public class User extends GuiComponent {
         connector = new ConnectionClient(this,7567);
         // connector = new ConnectionClient(this,2567);
 
-    }
-
-
-    /**
-     * Methode zur Initialisierung
-     */
-    public void init(){
-//        client.init();
     }
 
     /**
@@ -67,9 +60,11 @@ public class User extends GuiComponent {
     @Override
     public void mouseMoved(MouseEvent e) {
         super.mouseMoved(e);
-        //System.out.println(1);
     }
 
+    /**
+     * @return Gibt zurück, ob der User mt einer Spielsitzung verbunden ist.
+     */
     public boolean isConnected(){
         if (client != null) {
             return client.isConnected();
