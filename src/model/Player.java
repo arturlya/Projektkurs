@@ -210,7 +210,6 @@ public abstract class Player extends GravitationalObject {
      * @param direction Vector, der die Richtung des Schlages angibt
      */
     public void registerHit(Vector2D direction, int damage, int knockback){
-        System.out.println(1);
         if(invincibilityTimer <= 0) {
             knockbackPercentage += damage;
             if(knockbackPercentage < 10){

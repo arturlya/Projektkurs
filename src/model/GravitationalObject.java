@@ -17,8 +17,8 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
     protected boolean inAir;
     protected Rectangle2D.Double hitbox, renderHitbox;
     protected Line2D[] downLines;
-    protected double gameWidth = Game.getConfiguration().graphics().getResolutionWidth();
-    protected double gameHeight = Game.getConfiguration().graphics().getResolutionHeight();
+    protected double gameWidth = Game.getConfiguration().graphics().getResolution().getWidth();
+    protected double gameHeight = Game.getConfiguration().graphics().getResolution().getHeight();
 
     public GravitationalObject(){
         downLines = new Line2D[2];

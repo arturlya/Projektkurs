@@ -28,8 +28,8 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     private Image[] offScreenCircles;
     private Image activeOffScreenCircle;
     private double circleX, circleY;
-    private double gameWidth = Game.getConfiguration().graphics().getResolutionWidth();
-    private double gameHeight = Game.getConfiguration().graphics().getResolutionHeight();
+    private double gameWidth = Game.getConfiguration().graphics().getResolution().getWidth();
+    private double gameHeight = Game.getConfiguration().graphics().getResolution().getHeight();
     private Image[] playerImages;
     private Image currentPlayerImage;
     private double standingAnimationTimer;
@@ -50,6 +50,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             pathToImageFolder += "/Gambler";
             createImages();
         }
+        System.out.println("1111 " + gameWidth + " " + gameHeight);
     }
 
     private void createImages(){
