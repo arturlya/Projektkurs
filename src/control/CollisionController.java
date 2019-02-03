@@ -43,7 +43,14 @@ public class CollisionController implements IUpdateable {
     private void checkPlayerOffScreen(){
         for(Player player : players){
             if(!player.getHitbox().intersects(-200,-200,2320,1480)){
-                player.spawn(getFarthestSpawnpointFromPlayers());
+                player.setStocks(player.getStocks()-1);
+                if(player.getStocks() > 0) {
+                    player.spawn(getFarthestSpawnpointFromPlayers());
+                }else{
+                    Game.getEnvironment().removeRenderable(player);
+                    Game.getEnvironment().remove(player);
+                    player.removeRenderer();
+                }
             }
         }
     }

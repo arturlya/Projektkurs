@@ -52,14 +52,18 @@ public class PlayerTester{
         Game.getRenderEngine().setBaseRenderScale(1);
 
 
-        Player player = new Warrior(100,100,true);
+        Player player = new Gambler(100,100,true);
         player.setPlayerNumber(1);
         Player dummy = new Mage(500,500,false);
         dummy.setPlayerNumber(2);
+        Player dummy2 = new Warrior(500,500,false);
+        dummy.setPlayerNumber(3);
         Game.getEnvironment().add(player);
         Game.getEnvironment().add(player, RenderType.NORMAL);
         Game.getEnvironment().add(dummy);
         Game.getEnvironment().add(dummy,RenderType.NORMAL);
+        Game.getEnvironment().add(dummy2);
+        Game.getEnvironment().add(dummy2,RenderType.NORMAL);
 
         new InputProcessor(player);
 
@@ -153,7 +157,6 @@ public class PlayerTester{
             if(!(player instanceof Warrior && (((Warrior) player).isGettingHooked()))) {
                 Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
                     if (player.getAttackWindDown() <= 0) {
-                        //player.setHorizontalSpeed(0);
                         player.setDecelerating(true);
                         if (player.getDirectionLR() != -1) {
                             player.normalAttackRun();
@@ -168,7 +171,6 @@ public class PlayerTester{
                 });
                 Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
                     if (player.getAttackWindDown() <= 0) {
-                        //player.setHorizontalSpeed(0);
                         player.setDecelerating(true);
                         if (player.getDirectionUD() == 0) {
                             player.specialAttackUp();

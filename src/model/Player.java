@@ -39,6 +39,8 @@ public abstract class Player extends GravitationalObject {
     protected int playerNumber;
     /** Speichert, ob der Spieler steuerbar ist*/
     protected boolean playable;
+    /** Speichert, wie viele Leben der Spieler hat*/
+    protected int stocks;
 
    // protected Rectangle2D renderHurtbox;
     /** Visualisierung des Spielers*/
@@ -60,12 +62,13 @@ public abstract class Player extends GravitationalObject {
         setX(x);
         setY(y);
         jumpsAvailable = 2;
-      //  renderHurtbox = new Rectangle2D.Double(0,0,0,0);
+        stocks = 3;
+        //renderHurtbox = new Rectangle2D.Double(0,0,0,0);
         //createCircleImages();
         pr = new PlayerRenderer(this);
         //Das da unten muss für Online Modus engefügt werden(das da drunter weg)!!!!!!!!!!!!!!!!
-        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
-        //Game.getEnvironment().add(pr,RenderType.NORMAL);
+        //ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
+        Game.getEnvironment().add(pr,RenderType.NORMAL);
         Game.getLoop().attach(pr);
 
     }
@@ -266,6 +269,7 @@ public abstract class Player extends GravitationalObject {
 
     /** Abstrakte Attacke*/
     public abstract void normalAttackRun();
+
     /** Abstrakte Attacke*/
     public abstract void normalAttackDown();
 
@@ -364,6 +368,7 @@ public abstract class Player extends GravitationalObject {
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
+
     /**@param directionUD  Setzt die vertikale Richtung des Spielers auf diesen Wert*/
     public void setDirectionUD(int directionUD) {
         this.directionUD = directionUD;
@@ -406,9 +411,17 @@ public abstract class Player extends GravitationalObject {
         return directionUD;
     }
 
-    /**
-     * Entfernt den Renderer des Spielers
-     */
+    /**@return Gibt die Anzahl der Leben des Spielers zurück*/
+    public int getStocks() {
+        return stocks;
+    }
+
+    /**@param stocks  Setzt die Anzahl der Leben des Spielers auf diesen Wert*/
+    public void setStocks(int stocks) {
+        this.stocks = stocks;
+    }
+
+    /**Entfernt den Renderer des Spielers*/
     public void removeRenderer(){
         Game.getEnvironment().removeRenderable(pr);
     }

@@ -50,7 +50,6 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             pathToImageFolder += "/Gambler";
             createImages();
         }
-        System.out.println("1111 " + gameWidth + " " + gameHeight);
     }
 
     private void createImages(){

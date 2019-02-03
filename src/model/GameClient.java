@@ -480,67 +480,64 @@ public class GameClient extends Client implements IUpdateable {
      * Methode, die die Inputs für die Angriffe verarbeitet
      */
     private void processInputsAttacks(){
-        Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
-            if (player.getAttackWindDown() <= 0) {
-                //player.setHorizontalSpeed(0);
-                player.setDecelerating(true);
-                if (player.getDirectionLR() != -1) {
-                    if(player instanceof Gambler) {
-                        send("ATTACK" + playerNumber + "#nAR#"+((Gambler) player).getResult());
-                    }else{
-                        send("ATTACK" + playerNumber + "#nAR");
-                    }
-                    player.normalAttackRun();
-                } else if (player.getDirectionUD() == 1) {
-                    if(player instanceof Gambler){
-                        send("ATTACK"+playerNumber+"#nAD#"+((Gambler) player).getResult());
-                    }else{
-                        send("ATTACK"+playerNumber+"#nAD");
-                    }
-                    player.normalAttackDown();
-                } else if (player.getDirectionUD() == 0) {
-                    if(player instanceof Gambler){
-                        send("ATTACK"+playerNumber+"#nAU#"+((Gambler) player).getResult());
-                    }else{
-                        send("ATTACK"+playerNumber+"#nAU");
-                    }
-                    player.normalAttackUp();
-                } else {
-                    if(player instanceof Gambler){
-                        send("ATTACK"+playerNumber+"#nAS#"+((Gambler) player).getResult());
-                    }else{
-                        send("ATTACK"+playerNumber+"#nAS");
-                    }
-                    player.normalAttackStand();
-                }
-            }
-        });
-        Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
-            if (player.getAttackWindDown() <= 0) {
-                //player.setHorizontalSpeed(0);
-                player.setDecelerating(true);
+        if(!(player instanceof Warrior && (((Warrior) player).isGettingHooked()))) {
+            Input.keyboard().onKeyTyped(StaticData.normalAttack, (key) -> {
                 if (player.getAttackWindDown() <= 0) {
-                    player.setHorizontalSpeed(0);
+                    player.setDecelerating(true);
+                    if (player.getDirectionLR() != -1) {
+                        if (player instanceof Gambler) {
+                            send("ATTACK" + playerNumber + "#nAR#" + ((Gambler) player).getResult());
+                        } else {
+                            send("ATTACK" + playerNumber + "#nAR");
+                        }
+                        player.normalAttackRun();
+                    } else if (player.getDirectionUD() == 1) {
+                        if (player instanceof Gambler) {
+                            send("ATTACK" + playerNumber + "#nAD#" + ((Gambler) player).getResult());
+                        } else {
+                            send("ATTACK" + playerNumber + "#nAD");
+                        }
+                        player.normalAttackDown();
+                    } else if (player.getDirectionUD() == 0) {
+                        if (player instanceof Gambler) {
+                            send("ATTACK" + playerNumber + "#nAU#" + ((Gambler) player).getResult());
+                        } else {
+                            send("ATTACK" + playerNumber + "#nAU");
+                        }
+                        player.normalAttackUp();
+                    } else {
+                        if (player instanceof Gambler) {
+                            send("ATTACK" + playerNumber + "#nAS#" + ((Gambler) player).getResult());
+                        } else {
+                            send("ATTACK" + playerNumber + "#nAS");
+                        }
+                        player.normalAttackStand();
+                    }
+                }
+            });
+            Input.keyboard().onKeyTyped(StaticData.specialAttack, (key) -> {
+                if (player.getAttackWindDown() <= 0) {
+                    player.setDecelerating(true);
                     if (player.getDirectionUD() == 0) {
-                        if(player instanceof Gambler){
-                            send("ATTACK"+playerNumber+"#sAU#"+((Gambler) player).getResult());
-                        }else{
-                            send("ATTACK"+playerNumber+"#sAU");
+                        if (player instanceof Gambler) {
+                            send("ATTACK" + playerNumber + "#sAU#" + ((Gambler) player).getResult());
+                        } else {
+                            send("ATTACK" + playerNumber + "#sAU");
                         }
                         player.specialAttackUp();
                     } else if (player.getDirectionLR() != -1) {
                         player.specialAttackRun();
-                        send("ATTACK"+playerNumber+"#sAR");
+                        send("ATTACK" + playerNumber + "#sAR");
                     } else if (player.getDirectionUD() == 1) {
                         player.specialAttackDown();
-                        send("ATTACK"+playerNumber+"#sAD");
+                        send("ATTACK" + playerNumber + "#sAD");
                     } else {
                         player.specialAttackStand();
-                        send("ATTACK"+playerNumber+"#sAS");
+                        send("ATTACK" + playerNumber + "#sAS");
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -554,7 +551,7 @@ public class GameClient extends Client implements IUpdateable {
                     player.setVerticalSpeed(-700);
                     player.setInAir(true);
                     player.setJumpsAvailable(player.getJumpsAvailable()-1);
-                    player.setJumpCooldown(0.5);
+                    player.setJumpCooldown(0.2);
                 }
             }
         });

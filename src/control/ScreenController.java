@@ -9,6 +9,7 @@ import de.gurkenlabs.litiengine.graphics.RenderType;
 import model.GameClient;
 import model.Maps.Map;
 import model.Maps.Map1;
+import model.Screens.GameFinishScreen;
 import model.Screens.IngameScreen;
 import model.Screens.MenuScreen;
 import model.User;
@@ -19,6 +20,7 @@ public class ScreenController extends Entity implements IUpdateable {
 
     private MenuScreen menuScreen;
     private static IngameScreen ingameScreen;
+    private GameFinishScreen gameFinishScreen;
     public static ArrayList<Environment> environments = new ArrayList<>();
     private Map currentMap;
     private GameController gameController;
@@ -36,6 +38,10 @@ public class ScreenController extends Entity implements IUpdateable {
         Game.loadEnvironment(environments.get(1));
         ingameScreen = new IngameScreen();
         Game.getScreenManager().addScreen(ingameScreen);
+        environments.add(new Environment("assets/maps/blank.tmx"));
+        Game.loadEnvironment(environments.get(2));
+        gameFinishScreen = new GameFinishScreen(this);
+        Game.getScreenManager().addScreen(gameFinishScreen);
     }
 
     @Override
@@ -62,6 +68,11 @@ public class ScreenController extends Entity implements IUpdateable {
             System.out.println("Controller erstellt");
 
         }
+    }
+
+    public void setGameFinishScreen(){
+        Game.loadEnvironment(environments.get(2));
+        Game.getScreenManager().displayScreen(gameFinishScreen);
     }
 
     public MenuScreen getMenuScreen() {

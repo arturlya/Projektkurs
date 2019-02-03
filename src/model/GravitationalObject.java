@@ -43,7 +43,7 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
     @Override
     public void render(Graphics2D g) {
         g.setColor(new Color(70,120,255));
-        g.fill(renderHitbox);
+        if(!(this instanceof Player)) g.fill(renderHitbox);
     }
 
 
