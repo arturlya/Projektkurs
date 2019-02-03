@@ -3,17 +3,11 @@ package model;
 import control.ScreenController;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
-import de.gurkenlabs.litiengine.entities.IEntity;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.input.Input;
-import model.Maps.Map;
-import model.Screens.IngameScreen;
 import model.Screens.MenuScreen;
 import model.abitur.datenstrukturen.List;
 import model.abitur.netz.Client;
-
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import static control.Timer.dt;
 
@@ -43,6 +37,7 @@ public class GameClient extends Client implements IUpdateable {
     private boolean finalChoose,drawnPlayer;
     /** Nachricht vom Server, die gespeichert wird, in der alle Spieler mit ihrer Nummer und Figur gespeichert werden*/
     private String allPlayer = "";
+
 
     /** Speichert alle anderen Spieler*/
     private List<Player> others;
@@ -125,6 +120,7 @@ public class GameClient extends Client implements IUpdateable {
             drawnPlayer = true;
             System.out.println("Added Players");
         }
+
         if(gameStarted && coolDown<=0){
             send("POSITIONXY"+playerNumber+"#"+player.getX()+"#"+player.getY()+"#"+player.directionLR+"#"+player.decelerating);
             coolDown = 1;
@@ -144,8 +140,9 @@ public class GameClient extends Client implements IUpdateable {
         if(coolDown>0){
             coolDown = coolDown-1*dt;
         }
-        if(gameStarted){
+        if(gameStarted && drawnPlayer){
             processInputs();
+
         }
 
         if(!gameStarted){
@@ -205,11 +202,12 @@ public class GameClient extends Client implements IUpdateable {
                             others.next();
                         }
 
-                        if (others.hasAccess()) {
-                              others.getContent().setX(Double.parseDouble(temp[1]));
-                             others.getContent().setY(Double.parseDouble(temp[2]));
+                        if (others.hasAccess() && others.getContent() != null && others != null) {
+                            others.getContent().setX(Double.parseDouble(temp[1]));
+                            others.getContent().setY(Double.parseDouble(temp[2]));
                             others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
                             others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
+
                         }
                     }
                 }else {
@@ -224,11 +222,17 @@ public class GameClient extends Client implements IUpdateable {
                             }
                             others.next();
                         }
-                        if (others.hasAccess()) {
+                        if (others.hasAccess() && others.getContent() != null && others != null) {
+
+                         //   System.out.println(temp[1]);
+                         //   System.out.println(temp[2]);
+                         //   System.out.println(temp[3]);
+                         //   System.out.println(temp[4]);
                             others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
                             others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
                             others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
                             others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
+
                         }
                     }
                 }
@@ -371,8 +375,6 @@ public class GameClient extends Client implements IUpdateable {
                 String[] temp = pMessage.split("NUMBER");
                 playerNumber = Integer.parseInt(temp[1]);
                 System.out.println("Playernumber : "+playerNumber);
-
-
             }
     }
 
@@ -391,6 +393,8 @@ public class GameClient extends Client implements IUpdateable {
 
         return value;
     }
+
+
 
     /**
      * Sucht einen Spieler aus und schickt die Auswahl an den Server.
@@ -415,7 +419,6 @@ public class GameClient extends Client implements IUpdateable {
             }
             player.setY(10);
             player.setX(600);
-
 
         }
     }

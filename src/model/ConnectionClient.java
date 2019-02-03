@@ -74,7 +74,7 @@ public class ConnectionClient extends Client implements IUpdateable {
             temp = temp[1].split("#");
 
             serverIP = temp[0];
-              //  serverIP = "192.168.178.61";
+                //serverIP = "192.168.178.61";
             serverPort = Integer.parseInt(temp[1]);
             System.out.println("Joining "+serverIP+" at "+serverPort);
             user.joinGame(serverIP,serverPort);

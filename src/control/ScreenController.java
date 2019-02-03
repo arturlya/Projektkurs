@@ -20,16 +20,14 @@ public class ScreenController extends Entity implements IUpdateable {
 
     private MenuScreen menuScreen;
     private static IngameScreen ingameScreen;
-    private GameFinishScreen gameFinishScreen;
+    private static GameFinishScreen gameFinishScreen;
     public static ArrayList<Environment> environments = new ArrayList<>();
     private Map currentMap;
     private GameController gameController;
-    private User user;
     private boolean ingame;
 
     public ScreenController(User user){
         Game.getLoop().attach(this);
-        this.user = user;
         environments.add(new Environment("assets/maps/blank.tmx"));
         Game.loadEnvironment(environments.get(0));
         menuScreen = new MenuScreen(user);
@@ -70,7 +68,7 @@ public class ScreenController extends Entity implements IUpdateable {
         }
     }
 
-    public void setGameFinishScreen(){
+    public static void setGameFinishScreen(){
         Game.loadEnvironment(environments.get(2));
         Game.getScreenManager().displayScreen(gameFinishScreen);
     }
