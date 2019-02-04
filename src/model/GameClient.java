@@ -133,6 +133,17 @@ public class GameClient extends Client implements IUpdateable {
             if (gameStarted ) {
                 send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed()+"#"+player.directionLR+"#"+player.decelerating);
                 // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
+                if(!player.getHitbox().intersects(-200,-200,2320,1480) && player.getStocks()>0) {
+                    System.out.println("Removed Stock");
+                    player.setStocks(player.getStocks() - 1);
+                    send("STOCKS"+playerNumber+"#"+player.getStocks());
+                    if(player.getStocks()<=0){
+                        player.removeRenderer();
+                    }
+                    if (getNumberOfDeadPlayers() >= getNumberOfOtherPlayers()) {
+                        ScreenController.setGameFinishScreen();
+                    }
+                }
             }
 
         }
@@ -163,6 +174,21 @@ public class GameClient extends Client implements IUpdateable {
         }
     }
 
+    /**
+     * @return Gibt die Anzahl der Spieler mit weniger als 1 Stock zurück
+     */
+    private int getNumberOfDeadPlayers(){
+        int value = 0;
+        for(others.toFirst();others.hasAccess();others.next()){
+            if(others.getContent().getStocks() <= 0){
+                value++;
+            }
+        }
+        if(player.getStocks() <= 0){
+            value++;
+        }
+        return value;
+    }
 
     /**
      * Verarbeitet die empfangene Nachricht vom Server.
@@ -177,6 +203,7 @@ public class GameClient extends Client implements IUpdateable {
      *                 -pMessage mit "LOOKING" bekommt der Client die Richtung in die ein Client guckt
      *                 -pMessage mit "QUIT" dann bekommt der Client die Information, dass ein anderer Client das Spiel verlassen hat
      *                 -pMessage mit "NUMBER" dann bekommt der Client eine Spielernummer vom Server
+     *                 -pMessage mit "STOCKS" dann bekommt der Client die Stocks von einem Client
      */
     @Override
     public void processMessage(String pMessage) {
@@ -375,6 +402,28 @@ public class GameClient extends Client implements IUpdateable {
                 String[] temp = pMessage.split("NUMBER");
                 playerNumber = Integer.parseInt(temp[1]);
                 System.out.println("Playernumber : "+playerNumber);
+            }else if(pMessage.contains("STOCKS")){
+                String[] temp = pMessage.split("STOCKS");
+                temp = temp[1].split("#");
+                if(Integer.parseInt(temp[0]) != playerNumber) {
+                    int playerIndex = Integer.parseInt(temp[0]);
+                    others.toFirst();
+                    while (others.hasAccess()) {
+                        if (others.getContent().getPlayerNumber() == playerIndex) {
+                            break;
+                        }
+                        others.next();
+                    }
+                    if (others.hasAccess()) {
+                        others.getContent().setStocks(Integer.parseInt(temp[1]));
+                        if (others.getContent().getStocks() <= 0) {
+                            others.getContent().removeRenderer();
+                        }
+                        if (getNumberOfDeadPlayers() >= getNumberOfOtherPlayers()) {
+                            ScreenController.setGameFinishScreen();
+                        }
+                    }
+                }
             }
     }
 

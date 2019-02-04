@@ -43,19 +43,9 @@ public class CollisionController implements IUpdateable {
     private void checkPlayerOffScreen(){
         for(Player player : players){
             if(!player.getHitbox().intersects(-200,-200,2320,1480)){
-                player.setStocks(player.getStocks()-1);
-                //System.out.println(player.getStocks());
                 if(player.getStocks() > 0) {
                     player.spawn(getFarthestSpawnpointFromPlayers());
-                }else{
-                 //   Game.getEnvironment().removeRenderable(player);
-                 //   Game.getEnvironment().remove(player);
-                    player.removeRenderer();
-                    System.out.println("Renderer removed");
                 }
-            }
-            if(getNumberOfDeadPlayers() >= players.size()-1){
-                ScreenController.setGameFinishScreen();
             }
 
         }
@@ -162,16 +152,5 @@ public class CollisionController implements IUpdateable {
         projectiles.removeIf(p -> !gravObjects.contains(p));
     }
 
-    /**
-     * @return Gibt die Anzahl der Spieler mit weniger als 1 Stock zurück
-     */
-    private int getNumberOfDeadPlayers(){
-        int value = 0;
-        for(Player player : players){
-            if(player.getStocks() <= 0){
-                value++;
-            }
-        }
-        return value;
-    }
+
 }
