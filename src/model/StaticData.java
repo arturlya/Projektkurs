@@ -10,8 +10,8 @@ public final class StaticData {
     public static int ScreenWidth,ScreenHeight;
     public static float ScreenWidthMultiplier,ScreenHeightMultiplier;
     public static String ip;
-    public static int moveUp;
-    public static int moveDown;
+    public static int lookUp;
+    public static int lookDown;
     public static int moveLeft;
     public static int moveRight;
     public static int jump;
@@ -28,8 +28,12 @@ public final class StaticData {
             ScreenWidth = Game.getConfiguration().graphics().getResolutionWidth();
             ScreenHeight = Game.getConfiguration().graphics().getResolutionHeight();
         }
+        System.out.println(ScreenWidth);
+        System.out.println(ScreenHeight);
         ScreenWidthMultiplier = ScreenWidth/1920f;
         ScreenHeightMultiplier = ScreenHeight/1080f;
+        System.out.println(ScreenWidthMultiplier);
+        System.out.println(ScreenHeightMultiplier);
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException err) {

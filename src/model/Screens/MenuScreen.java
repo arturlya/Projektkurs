@@ -123,8 +123,8 @@ public class MenuScreen extends Screen implements IUpdateable {
             for (int i = 0; i < keyMenu.getCellComponents().size(); i++) {
                 if (KeyEvent.getKeyText(keyChecker.getKey()).equalsIgnoreCase(keyMenu.getCellComponents().get(i).getText())) {
                     keyMenu.getCellComponents().get(i).setText("");
-                    if (i == 0) StaticData.moveUp = 0;
-                    if (i == 1) StaticData.moveDown = 0;
+                    if (i == 0) StaticData.lookUp = 0;
+                    if (i == 1) StaticData.lookDown = 0;
                     if (i == 2) StaticData.moveLeft = 0;
                     if (i == 3) StaticData.moveRight = 0;
                     if (i == 4) StaticData.jump = 0;
@@ -133,10 +133,10 @@ public class MenuScreen extends Screen implements IUpdateable {
                 }
             }
             if (keyNameMenu.getCurrentSelection() == 0) {
-                Config.pref.putInt("moveUp",keyChecker.getKey());
+                Config.pref.putInt("lookUp",keyChecker.getKey());
                 keyMenu.getCellComponents().get(0).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 1) {
-                Config.pref.putInt("moveDown",keyChecker.getKey());
+                Config.pref.putInt("lookDown",keyChecker.getKey());
                 keyMenu.getCellComponents().get(1).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 2) {
                 Config.pref.putInt("moveLeft",keyChecker.getKey());
@@ -273,8 +273,8 @@ public class MenuScreen extends Screen implements IUpdateable {
         keyNameMenu.prepare();
         keyNameMenu.setEnabled(true);
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add(KeyEvent.getKeyText(StaticData.moveUp));
-        arrayList.add(KeyEvent.getKeyText(StaticData.moveDown));
+        arrayList.add(KeyEvent.getKeyText(StaticData.lookUp));
+        arrayList.add(KeyEvent.getKeyText(StaticData.lookDown));
         arrayList.add(KeyEvent.getKeyText(StaticData.moveLeft));
         arrayList.add(KeyEvent.getKeyText(StaticData.moveRight));
         arrayList.add(KeyEvent.getKeyText(StaticData.jump));
