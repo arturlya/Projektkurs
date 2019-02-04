@@ -212,6 +212,11 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+    /**
+     * Render Methode der Klasse der Klasse IRenderable
+     * Rendert das komplette Menü
+     * @param g
+     */
     public void render(Graphics2D g) {
         g.drawImage(bg, 0, 0, width, height, null);
         if (menuName.equalsIgnoreCase("main")) {
