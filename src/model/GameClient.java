@@ -522,10 +522,10 @@ public class GameClient extends Client implements IUpdateable {
                 i = 2;
             }
         });
-        Input.keyboard().onKeyPressed(StaticData.moveUp, (key) -> player.setDirectionUD(0));
-        Input.keyboard().onKeyReleased(StaticData.moveUp, (key) -> player.setDirectionUD(-1));
-        Input.keyboard().onKeyPressed(StaticData.moveDown, (key) -> player.setDirectionUD(1));
-        Input.keyboard().onKeyReleased(StaticData.moveDown, (key) -> player.setDirectionUD(-1));
+        Input.keyboard().onKeyPressed(StaticData.lookUp, (key) -> player.setDirectionUD(0));
+        Input.keyboard().onKeyReleased(StaticData.lookUp, (key) -> player.setDirectionUD(-1));
+        Input.keyboard().onKeyPressed(StaticData.lookDown, (key) -> player.setDirectionUD(1));
+        Input.keyboard().onKeyReleased(StaticData.lookDown, (key) -> player.setDirectionUD(-1));
     }
 
     /**

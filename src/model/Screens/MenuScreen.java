@@ -18,30 +18,61 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Klasse MenuScreen.
+ * Erstellt und zeigt alles relevante im Menü an.
+ *
+ */
 public class MenuScreen extends Screen implements IUpdateable {
 
+    /** Aktuelles Untermenü*/
     private String menuName;
+    /** Der Port zum joinen und zum hosten*/
     public static String joinPort = "";
     public static String hostPort = "";
+    /** Zuständig für die Überprüfung ob ein String numerisch ist*/
     private char[] chars;
+    /** Screen-Größe und Breite*/
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
-    public static int playerPick;
+    /** Multiplikator falls Auflösung nicht 1920x1080*/
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
+    /** Ausgewählte Figurnummer*/
+    public static int playerPick;
+    /** Ob ein Spieler verbunden ist (Client-Side)*/
     private boolean connected;
+    /** Ob ein Spieler eine Figur ausgewählt hat und ready ist*/
     public static boolean ready;
+    /** Zuständig für die Tastenbelegung*/
     private static boolean chooseKey;
-    private Image bg,trans,join,options,exit,mageName,warriorName;
+    /** Menü-Bilder*/
+    private Image bg,trans,join,create,options,exit;
+    /** Figuren-Bilder für die Figurenauswahl*/
     private ArrayList<Image> playerImages;
-    private BufferedImage textfield,create;
+    /** Bild für ein Textfeld*/
+    private BufferedImage textfield;
+    /** Arraylist mit Buttons aus dem Hauptmenü*/
     private ArrayList<ImageComponent> buttons = new ArrayList<>();
+    /** Arraylist mit den Textfeldern*/
     private ArrayList<TextFieldComponent> textFields = new ArrayList<>();
+    /** Untermenüs*/
     private Menu optionsMenu,keyNameMenu,keyMenu;
+    /** KeyChecker-Objekt für die Überprüfung der gedrückten Tasten*/
     private KeyChecker keyChecker = new KeyChecker();
+    /** Audioregler*/
     private HorizontalSlider audio;
+    /** CheckBox zum bereit machen*/
     private CheckBox readyMark;
 
+
+    /** Ein User-Objekt für die Connection*/
     private User user;
 
+
+    /**
+     * Konstruktor der Klasse MenuScreen
+     *
+     * @param user User-Objekt für die Überprüfung einer Connection zum Hauptserver
+     */
     public MenuScreen(User user){
         super("MENU");
         Game.getLoop().attach(this);
@@ -59,8 +90,6 @@ public class MenuScreen extends Screen implements IUpdateable {
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Warrior/Standing1Right.png")));
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right.png")));
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Gambler/Standing1Right.png")));
-            mageName = ImageIO.read(new File("assets/img/ingame/Players/Mage Name.png"));
-            warriorName = ImageIO.read(new File("assets/img/ingame/Players/Warrior Name.png"));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
@@ -71,16 +100,23 @@ public class MenuScreen extends Screen implements IUpdateable {
         Input.keyboard().addKeyListener(keyChecker);
     }
 
+    /**
+     * Private Klasse KeyChecker.
+     */
     private class KeyChecker extends KeyAdapter{
 
+        /** gedrückte Taste*/
         private int key;
 
+        /** Tastenüberprüfung*/
         @Override
         public void keyTyped(KeyEvent e) {
             if (e.getKeyCode() != KeyEvent.VK_ENTER && MenuScreen.chooseKey) {
                 key = e.getKeyCode();
             }
         }
+
+        /** Verändernde und rückgebende Methoden*/
 
         int getKey(){
             return key;
@@ -91,6 +127,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+    /**
+     * Update des Interfaces IUpdateable
+     */
     @Override
     public void update() {
         Input.keyboard().onKeyTyped(KeyEvent.VK_ESCAPE, (key) -> menuName = "main");
@@ -123,8 +162,8 @@ public class MenuScreen extends Screen implements IUpdateable {
             for (int i = 0; i < keyMenu.getCellComponents().size(); i++) {
                 if (KeyEvent.getKeyText(keyChecker.getKey()).equalsIgnoreCase(keyMenu.getCellComponents().get(i).getText())) {
                     keyMenu.getCellComponents().get(i).setText("");
-                    if (i == 0) StaticData.moveUp = 0;
-                    if (i == 1) StaticData.moveDown = 0;
+                    if (i == 0) StaticData.lookUp = 0;
+                    if (i == 1) StaticData.lookDown = 0;
                     if (i == 2) StaticData.moveLeft = 0;
                     if (i == 3) StaticData.moveRight = 0;
                     if (i == 4) StaticData.jump = 0;
@@ -133,10 +172,10 @@ public class MenuScreen extends Screen implements IUpdateable {
                 }
             }
             if (keyNameMenu.getCurrentSelection() == 0) {
-                Config.pref.putInt("moveUp",keyChecker.getKey());
+                Config.pref.putInt("lookUp",keyChecker.getKey());
                 keyMenu.getCellComponents().get(0).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 1) {
-                Config.pref.putInt("moveDown",keyChecker.getKey());
+                Config.pref.putInt("lookDown",keyChecker.getKey());
                 keyMenu.getCellComponents().get(1).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }else if (keyNameMenu.getCurrentSelection() == 2) {
                 Config.pref.putInt("moveLeft",keyChecker.getKey());
@@ -173,6 +212,11 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+    /**
+     * Render Methode der Klasse der Klasse IRenderable
+     * Rendert das komplette Menü
+     * @param g
+     */
     public void render(Graphics2D g) {
         g.drawImage(bg, 0, 0, width, height, null);
         if (menuName.equalsIgnoreCase("main")) {
@@ -215,6 +259,12 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+
+    /**
+     * Mausklick-Abfrage
+     *
+     * @param e MouseEvent
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         super.mouseClicked(e);
@@ -248,6 +298,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+    /**
+     * Initialisieren der Buttons vom Hauptmenü.
+     */
     private void createButtons(){
         buttons.add(new ImageComponent(640*widthMultiplier,151*heightMultiplier,join));
         buttons.add(new ImageComponent(640*widthMultiplier,349*heightMultiplier,create));
@@ -258,6 +311,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+    /**
+     * Zwei Textfelder werden initialisiert
+     */
     private void createTextField(){
         textFields.add(new TextFieldComponent(910*widthMultiplier,520*heightMultiplier,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
         textFields.add(new TextFieldComponent(910*widthMultiplier,520*heightMultiplier,100,40,Spritesheet.load(textfield,"assets/img/Menu/textfield.png",100,40),""));
@@ -268,13 +324,19 @@ public class MenuScreen extends Screen implements IUpdateable {
         }
     }
 
+    /**
+     * Initialisierung der Untermenüs.
+     *      -> Tastenbelegung
+     *      -> Audio & Video
+     *      -> Overall
+     */
     private void createSubMenus(){
         keyNameMenu = new Menu(0, 0, width - 500*widthMultiplier, height, "Move Forwards", "Move Backwards", "Move Left", "Move Right", "Jump", "Normal Attack", "Special Attack");
         keyNameMenu.prepare();
         keyNameMenu.setEnabled(true);
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add(KeyEvent.getKeyText(StaticData.moveUp));
-        arrayList.add(KeyEvent.getKeyText(StaticData.moveDown));
+        arrayList.add(KeyEvent.getKeyText(StaticData.lookUp));
+        arrayList.add(KeyEvent.getKeyText(StaticData.lookDown));
         arrayList.add(KeyEvent.getKeyText(StaticData.moveLeft));
         arrayList.add(KeyEvent.getKeyText(StaticData.moveRight));
         arrayList.add(KeyEvent.getKeyText(StaticData.jump));
@@ -289,6 +351,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         createAudioSlider();
     }
 
+    /**
+     * Audioregler initialisieren
+     */
     private void createAudioSlider(){
         audio = new HorizontalSlider(width/2-100,height/2-150,300,50,0,100,5,null,null,true);
         audio.prepare();
@@ -296,6 +361,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         audio.setCurrentValue(StaticData.audioVolume);
     }
 
+    /**
+     * Bereithaken initialiesieren
+     */
     private void createReadyCheckMark(){
         readyMark = new CheckBox(1800*widthMultiplier,940*heightMultiplier,100,100,null,false);
         readyMark.prepare();

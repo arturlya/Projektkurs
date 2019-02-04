@@ -16,16 +16,33 @@ import model.User;
 
 import java.util.ArrayList;
 
+/**
+ * Klasse ScreenController
+ * Reguliert zwischen IngameScreen und MenuScreen
+ *
+ */
 public class ScreenController extends Entity implements IUpdateable {
 
+    /** Referenz auf ein MenuScreen-Objekt*/
     private MenuScreen menuScreen;
+    /** Referenz auf ein IngameScreen-Objekt*/
     private static IngameScreen ingameScreen;
+    /** Referenz auf ein GameFinishScreen-Objekt*/
     private static GameFinishScreen gameFinishScreen;
+    /** Arraylist mit Environments*/
     public static ArrayList<Environment> environments = new ArrayList<>();
+    /** Momentane Map*/
     private Map currentMap;
+    /** Referenz auf ein GameController-Objekt*/
     private GameController gameController;
+    /** Ob man ingame ist*/
     private boolean ingame;
 
+
+    /**
+     * Der ScreenController Konstruktor initialisiert die einzelnen Screens und Environments
+     * @param user
+     */
     public ScreenController(User user){
         Game.getLoop().attach(this);
         environments.add(new Environment("assets/maps/blank.tmx"));
@@ -42,6 +59,9 @@ public class ScreenController extends Entity implements IUpdateable {
         Game.getScreenManager().addScreen(gameFinishScreen);
     }
 
+    /**
+     * Update des Interfaces IUpdateable
+     */
     @Override
     public void update() {
         if (GameClient.gameStarted && !ingame) {
@@ -49,6 +69,11 @@ public class ScreenController extends Entity implements IUpdateable {
             ingame = true;
         }
     }
+
+
+    /**
+     * Lauter verändernde und rückgebende Methoden
+     */
 
     public void setMenuScreen(){
         Game.loadEnvironment(environments.get(0));
@@ -71,26 +96,6 @@ public class ScreenController extends Entity implements IUpdateable {
     public static void setGameFinishScreen(){
         Game.loadEnvironment(environments.get(2));
         Game.getScreenManager().displayScreen(gameFinishScreen);
-    }
-
-    public MenuScreen getMenuScreen() {
-        return menuScreen;
-    }
-
-    public IngameScreen getIngameScreen() {
-        return ingameScreen;
-    }
-
-    public ArrayList<Environment> getEnvironments() {
-        return environments;
-    }
-
-    public Map getCurrentMap() {
-        return currentMap;
-    }
-
-    public void setCurrentMap(Map currentMap) {
-        this.currentMap = currentMap;
     }
 
     public static boolean isIngame(){
