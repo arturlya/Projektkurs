@@ -1,7 +1,6 @@
 package model;
 
 
-import control.Timer;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
@@ -10,11 +9,24 @@ import java.awt.geom.Rectangle2D;
 
 import static control.Timer.dt;
 
+/**
+ * Klasse Warrior.
+ * Erbt von der abtrakten Oberklasse Player
+ */
 public class Warrior extends Player{
 
+    /** Merkt sich, ob die Folgeattacke ausgeführt werden soll bzw. der Greifhaken getroffen hat*/
     private boolean downNormalAttackActive, gettingHooked, hookingTimerSet;
+    /** Cooldown des Greifhakens*/
     private double hookingTimer;
 
+    /**
+     * Konstruktor der Klasse Warrior.
+     *
+     * @param x X-Position des Warriors
+     * @param y Y-Position des Warriors
+     * @param playable Spielbarkeit des Warriors
+     */
     public Warrior(double x, double y, boolean playable){
         super(x,y,playable);
         setWidth(96);
@@ -23,6 +35,9 @@ public class Warrior extends Player{
     }
 
 
+    /**
+     * Update des Interfaces IUpdateable
+     */
     @Override
     public void update() {
         super.update();
@@ -46,6 +61,9 @@ public class Warrior extends Player{
         }
     }
 
+    /**
+     * Implementation der normalAttackRun vom Player.
+     */
     @Override
     public void normalAttackRun() {
         //Schlag von oben nach unten
@@ -62,7 +80,10 @@ public class Warrior extends Player{
         attackHurtTime = 0.15;
         attackWindDown  =0.2;
     }
-
+    /**
+     * Implementation der normalAttackDown vom Player.
+     * Auf diese Attcke folgt eine weitere Attacke 'secondDownAttack'
+     */
     @Override
     public void normalAttackDown() {
         //Sticht nach vorne, danach nach hinten
@@ -80,7 +101,9 @@ public class Warrior extends Player{
         attackWindDown = 0.05;
         downNormalAttackActive = true;
     }
-
+    /**
+     * Folgeattcke der normalAttackDown.
+     */
     private void secondDownAttack() {
         if(lookingAt == 0) {
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
@@ -94,7 +117,9 @@ public class Warrior extends Player{
         attackWindDown = 0.3;
         downNormalAttackActive = false;
     }
-
+    /**
+     * Implementation der normalAttackUp vom Player.
+     */
     @Override
     public void normalAttackUp() {
         //sticht nach oben
@@ -108,6 +133,9 @@ public class Warrior extends Player{
         attackWindDown = 0.2;
     }
 
+    /**
+     * Implementation der normalAttackStand vom Player.
+     */
     @Override
     public void normalAttackStand() {
         //sticht nach vorne
@@ -125,7 +153,9 @@ public class Warrior extends Player{
         attackWindDown = 0.1;
 
     }
-
+    /**
+     * Implementation der specialAttackRun vom Player.
+     */
     @Override
     public void specialAttackRun() {
         //schlägt mit schild
@@ -142,7 +172,9 @@ public class Warrior extends Player{
         attackHurtTime = 0.2;
         attackWindDown = 0.4;
     }
-
+    /**
+     * Implementation der specialAttackDown vom Player.
+     */
     @Override
     public void specialAttackDown() {
         //blockt
@@ -150,7 +182,9 @@ public class Warrior extends Player{
         shieldActive = true;
         attackWindDown = 0.3;
     }
-
+    /**
+     * Implementation der specialAttackUp vom Player.
+     */
     @Override
     public void specialAttackUp() {
         //schießt haken
@@ -159,7 +193,9 @@ public class Warrior extends Player{
             shootGrapplingHook();
         }
     }
-
+    /**
+     * Implementation der specialAttackStand vom Player.
+     */
     @Override
     public void specialAttackStand() {
         //wirft messer
@@ -170,12 +206,14 @@ public class Warrior extends Player{
         attackWindDown = 0.3;
     }
 
+    /** Schießt einen Greifhaken*/
     protected void shootGrapplingHook(){
         projectile = new GrapplingHook(this,getX(),getY());
         Game.getEnvironment().add(projectile);
         Game.getEnvironment().add(projectile, RenderType.NORMAL);
     }
 
+    /** Zieht den Warrior zum Greifhaken hin*/
     public void pullToHook(){
         if(projectile != null) {
             gettingHooked = true;
@@ -184,12 +222,25 @@ public class Warrior extends Player{
         }
     }
 
+    /**
+     * Klasse GrapplingHook, dem Rettungsprojektil des Warriors
+     */
     public class GrapplingHook extends Projectile{
 
+        /** Ob die Richtung des Greifhakens bestimmt ist*/
         boolean directionChosen;
+        /** Ob der Greifhaken aktiv ist*/
         boolean isActive;
+        /** Besitzer des Greifhakens*/
         Warrior owner;
 
+        /**
+         * Konstruktor der Klasse GrapplingHook
+         *
+         * @param owner Erzeuger des GrapplingHooks
+         * @param x X-Position des GrapplingHooks
+         * @param y Y-Position des GrapplingHooks
+         */
         public GrapplingHook(Warrior owner, double x, double y){
             super(owner,x,y,5,5, new Vector2D(400,-750),3,0);
             this.owner = owner;
@@ -200,14 +251,19 @@ public class Warrior extends Player{
         }
     }
 
+    /**
+     * @param hookingTimer Setzt den hookingTimer auf diesen Wert.
+     */
     public void setHookingTimer(double hookingTimer) {
         this.hookingTimer = hookingTimer;
     }
 
+    /** @return Gibt zurück, ob der Greifhaken etwas getroffen hat*/
     public boolean isGettingHooked() {
         return gettingHooked;
     }
 
+    /** @param gettingHooked Setzt gettingHooked auf diesen Wert*/
     public void setGettingHooked(boolean gettingHooked) {
         this.gettingHooked = gettingHooked;
     }

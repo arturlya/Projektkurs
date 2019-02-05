@@ -134,6 +134,8 @@ public class GameServer extends Server {
             sendToAll(pMessage);
         }else if(pMessage.contains("LOOKING")){
             sendToAll(pMessage);
+        }else if(pMessage.contains("STOCKS")){
+            sendToAll(pMessage);
         }
 
         if(isStarting() && startVote<10){

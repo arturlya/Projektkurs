@@ -12,6 +12,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Klasse MainController.
+ * Besitzt die main-Methode.
+ */
 public class MainController {
 
     public static void main(String[] args){
@@ -28,6 +32,10 @@ public class MainController {
     private ScreenController screenController;
     private Image cursor;
 
+    /**
+     * Konstruktor der Klasse MainController.
+     * Startet das Spiel und wird von der main ausgeführt.
+     */
     public MainController(){
         Game.init();
         Game.getConfiguration().graphics().setFullscreen(false);
@@ -40,14 +48,14 @@ public class MainController {
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
         User user = new User();
-        user.init();
+
         screenController = new ScreenController(user);
         //screenController.setIngameScreen(new Map1());
         screenController.setMenuScreen();
 
 
 
-        /**
+        /*
          * Wer von euch lit ist uncommented!
          */
         //Game.getSoundEngine().playMusic(Sound.get("assets/audio/Musik/bgm.mp3"));

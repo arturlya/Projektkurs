@@ -81,6 +81,11 @@ public class ScreenController extends Entity implements IUpdateable {
         gameController = null;
     }
 
+    /**
+     * Setzt das Fenster auf das Spielfenster
+     *
+     * @param map Stage des Spiels
+     */
     public void setIngameScreen(Map map){
         Game.loadEnvironment(environments.get(1));
         Game.getScreenManager().displayScreen(ingameScreen);
@@ -93,11 +98,17 @@ public class ScreenController extends Entity implements IUpdateable {
         }
     }
 
+    /**
+     * Wechselt das Fenster auf den Endscreen
+     */
     public static void setGameFinishScreen(){
         Game.loadEnvironment(environments.get(2));
         Game.getScreenManager().displayScreen(gameFinishScreen);
     }
 
+    /**
+     * @return Gibt zurück, ob das aktuelle Fenster das Spielfenster ist
+     */
     public static boolean isIngame(){
         if(Game.getScreenManager().getCurrentScreen() == ingameScreen){
             return true;

@@ -57,6 +57,11 @@ public class User extends GuiComponent {
         }
     }
 
+    /**
+     * mouseMoved der Oberklasse GuiComponent
+     *
+     * @param e Das MouseEvent zum Interagieren
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
         super.mouseMoved(e);
