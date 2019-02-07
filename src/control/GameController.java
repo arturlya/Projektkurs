@@ -34,8 +34,11 @@ public class GameController {
      * Entfernt die Controller vom Spielfluss
      */
     public void removeControllers(){
+        if(physicsController != null)
         Game.getLoop().detach(physicsController);
+        if(timer != null)
         Game.getLoop().detach(timer);
+        if(collisionController != null)
         Game.getLoop().detach(collisionController);
     }
 }

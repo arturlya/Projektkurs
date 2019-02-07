@@ -76,10 +76,12 @@ public class ScreenController extends Entity implements IUpdateable {
      */
 
     public void setMenuScreen(){
+        if(Game.getScreenManager().getCurrentScreen() instanceof IngameScreen){
+            gameController.removeControllers();
+            gameController = null;
+        }
         Game.loadEnvironment(environments.get(0));
         Game.getScreenManager().displayScreen(menuScreen);
-        gameController.removeControllers();
-        gameController = null;
     }
 
     /**
