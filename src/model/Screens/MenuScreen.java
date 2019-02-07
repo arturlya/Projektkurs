@@ -331,7 +331,7 @@ public class MenuScreen extends Screen implements IUpdateable {
      *      -> Overall
      */
     private void createSubMenus(){
-        keyNameMenu = new Menu(0, 0, width - 500*widthMultiplier, height, "Move Forwards", "Move Backwards", "Move Left", "Move Right", "Jump", "Normal Attack", "Special Attack");
+        keyNameMenu = new Menu(0, 0, width - 500*widthMultiplier, height, "Look Up", "Look Down", "Move Left", "Move Right", "Jump", "Normal Attack", "Special Attack");
         keyNameMenu.prepare();
         keyNameMenu.setEnabled(true);
         ArrayList<String> arrayList = new ArrayList<>();

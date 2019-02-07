@@ -20,7 +20,7 @@ import static control.Timer.dt;
 public class GameClient extends Client implements IUpdateable {
 
     /** Speichert die Figur des Client*/
-    private Player player;
+    public static Player player;
     /** Sagt aus, ob dieser Client bereit für Spielstart ist*/
     private boolean ready;
     /** Sagt aus, ob das Spiel gestartet ist*/
