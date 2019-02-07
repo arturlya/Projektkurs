@@ -40,7 +40,7 @@ public class GameClient extends Client implements IUpdateable {
 
 
     /** Speichert alle anderen Spieler*/
-    private List<Player> others;
+    public static List<Player> others;
 
 
     /**

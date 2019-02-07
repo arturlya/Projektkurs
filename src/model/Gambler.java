@@ -92,7 +92,8 @@ public class Gambler extends Player {
             if(buffTimer >= 0) {
                 buffTimer = buffTimer - 1 * dt;
             } else {
-                knockbackPercentage = knockbackPercentage - 10;
+                if (knockbackPercentage >= 10) knockbackPercentage = knockbackPercentage - 10;
+                else knockbackPercentage = 0;
                 speed = speed -100;
                 System.out.println("Boosts removed");
                 buffed = false;

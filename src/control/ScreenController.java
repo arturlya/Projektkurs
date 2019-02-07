@@ -51,7 +51,7 @@ public class ScreenController extends Entity implements IUpdateable {
         Game.getScreenManager().addScreen(menuScreen);
         environments.add(new Environment("assets/maps/blank.tmx"));
         Game.loadEnvironment(environments.get(1));
-        ingameScreen = new IngameScreen();
+        ingameScreen = new IngameScreen(GameClient.others);
         Game.getScreenManager().addScreen(ingameScreen);
         environments.add(new Environment("assets/maps/blank.tmx"));
         Game.loadEnvironment(environments.get(2));

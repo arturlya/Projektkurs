@@ -38,6 +38,11 @@ public class Map1 extends Map {
         heightMultiplier = StaticData.ScreenHeightMultiplier;
     }
 
+    @Override
+    public void render(Graphics2D graphics2D) {
+        super.render(graphics2D);
+    }
+
     /**
      * Spezifische Hitboxen initialisieren
      */

@@ -305,6 +305,10 @@ public abstract class Player extends GravitationalObject {
         return attacking;
     }
 
+    /**@return Gibt den Knockback Wert zurück*/
+    public int getKnockbackPercentage() {
+        return knockbackPercentage;
+    }
 
     /**@return Gibt zurück, ob der Schild des Spielers aktiv ist*/
     public boolean isShieldActive() {
