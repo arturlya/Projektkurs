@@ -11,15 +11,28 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
+/**
+ * Klasse CollisionController
+ * Implementiert von IUpdatable
+ * Kontrolliert die Kollision von Spielern und ihren Angriffen
+ */
 public class CollisionController implements IUpdateable {
 
+    /**Merkt sich alle GravitationalObjects des Spiels*/
     private ArrayList<GravitationalObject> gravObjects;
+    /**Merkt sich alle Player des Spiels*/
     private ArrayList<Player> players;
+    /**Merkt sich alle Projectiles des Spiels*/
     private ArrayList<Projectile> projectiles;
+    /**Merkt sich die Anzahl der GravObjects im Spiel*/
     private int gravObjectAmount;
+    /**Merkt sich die Map*/
     private Map map;
 
+    /**
+     * Konstruktor der Klasse CollisionController
+     * @param physicsController der PhysicsController der Spiels
+     */
     public CollisionController(PhysicsController physicsController){
         Game.getLoop().attach(this);
         gravObjects = physicsController.getGravObjects();
@@ -29,6 +42,9 @@ public class CollisionController implements IUpdateable {
         initializeMap();
     }
 
+    /**
+     * Update des Interfaces IUpdateable
+     */
     @Override
     public void update() {
         checkHurtboxToPlayerCollision();
@@ -40,6 +56,9 @@ public class CollisionController implements IUpdateable {
         gravObjectAmount = gravObjects.size();
     }
 
+    /**
+     * Schaut, ob Spieler außerhalb des Bildschirms sind, falls ja, wird deren Spawn-Methode aufgerufen
+     */
     private void checkPlayerOffScreen(){
         for(Player player : players){
             if(!player.getHitbox().intersects(-200,-200,2320,1480)){
@@ -51,6 +70,9 @@ public class CollisionController implements IUpdateable {
         }
     }
 
+    /**
+     * Prüft, ob die Hurtbox eines 'Attackers' mit der Hitbox eines 'Defenders' kollidieren, falls ja, wird ein Hit ausgeführt
+     */
     private void checkHurtboxToPlayerCollision(){
         Player gamblerDefender = null;
         boolean gamblerHit = false;
@@ -80,6 +102,9 @@ public class CollisionController implements IUpdateable {
         }
     }
 
+    /**
+     * Prüft die Kollision zwischen Projektilen und Spielern
+     */
     private void checkProjectileCollision(){
         for(Projectile projectile : projectiles){
             if(!projectile.isInAir()){
@@ -104,6 +129,10 @@ public class CollisionController implements IUpdateable {
         }
     }
 
+    /**
+     * Ermittelt einen passenden Spawnpunkt für einen Spieler, sodass er möglichst weit entfernt von anderen spawnt
+     * @return Der ermittelte Spawnpunkt
+     */
     public Point getFarthestSpawnpointFromPlayers(){
         int pointIndex = 0;
         double pointDistance = 0;
@@ -129,11 +158,19 @@ public class CollisionController implements IUpdateable {
         return map.getSpawnpoints().get(pointIndex);
     }
 
+    /**
+     * Speichert die aktuell verwendete Map in der 'map' Referenz
+     */
     private void initializeMap(){
         Iterator itr = Game.getEnvironment().getRenderables(RenderType.BACKGROUND).iterator();
         map = (Map)itr.next();
     }
 
+    /**
+     * Ermittelt den Vektor mit dem ein Spieler zurückgeschlagen wird und führt mit diesem die 'registerHit'-Methode vom Spieler aus
+     * @param attacker der Spieler, von dem der Angriff ausgeht
+     * @param defender der Spieler, der von dem Angriff getroffen wird
+     */
     private void playerHit(Player attacker, Player defender){
         Point attackerCoords = new Point((int)attacker.getCenter().getX(), (int)attacker.getHurtbox().getCenterY());
         Vector2D smallDir = new Vector2D(attackerCoords,defender.getCenter());
@@ -141,6 +178,9 @@ public class CollisionController implements IUpdateable {
         defender.registerHit(scaledDir, attacker.getHurtbox().getDamage(), attacker.getHurtbox().getKnockback());
     }
 
+    /**
+     * sorgt dafür, dass die projectile ArrayList immer alle im Spiel vorhandenen Projektile enthält
+     */
     private void updateProjectiles(){
         for(GravitationalObject g : gravObjects){
             if(g instanceof Projectile){

@@ -454,15 +454,15 @@ public class GameClient extends Client implements IUpdateable {
         if(player == null) {
             switch (number) {
                 case 1:
-                    player = new Warrior(400,50,true);
+                    player = new Warrior(400,50,false);
                     send("PLAYER" + playerNumber + "PLAYER" + 1);
                     break;
                 case 2:
-                    player = new Mage(400,50,true);
+                    player = new Mage(400,50,false);
                     send("PLAYER" + playerNumber + "PLAYER" + 2);
                     break;
                 case 3:
-                    player = new Gambler(400,50,true);
+                    player = new Gambler(400,50,false);
                     send("PLAYER"+playerNumber+"PLAYER"+3);
                     break;
             }

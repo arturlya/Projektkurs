@@ -18,17 +18,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Klasse PlayerTester
+ * Besitzt eine Main-Methode
+ * Beim Start der Main wird ein Spieler und 2 Player-Dummies erstellt
+ * Wird verwendet um Spieler und Angriffe auszutesten, ohne auf einen Server connecten zu müssen
+ */
 public class PlayerTester{
 
+    /**Main-Methode, die einen PlayerTester erstellt*/
     public static void main(String[] Args){
         new PlayerTester();
     }
 
+    /**Das Bild vom Cursor*/
     private Image cursor;
+    /**Der PhysicsController des Spiels*/
     private PhysicsController physicsController;
+    /**Zahl, die dafür sorgt, dass Button-Inputs nur einmal pro Update-Aufruf ausgeführt werden*/
     private int i;
-    int j;
 
+    /**
+     * Konstruktor des PlayerTesters
+     * Startet das Spiel, erstellt dafür alle nötigen Objekte wie z.B. Environment, PhysicsController, etc.
+     */
     public PlayerTester(){
         Game.init();
         Game.getConfiguration().graphics().setFullscreen(false);
@@ -48,15 +61,15 @@ public class PlayerTester{
 
         physicsController = new PhysicsController();
         new CollisionController(physicsController);
-        Game.getEnvironment().add(new Timer());
+        new Timer();
         Game.getRenderEngine().setBaseRenderScale(1);
 
 
         Player player = new Gambler(100,100,true);
         player.setPlayerNumber(1);
-        Player dummy = new Mage(500,500,false);
+        Player dummy = new Mage(500,500,true);
         dummy.setPlayerNumber(2);
-        Player dummy2 = new Warrior(500,500,false);
+        Player dummy2 = new Warrior(500,500,true);
         dummy.setPlayerNumber(3);
         Game.getEnvironment().add(player);
         Game.getEnvironment().add(player, RenderType.NORMAL);
@@ -70,15 +83,28 @@ public class PlayerTester{
         Game.start();
     }
 
+    /**
+     * Interne InputProcessor-Klasse
+     * Implementiert IUpdatable
+     * Steuert die Inputs des Spielers
+     */
     private class InputProcessor implements IUpdateable {
 
+        /**Spieler, der von den Inputs beeinflusst wird*/
         private Player player;
 
+        /**
+         * Konstruktor des InputProcessors
+         * @param player Spieler der beeinflusst werden soll
+         */
         public InputProcessor(Player player){
             this.player = player;
             Game.getLoop().attach(this);
         }
 
+        /**
+         * update-Methode aus dem IUpdatable-Interface
+         */
         @Override
         public void update() {
             i = 1;
@@ -86,7 +112,7 @@ public class PlayerTester{
         }
 
         /**
-         * Methode, die, falls der Player spielbar ist, die anderen Input-Mathoden aufruft
+         * Methode, die die anderen Input-Mathoden aufruft
          */
         private void processInputs(){
             processInputsDirections();
@@ -134,20 +160,20 @@ public class PlayerTester{
                     i = 0;
                 }
             });
-            Input.keyboard().onKeyPressed(StaticData.moveUp, (key) ->{
+            Input.keyboard().onKeyPressed(StaticData.lookUp, (key) ->{
                 if(i == 1) {
                     player.setDirectionUD(0);
                 }
                 i = 0;
             });
 
-            Input.keyboard().onKeyReleased(StaticData.moveUp, (key) ->{
+            Input.keyboard().onKeyReleased(StaticData.lookUp, (key) ->{
                 if(i == 1) {
                     player.setDirectionUD(-1);
                 }
             });
-            Input.keyboard().onKeyPressed(StaticData.moveDown, (key) -> player.setDirectionUD(1));
-            Input.keyboard().onKeyReleased(StaticData.moveDown, (key) -> player.setDirectionUD(-1));
+            Input.keyboard().onKeyPressed(StaticData.lookDown, (key) -> player.setDirectionUD(1));
+            Input.keyboard().onKeyReleased(StaticData.lookDown, (key) -> player.setDirectionUD(-1));
         }
 
         /**

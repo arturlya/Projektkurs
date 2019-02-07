@@ -37,20 +37,17 @@ public abstract class Player extends GravitationalObject {
     protected boolean moving, decelerating;
     /** Speichert die Spielernummer des Spielers auf dem Server*/
     protected int playerNumber;
-    /** Speichert, ob der Spieler steuerbar ist*/
-    protected boolean playable;
     /** Speichert, wie viele Leben der Spieler hat*/
     protected int stocks;
 
-   // protected Rectangle2D renderHurtbox;
     /** Visualisierung des Spielers*/
     protected PlayerRenderer pr;
 
     /**
      * Konstruktor der abstrakten Klasse Player
-     * @param playable entscheided, ob der Player spielbar, also von Tastatur-Inputs kontrolliert wird
+     * @param isPlayerTester gibt an, ob der Spieler im PlayerTester oder im GameClient erstellt wurde
      */
-    public Player(double x, double y, boolean playable){
+    public Player(double x, double y, boolean isPlayerTester){
         super();
         hitbox = new Rectangle2D.Double(0,0,96,96);
         hurtbox = new Hurtbox(50,50,50,50);
@@ -58,17 +55,16 @@ public abstract class Player extends GravitationalObject {
         directionUD = -1;
         maxSpeed = 300;
         speed = 4000;
-        this.playable = playable;
         setX(x);
         setY(y);
         jumpsAvailable = 2;
         stocks = 3;
-        //renderHurtbox = new Rectangle2D.Double(0,0,0,0);
-        //createCircleImages();
         pr = new PlayerRenderer(this);
-        //Das da unten muss für Online Modus engefügt werden(das da drunter weg)!!!!!!!!!!!!!!!!
-        ScreenController.environments.get(1).add(pr,RenderType.NORMAL);
-        //Game.getEnvironment().add(pr,RenderType.NORMAL);
+        if(!isPlayerTester) {
+            ScreenController.environments.get(1).add(pr, RenderType.NORMAL);
+        }else {
+            Game.getEnvironment().add(pr, RenderType.NORMAL);
+        }
         Game.getLoop().attach(pr);
 
     }
@@ -86,9 +82,7 @@ public abstract class Player extends GravitationalObject {
             horizontalMovement();
             horizontalDecelerate();
         }
-        // processInputs();
         removeProjectiles();
-        //adjustRenderHitbox();
         if (!inAir) {
             jumpsAvailable = 2;
         }

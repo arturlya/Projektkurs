@@ -25,10 +25,10 @@ public class Warrior extends Player{
      *
      * @param x X-Position des Warriors
      * @param y Y-Position des Warriors
-     * @param playable Spielbarkeit des Warriors
+     * @param isPlayerTester gibt an, ob der Spieler im PlayerTester oder im GameClient erstellt wurde
      */
-    public Warrior(double x, double y, boolean playable){
-        super(x,y,playable);
+    public Warrior(double x, double y, boolean isPlayerTester){
+        super(x,y,isPlayerTester);
         setWidth(96);
         setHeight(96);
         setName("Warrior");

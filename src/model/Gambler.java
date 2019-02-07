@@ -41,10 +41,10 @@ public class Gambler extends Player {
      *
      * @param x X-Position des Gamblers
      * @param y Y-Position des Gamblers
-     * @param playable Ist diese Figur steuerbar oder nicht?
+     * @param isPlayerTester gibt an, ob der Spieler im PlayerTester oder im GameClient erstellt wurde
      */
-    public Gambler(double x, double y,boolean playable){
-        super(x,y,playable);
+    public Gambler(double x, double y, boolean isPlayerTester){
+        super(x,y,isPlayerTester);
         uMatrix = new double[5][5];
         verteilung = new double[1][5];
         verteilung[0][0] = 1;

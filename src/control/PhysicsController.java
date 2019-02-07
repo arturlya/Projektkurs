@@ -19,18 +19,26 @@ import static control.Timer.dt;
 
 
 /**
+ * Klasse PhysicsController
+ * Implementiert IUpdatable
  * Kontrolliert die Physik aller GravitationalObjects
  */
 public class PhysicsController implements IUpdateable {
+
+    /**Merkt sich alle GravitiationalObjevts*/
     private ArrayList<GravitationalObject> gravObjects;
+    /**Merkt sich alle Spieler*/
     private ArrayList<Player> players;
+    /**Merkt sich alle Entities*/
     private Collection entities;
+    /**Merkt sich die Anzahl der Entities*/
     private int entityAmount;
+    /**Merkt sich die Map*/
     private Map map;
 
 
     /**
-     *
+     * Konstruktor des PhysicsControllers
      */
     public PhysicsController(){
         Game.getLoop().attach(this);
@@ -42,13 +50,17 @@ public class PhysicsController implements IUpdateable {
         updateGravObjects();
     }
 
+    /**
+     * Update-Methode des IUpdatable-Interfaces
+     * Bewegt alle Spieler, die in der Luft sind passend
+     * Stoppt den Fall, falls die Linien unterhalb der Spieler mit den Plattformen der Map kollidieren
+     */
     @Override
     public void update() {
         if(Game.getEnvironment().getEntities().size() != entityAmount){
             updateGravObjects();
         }
         for(GravitationalObject g : gravObjects){
-
             if(g.getVerticalSpeed() >= 0) {
                 boolean colliding = false;
                 for (int i = 0; i < map.getLines().size() && !colliding; i++) {
@@ -87,6 +99,9 @@ public class PhysicsController implements IUpdateable {
         }
     }
 
+    /**
+     * Hält die GravitationalObject-ArrayList aktuell
+     */
     private void updateGravObjects(){
         Iterator itr = Game.getEnvironment().getEntities().iterator();
         while(itr.hasNext()){
@@ -102,6 +117,9 @@ public class PhysicsController implements IUpdateable {
         updatePlayers();
     }
 
+    /**
+     * Hält die Player-ArrayList aktuell
+     */
     private void updatePlayers(){
         for (GravitationalObject g : gravObjects) {
             if(g instanceof Player){
@@ -117,19 +135,24 @@ public class PhysicsController implements IUpdateable {
 
     }
 
+    /**
+     * Speichert die aktuell verwendete Map in der 'map' Referenz
+     */
     private void initializeMap(){
         Iterator itr = Game.getEnvironment().getRenderables(RenderType.BACKGROUND).iterator();
         map = (Map)itr.next();
-        System.out.println(map);
     }
 
+    /**@return gibt die GravitationalObject-ArrayList zurück*/
     public ArrayList<GravitationalObject> getGravObjects() {
         return gravObjects;
     }
 
+    /**@return gibt die Player-ArrayList zurück*/
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
+    /**@return gibt die Map zurück*/
     public Map getMap(){return map;}
 }
