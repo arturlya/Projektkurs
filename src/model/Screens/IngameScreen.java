@@ -15,6 +15,10 @@ public class IngameScreen extends GameScreen {
     private Image[] mage,warrior,gambler;
     private List<Player> others;
     private int alpha;
+    /** Screen-Größe und Breite*/
+    private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
+    /** Multiplikator falls Auflösung nicht 1920x1080*/
+    private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
 
     public IngameScreen(List<Player> others){
         super("INGAME");
@@ -48,28 +52,31 @@ public class IngameScreen extends GameScreen {
     }
 
     private void renderLifesAndDamage(final Graphics2D g){
-        others.toFirst();
-        while (others.hasAccess()) {
-            if (others.getContent().getStocks() >= 0) {
-                g.setColor(Color.WHITE);
-                g.fillRect(1920 - (others.getContent().getPlayerNumber() * 120) + 3, 13, 104, 104);
-                if (others.getContent().getKnockbackPercentage() >= 50) {
-                    alpha = 255;
-                } else {
-                    alpha = others.getContent().getKnockbackPercentage() * 5;
+        if (others != null) {
+            others.toFirst();
+            while (others.hasAccess()) {
+                if (others.getContent().getStocks() >= 0) {
+                    int x = 1920 - others.getContent().getPlayerNumber() * 120 + 3;
+                    g.setColor(Color.WHITE);
+                    g.fillRect((int)(x*widthMultiplier)+3, 13, (int)(104*widthMultiplier), (int)(104*widthMultiplier));
+                    if (others.getContent().getKnockbackPercentage() >= 50) {
+                        alpha = 255;
+                    } else {
+                        alpha = others.getContent().getKnockbackPercentage() * 5;
+                    }
+                    g.setColor(new Color(255, 0, 0, alpha));
+                    System.out.println(others.getContent().getKnockbackPercentage());
+                    g.fillRect((int)(x*widthMultiplier)+3, 13, (int)(104*widthMultiplier), (int)(104*widthMultiplier));
+                    if (others.getContent() instanceof Mage) {
+                        g.drawImage(mage[others.getContent().getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
+                    } else if (others.getContent() instanceof Warrior) {
+                        g.drawImage(warrior[others.getContent().getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
+                    } else if (others.getContent() instanceof Gambler) {
+                        g.drawImage(gambler[others.getContent().getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
+                    }
                 }
-                g.setColor(new Color(255, 0, 0, alpha));
-                System.out.println(others.getContent().getKnockbackPercentage());
-                g.fillRect(1920 - (others.getContent().getPlayerNumber() * 120) + 3, 13, 104, 104);
-                if (others.getContent() instanceof Mage) {
-                    g.drawImage(mage[others.getContent().getStocks()], 1920 - (others.getContent().getPlayerNumber() * 120), 10, null);
-                } else if (others.getContent() instanceof Warrior) {
-                    g.drawImage(warrior[others.getContent().getStocks()], 1920 - (others.getContent().getPlayerNumber() * 120), 10, null);
-                } else if (others.getContent() instanceof Gambler) {
-                    g.drawImage(gambler[others.getContent().getStocks()], 1920 - (others.getContent().getPlayerNumber() * 120), 10, null);
-                }
+                others.next();
             }
-            others.next();
         }
     }
 

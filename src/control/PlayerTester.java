@@ -9,6 +9,7 @@ import de.gurkenlabs.litiengine.sound.Sound;
 import model.*;
 import model.Maps.Map1;
 import model.Screens.IngameScreen;
+import model.abitur.datenstrukturen.List;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -54,7 +55,20 @@ public class PlayerTester{
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
 
         Game.loadEnvironment(new Environment("assets/maps/blank.tmx"));
-        IngameScreen ingameScreen = new IngameScreen();
+
+        Player player = new Gambler(100,100,true);
+        player.setPlayerNumber(1);
+        Player dummy = new Mage(500,500,true);
+        dummy.setPlayerNumber(2);
+        Player dummy2 = new Warrior(500,500,true);
+        dummy2.setPlayerNumber(3);
+
+        List<Player> others = new List<>();
+        others.append(player);
+        others.append(dummy);
+        others.append(dummy2);
+
+        IngameScreen ingameScreen = new IngameScreen(others);
         Game.getScreenManager().addScreen(ingameScreen);
         Game.getScreenManager().displayScreen(ingameScreen);
         Game.getEnvironment().add(new Map1(), RenderType.BACKGROUND);
@@ -64,13 +78,6 @@ public class PlayerTester{
         new Timer();
         Game.getRenderEngine().setBaseRenderScale(1);
 
-
-        Player player = new Gambler(100,100,true);
-        player.setPlayerNumber(1);
-        Player dummy = new Mage(500,500,true);
-        dummy.setPlayerNumber(2);
-        Player dummy2 = new Warrior(500,500,true);
-        dummy.setPlayerNumber(3);
         Game.getEnvironment().add(player);
         Game.getEnvironment().add(player, RenderType.NORMAL);
         Game.getEnvironment().add(dummy);
