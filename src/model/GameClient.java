@@ -230,16 +230,17 @@ public class GameClient extends Client implements IUpdateable {
                         }
 
                         if (others.hasAccess() && others.getContent() != null && others != null) {
-                            others.getContent().setX(Double.parseDouble(temp[1]));
-                            others.getContent().setY(Double.parseDouble(temp[2]));
-                            others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
-                            others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
-
+                            try {
+                                others.getContent().setX(Double.parseDouble(temp[1]));
+                                others.getContent().setY(Double.parseDouble(temp[2]));
+                                others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
+                                others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
+                            }catch(Exception e){}
                         }
                     }
                 }else {
                     temp = temp[1].split("#");
-                    if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
+                    if (Integer.parseInt(temp[0]) != playerNumber) {
 
                         int playerIndex = Integer.parseInt(temp[0]);
                         others.toFirst();
@@ -255,11 +256,12 @@ public class GameClient extends Client implements IUpdateable {
                          //   System.out.println(temp[2]);
                          //   System.out.println(temp[3]);
                          //   System.out.println(temp[4]);
-                            others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
-                            others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
-                            others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
-                            others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
-
+                            try {
+                                others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
+                                others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
+                                others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
+                                others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
+                            }catch(Exception e){}
                         }
                     }
                 }
