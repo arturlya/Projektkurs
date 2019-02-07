@@ -97,8 +97,8 @@ public class IngameScreen extends GameScreen {
                     others.next();
                 }
             }
-            if (GameClient.others != null) others = GameClient.others;
         }
+        if (GameClient.others != null) others = GameClient.others;
     }
 
     public void renderGravObjects(final Graphics2D g){
