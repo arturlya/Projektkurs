@@ -46,8 +46,8 @@ public class Mage extends Player{
         }else{
             hurtbox.setRelativeRect(-hitbox.width,hitbox.height/4,hitbox.width,hitbox.height*0.5);
         }
-        hurtbox.setDamage(0);
-        hurtbox.setKnockback(0);
+        hurtbox.setDamage(3);
+        hurtbox.setKnockback(3);
         attackWindUp = 0.1;
         attackHurtTime = 0.3;
         attackWindDown  =0.6;
@@ -72,8 +72,8 @@ public class Mage extends Player{
     @Override
     public void normalAttackUp() {
         hurtbox.setRelativeRect(-hitbox.width*0.2,-hitbox.height,hitbox.width*1.4,hitbox.height);
-        hurtbox.setDamage(0);
-        hurtbox.setKnockback(0);
+        hurtbox.setDamage(4);
+        hurtbox.setKnockback(2);
         attackWindUp = 0.5;
         attackHurtTime = 0.4;
         attackWindDown  =0.2;
@@ -136,7 +136,7 @@ public class Mage extends Player{
     public void specialAttackStand() {
         hurtbox.setRelativeRect(-hitbox.width*1.5,-hitbox.height*0.5,hitbox.width*4,hitbox.height*1.5);
         hurtbox.setDamage(0);
-        hurtbox.setKnockback(0);
+        hurtbox.setKnockback(7);
         attackWindUp = 0.5;
         attackHurtTime = 0.3;
         attackWindDown  =0.4;

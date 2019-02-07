@@ -16,24 +16,45 @@ import java.io.IOException;
 
 import static control.Timer.dt;
 
+/**
+ * Klasse PlayerRenderer
+ * Implementiert IUpdatable, IRenderable
+ * Zeichnet den Spieler abhängig von der Fenstergröße
+ */
 public class PlayerRenderer implements IUpdateable, IRenderable {
-
-
+    /**Merkt sich den Path zum Ordner, indem die Images des Spielers enthalten sind*/
     private String pathToImageFolder;
+    /**Merkt sich den Spieler, welcher gezeichnet werden soll*/
     private Player player;
+    /**Merkt sich, ob hurtboxes gezeichnet werden sollen*/
     private boolean renderHurtboxes = true;
+    /**Merkt sich die renderHurtbox, also die hurtbox abhängig von der Fenstergröße gescaled*/
     private Rectangle2D renderHurtbox;
+    /**Merkt sich die, auf die Fenstergröße angepassten Koordinaten und Maße, und andere Maße, falls der Spieler außerhalb des Fensters ist*/
     private double rx, ry, rwidth, rheight, offScreenX, offScreenY, offScreenWidth, offScreenHeight;
+    /**Merkt sich die Fensterecke, aus der der Spieler heraus gegangen ist*/
     private Point corner;
+    /**Merkt sich die Bilder der Kreise, die auftauchen, wenn ein Spieler außerhalb des Fensters ist*/
     private Image[] offScreenCircles;
+    /**Merkt sich den Kreis, der gerade gezeichnet werden soll*/
     private Image activeOffScreenCircle;
+    /**Merkt sich die Koordinaten des Kreises*/
     private double circleX, circleY;
+    /**Merkt sich die Breite des Fensters*/
     private double gameWidth = Game.getConfiguration().graphics().getResolution().getWidth();
+    /**Merkt sich die Höhe des Fensters*/
     private double gameHeight = Game.getConfiguration().graphics().getResolution().getHeight();
+    /**Merkt sich die verschiedenen Bilder des Spielers*/
     private Image[] playerImages;
+    /**Merkt sich das momentan gezeichnete Bild des Spielers*/
     private Image currentPlayerImage;
+    /**Merkt sich den Timer, der für die standingAnimation verantwortlich ist*/
     private double standingAnimationTimer;
 
+    /**
+     * Konstruktor des PlayerRenderers
+     * @param player der Spieler, der gezeichnet werden soll
+     */
     public PlayerRenderer(Player player) {
         this.player = player;
         renderHurtbox = new Rectangle2D.Double(0, 0, 0, 0);
@@ -52,6 +73,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         }
     }
 
+    /**
+     * Erstellt die verschiedenen Bilder des Spielers
+     */
     private void createImages(){
         playerImages = new Image[10];
         try {
@@ -70,6 +94,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         }
     }
 
+    /**
+     * Erstellt die verschiedenen Bilder der Kreise
+     */
     private void createCircleImages(){
         offScreenCircles = new Image[8];
         try {
@@ -87,6 +114,10 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         activeOffScreenCircle = offScreenCircles[0];
     }
 
+    /**
+     * Render-Methode des IRenderable Interfaces
+     * Zeichnet den Spieler, dessen hitbox, hurtbox und, falls nötig, einen Kreis
+     */
     @Override
     public void render(Graphics2D g) {
         if(renderHurtboxes) {
@@ -108,6 +139,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         }
     }
 
+    /**
+     * Update-Methode des IUpdatable Interfaces
+     */
     @Override
     public void update() {
         adjustRenderHitbox();
@@ -117,19 +151,32 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         updateStandingAnimationLoop();
     }
 
+    /**
+     * Zählt den AnimationTimer durch und setzt das dazu passende Bild als aktives Bild
+     */
     private void updateStandingAnimationLoop(){
         if(standingAnimationTimer > 1.5){
             standingAnimationTimer = 0;
         }
         int i = 0;
-        if(player.getLookingAt() == 1){
-            i += 5;
-        }
         i += (int)(standingAnimationTimer * (5/1.5));
-        currentPlayerImage = playerImages[i];
+        if(i > 4){
+            i = 4;
+        }
+        if(player.getLookingAt() == 1){
+            currentPlayerImage = playerImages[i+5];
+        }else {
+            currentPlayerImage = playerImages[i];
+        }
         standingAnimationTimer += dt;
     }
 
+    /**
+     * Legt die RenderHitbox des Spielers fest
+     * Wenn der Spieler im Fenster ist, dann wird die Hitbox nur auf Fenstergröße angepasst
+     * Wenn der Spieler außerhalb ist, wird an der richtigen Stelle ein Kreis gezeichnet und der Spieler innerhalb des Kreises
+     * Je weiter der Spieler vom Fensterrand entfernt ist, desto kleiner wird er im Kreis gezeichnet
+     */
     private void adjustRenderHitbox(){
         rx = player.getHitbox().x/1920*gameWidth;
         ry = player.getHitbox().y/1080*gameHeight;
