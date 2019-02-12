@@ -1,0 +1,78 @@
+Mage:
+-Normal Attack Run
+	-Stößt Feuer aus seiner Hand 
+	-Vor ihm in der Mitte
+	-Hitbox halb so hoch wie er
+-Normal Attack Down
+	-Geht runter
+	-Mit beiden Händen ein Feuer
+	-Ganz unten
+-Normal Attack Up
+	-Blitze nach oben 
+	-Hitbox etwas brieter als seine
+	-mittig
+-Normal Attack Stand
+	-Bltze nach vorne 
+	-1.4x mal seine Breite
+	-Halb so hoch wie er
+	-mittig
+-Special Attack Run
+	-Projektil
+	-Feuerball Bild
+-Speicial Attack Down
+	-Windschild
+-Speicial Attack Up
+	-Teleport
+-Special Attack Stand
+	-Stößt Arme zur Seite
+	-Wind (Box)
+Warrior:
+-Normal Attack Run
+	-Schwert auf Kopfhöhe
+	-Von oben nach unten
+-Normal Attack Down
+	-Dolch kommt aus beiden Füßen
+	-Zuerst vorne
+	-Danach hinten
+-Normal Attack Up
+	-Über dem Spieler
+	-Schwert über sich schwingen
+-Normal Attack Stand
+	-Schwert nach vorne stechen
+	-mittig
+-Special Attack Run
+	-Schild nach vorne schlagen
+	-weiter oben als Mitte
+-Special Attack Down
+	-Block
+	-Blockt Körper mit Schild
+-Special Attack Up
+	-Schießt Haken nach oben
+	-Haken Bild
+	-Linie ingame
+-Special Attack Stand
+	-Wirft Wurfmesser
+	-Wurfmesser Bild
+Gambler:
+-Normal Attack Run
+	-Karte nach unten
+-Normal Attack Down
+	-Kartenschwarm in beide Richtungen
+-Normal Attack Up
+	-(Kartenformen über ihm)
+-Normal Attack Stand
+	-Wirft einen Würfel
+	-Von etwas über Mitte nach unten
+-Special Attack Run
+	-Wirft Pokerchip
+	-Pokerchip Bild
+-Special Attack Down
+	-Block
+	-Kartenkreis animiert
+-Speicial Attack Up
+	-Rescue
+	-Teleport zu Gegner
+	-Gestunnt
+-Speicial Attack Stand
+	-Wirft Karte
+	-Karte Bild
