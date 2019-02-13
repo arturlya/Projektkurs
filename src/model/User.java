@@ -11,12 +11,12 @@ import java.awt.event.MouseEvent;
 public class User extends GuiComponent {
 
     /** Client für eine Spielsitzung*/
-    private GameClient client;
+    private static GameClient client;
     /** Client für das Finden einer Spielsitzung beim Raspberry*/
-    private ConnectionClient connector;
+    private static ConnectionClient connector;
 
     /** Speichert, ob der GameClient verbunden ist*/
-    private boolean clientActive;
+    private static boolean clientActive;
 
     /**
      * Nutzer der Anwendung.
@@ -51,8 +51,9 @@ public class User extends GuiComponent {
     /**
      * Der Nutzer verlässt den aktuellen Server.
      */
-    public void closeConnection(){
+    public static void closeConnection(){
         if(clientActive){
+            connector.removeCurrentConnection();
             client.close();
         }
     }

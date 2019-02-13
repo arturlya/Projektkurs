@@ -74,7 +74,6 @@ public class GameClient extends Client implements IUpdateable {
                     //Aufpassen temp0
                     String[] charInfo = temp[i].split("#", 2);
                     if(Integer.parseInt(charInfo[0]) != playerNumber){
-                        // if (Integer.parseInt(charInfo[0]) != player.getPlayerNumber()) {
                         boolean alreadyKnown = false;
                         others.toFirst();
                         while(others.hasAccess()){
@@ -90,7 +89,6 @@ public class GameClient extends Client implements IUpdateable {
                                 others.append(otherPlayer);
                                 ScreenController.environments.get(1).add(otherPlayer);
                                 ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
-                                //ingameScreen.addGravObject(otherPlayer);
 
                                 System.out.println("Added other player");
                             } else if (charInfo[1].equals("Mage")) {
