@@ -418,7 +418,7 @@ public class Gambler extends Player {
         int vY = v[0].length;
         int uX = u.length;
         int uY = u[0].length;
-        if(vY == uY && vX == uX){
+        if(vY == uX){
             double[][] tmp = new double[vX][uY];
             for(int i=0;i<vX;i++){
                 for(int j=0;j<uY;j++){
@@ -430,7 +430,7 @@ public class Gambler extends Player {
             }
             return tmp;
         }
-        /*else if(vX == uX && vY == uY) {
+        else if(vX == uY) {
             double[][] tmp = new double[uX][vY];
 
             for(int i=0;i<uX;i++){
@@ -442,7 +442,7 @@ public class Gambler extends Player {
 
             }
             return tmp;
-        }*/else {
+        }else {
             System.err.println("Dimensionsfehler");
             return null;
         }
