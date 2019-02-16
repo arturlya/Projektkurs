@@ -4,6 +4,10 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+
 import static control.Timer.dt;
 
 /**
@@ -35,6 +39,8 @@ public class Gambler extends Player {
     private double[][] uMatrix;
     /** Die Verteilung der Wahrscheinlichkeiten, wird nach Attacke mit der Übergangsmatrix multipliziert*/
     private double[][] verteilung;
+
+    private Image[] coins;
 
     /**
      * Konstruktor der Klasse Gambler.
@@ -75,8 +81,18 @@ public class Gambler extends Player {
         buffed = false;
         result = Math.random();
         teleportToPlayer = false;
-
-
+        coins = new Image[7];
+        try {
+            coins[0] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/blue.png"));
+            coins[1] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/cyan.png"));
+            coins[2] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/green.png"));
+            coins[3] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/orange.png"));
+            coins[4] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/purple.png"));
+            coins[5] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/red.png"));
+            coins[6] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/yellow.png"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -300,10 +316,11 @@ public class Gambler extends Player {
     private void throwCoins(){
         for(int i=0;i<damage;i++) {
             Projectile coin;
+            int random = (int)(Math.random()*7);
             if (lookingAt == 0){
-                coin = new Projectile(this, getX(), getY() + hitbox.height * 0.25, 5, 5, new Vector2D(Math.random() * 100 + 150, -(Math.random() * 100 + 400)), 3, 1);
+                coin = new Projectile(this, getX(), getY() + hitbox.height * 0.25, 5, 5, coins[random], new Vector2D(Math.random() * 100 + 150, -(Math.random() * 100 + 400)), 3, 1);
             }else{
-                coin = new Projectile(this, getX()+hitbox.width, getY() + hitbox.height * 0.25, 5, 5, new Vector2D(Math.random() * 100 + 150, -(Math.random() * 100 + 400)), 3, 1);
+                coin = new Projectile(this, getX()+hitbox.width, getY() + hitbox.height * 0.25, 5, 5, coins[random], new Vector2D(Math.random() * 100 + 150, -(Math.random() * 100 + 400)), 3, 1);
             }
             Game.getEnvironment().add(coin);
             Game.getEnvironment().add(coin, RenderType.NORMAL);

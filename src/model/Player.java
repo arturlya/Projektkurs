@@ -240,7 +240,7 @@ public abstract class Player extends GravitationalObject {
      */
     public void shoot(double paramX,double paramY,double width,double height, Vector2D direction, int damage, int knockback) {
         if (projectile == null){
-            projectile = new Projectile(this, paramX, paramY, (int)width, (int)height, direction, damage, knockback);
+            projectile = new Projectile(this, paramX, paramY, (int)width, (int)height, null, direction, damage, knockback);
             Game.getEnvironment().add(projectile);
             Game.getEnvironment().add(projectile,RenderType.NORMAL);
         }

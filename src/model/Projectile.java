@@ -2,6 +2,7 @@ package model;
 
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -15,6 +16,8 @@ public class Projectile extends GravitationalObject {
     private Hurtbox hurtbox;
     /** Erzeuger des Projektils*/
     private Player player;
+    /** Bild des Projektils*/
+    private Image image;
 
     /**
      * Konstruktor der Klasse Projectile.
@@ -28,13 +31,14 @@ public class Projectile extends GravitationalObject {
      * @param damage Schaden des Projektils
      * @param knockback Rückstoß, den das Projektil ausübt
      */
-    public Projectile(Player player, double x, double y, int width, int height, Vector2D direction, int damage, int knockback){
+    public Projectile(Player player, double x, double y, int width, int height, Image image, Vector2D direction, int damage, int knockback){
         super();
         this.player = player;
         setX(x);
         setY(y);
         setWidth(width);
         setHeight(height);
+        if (image != null) this.image = image;
         hitbox = new Rectangle2D.Double(x,y,width,height);
         hurtbox = new Hurtbox(x,y,width,height);
         hurtbox.setDamage(damage);
@@ -47,6 +51,7 @@ public class Projectile extends GravitationalObject {
         setVerticalSpeed(direction.getY());
         inAir = true;
     }
+
     /**
      * Update des Interfaces IUpdateable
      */
@@ -54,6 +59,11 @@ public class Projectile extends GravitationalObject {
     public void update() {
         super.update();
         hurtbox.setRect(getX(),getY(),getWidth(),getHeight());
+    }
+
+    @Override
+    public void render(Graphics2D g) {
+        if (image != null) g.drawImage(image,(int)(getX()*StaticData.ScreenWidthMultiplier),(int)(getY()*StaticData.ScreenHeightMultiplier),null);
     }
 
     /**

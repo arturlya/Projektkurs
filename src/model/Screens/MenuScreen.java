@@ -45,7 +45,7 @@ public class MenuScreen extends Screen implements IUpdateable {
     /** Zuständig für die Tastenbelegung*/
     private static boolean chooseKey;
     /** Menü-Bilder*/
-    private Image bg,trans,join,create,options,exit;
+    private Image bg,trans,join,create,options,exit,joingame,creategame;
     /** Figuren-Bilder für die Figurenauswahl*/
     private ArrayList<Image> playerImages;
     /** Bild für ein Textfeld*/
@@ -90,6 +90,8 @@ public class MenuScreen extends Screen implements IUpdateable {
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Warrior/Standing1Right.png")));
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right.png")));
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Gambler/Standing1Right.png")));
+            joingame = ImageIO.read(new File("assets/img/Menu/joingame.png"));
+            creategame = ImageIO.read(new File("assets/img/Menu/creategame.png"));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
@@ -226,9 +228,11 @@ public class MenuScreen extends Screen implements IUpdateable {
         }else if (menuName.equalsIgnoreCase("join")) {
             g.drawImage(trans, 0, 0, width, height, null);
             textFields.get(0).render(g);
+            g.drawImage(joingame,(int)(350*widthMultiplier),(int)(100*heightMultiplier),null);
         }else if (menuName.equalsIgnoreCase("create")) {
             g.drawImage(trans, 0, 0, width, height, null);
             textFields.get(1).render(g);
+            g.drawImage(creategame,(int)(380*widthMultiplier),(int)(100*heightMultiplier),null);
         }else if (menuName.equalsIgnoreCase("options")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);

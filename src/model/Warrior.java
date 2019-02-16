@@ -242,7 +242,7 @@ public class Warrior extends Player{
          * @param y Y-Position des GrapplingHooks
          */
         public GrapplingHook(Warrior owner, double x, double y){
-            super(owner,x,y,5,5, new Vector2D(400,-750),3,0);
+            super(owner,x,y,5,5, null, new Vector2D(400,-750),3,0);
             this.owner = owner;
             hitbox = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
             isActive = false;
