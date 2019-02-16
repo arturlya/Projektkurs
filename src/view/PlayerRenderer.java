@@ -293,6 +293,13 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         }
     }
 
+    /**
+     *
+     * @param currentMove
+     * @param animationTime
+     * @param animationOffsetX
+     * @param animationOffsetY
+     */
     public void triggerAnimation(String currentMove, double animationTime, double animationOffsetX, double animationOffsetY){
         this.currentMove = currentMove;
         this.animationTimer = animationTime;
