@@ -6,6 +6,7 @@ import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import static control.Timer.dt;
@@ -41,6 +42,8 @@ public class Gambler extends Player {
     private double[][] verteilung;
 
     private Image[] coins;
+
+    private BufferedImage card;
 
     /**
      * Konstruktor der Klasse Gambler.
@@ -90,6 +93,7 @@ public class Gambler extends Player {
             coins[4] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/purple.png"));
             coins[5] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/red.png"));
             coins[6] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/yellow.png"));
+            card = ImageIO.read(new File("assets/img/ingame/Players/Gambler/Projektile/card.png"));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -301,7 +305,7 @@ public class Gambler extends Player {
     public void specialAttackStand() {
         pr.triggerAnimation("SpecialAttackStand",0.2,0,0);
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,5, new Vector2D(1700,0),damage,1);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,card.getWidth(),card.getHeight(),card,new Vector2D(1700,0),damage,1);
         attackWindDown = 0.3;
     }
 

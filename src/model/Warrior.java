@@ -221,7 +221,7 @@ public class Warrior extends Player{
         //schaden schwach
         //knockback schwach
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(1000,0),3,1);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10,null,new Vector2D(1000,0),3,1);
         attackWindDown = 0.3;
     }
 
