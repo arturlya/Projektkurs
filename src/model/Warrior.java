@@ -6,6 +6,8 @@ import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static control.Timer.dt;
 
@@ -62,6 +64,16 @@ public class Warrior extends Player{
     }
 
     /**
+     * Hinzufügen von allen Animationen auf die HashMap von PlayerRenderer
+     */
+    @Override
+    protected void listAllAnimations() {
+        ArrayList<String> moves = pr.getAllPlayerMoves();
+        moves.add("SecondDownAttack");
+        super.listAllAnimations();
+    }
+
+    /**
      * Implementation der normalAttackRun vom Player.
      */
     @Override
@@ -73,6 +85,7 @@ public class Warrior extends Player{
             hurtbox.setRelativeRect(hitbox.width,0,hitbox.width/2,hitbox.height);
         } else {
             hurtbox.setRelativeRect(-hitbox.width/2,0,hitbox.width/2,hitbox.height);
+            pr.setAnimationOffsetX(-hitbox.width/2);
         }
         hurtbox.setDamage(5);
         hurtbox.setKnockback(3);
@@ -91,6 +104,7 @@ public class Warrior extends Player{
         //knockback schwach
         if(lookingAt == 0) {
             hurtbox.setRelativeRect(-hitbox.width/2, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
+            pr.setAnimationOffsetX(-hitbox.width/2);
         }else{
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
         }
@@ -109,6 +123,7 @@ public class Warrior extends Player{
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
         }else{
             hurtbox.setRelativeRect(-hitbox.width/2, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
+            pr.setAnimationOffsetX(-hitbox.width/2);
         }
         hurtbox.setDamage(10);
         hurtbox.setKnockback(4);
@@ -126,6 +141,8 @@ public class Warrior extends Player{
         //schaden mittel
         //knockback schwach
         hurtbox.setRelativeRect(-hitbox.width*0.1, -hitbox.height*0.5,hitbox.width+hitbox.width*0.2,hitbox.height*0.5);
+        pr.setAnimationOffsetX(-hitbox.width*0.1);
+        pr.setAnimationOffsetY(-hitbox.height*0.5);
         hurtbox.setDamage(6);
         hurtbox.setKnockback(3);
         attackWindUp = 0.3;
@@ -145,6 +162,7 @@ public class Warrior extends Player{
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.4,hitbox.width*0.6,hitbox.getHeight()*0.2);
         }else{
             hurtbox.setRelativeRect(-hitbox.width*0.6,hitbox.height*0.4,hitbox.width*0.6,hitbox.getHeight()*0.2);
+            pr.setAnimationOffsetX(-hitbox.width*0.6);
         }
         hurtbox.setDamage(7);
         hurtbox.setKnockback(2);
@@ -165,6 +183,7 @@ public class Warrior extends Player{
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.2,hitbox.width*0.7,hitbox.height*0.6);
         }else{
             hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width*0.7,hitbox.height*0.6);
+            pr.setAnimationOffsetX(-hitbox.width*0.7);
         }
         hurtbox.setDamage(2);
         hurtbox.setKnockback(8);

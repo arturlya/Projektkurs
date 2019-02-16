@@ -8,6 +8,8 @@ import view.PlayerRenderer;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 import static control.Timer.dt;
@@ -66,7 +68,7 @@ public abstract class Player extends GravitationalObject {
             Game.getEnvironment().add(pr, RenderType.NORMAL);
         }
         Game.getLoop().attach(pr);
-
+        listAllAnimations();
     }
 
 
@@ -88,6 +90,12 @@ public abstract class Player extends GravitationalObject {
         }
         if(attacking){
             decelerating = true;
+        /*}else{
+            if(moving){
+                pr.setCurrentMove("Run");
+            }else{
+                pr.setCurrentMove("Standing");
+            }*/
         }
     }
 
@@ -259,6 +267,22 @@ public abstract class Player extends GravitationalObject {
         setVerticalSpeed(0);
         this.setX(point.x);
         this.setY(point.y);
+    }
+
+    /** Methode, um dem PlayerRenderer alle möglichen Animationen zu geben*/
+    protected void listAllAnimations(){
+        ArrayList<String> moves = pr.getAllPlayerMoves();
+        moves.add("/NormalAttack/Run/");
+        moves.add("/NormalAttack/Down/");
+        moves.add("/NormalAttack/Up/");
+        moves.add("/NormalAttack/Stand/");
+        moves.add("/SpecialAttack/Run/");
+        moves.add("/SpecialAttack/Down/");
+        moves.add("/SpecialAttack/Up/");
+        moves.add("/SpecialAttack/Stand/");
+        moves.add("/Run");
+        moves.add("/Standing");
+        pr.createImages();
     }
 
     /** Abstrakte Attacke*/

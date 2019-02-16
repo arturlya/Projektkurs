@@ -5,7 +5,6 @@ import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.input.Input;
-import de.gurkenlabs.litiengine.sound.Sound;
 import model.*;
 import model.Maps.Map1;
 import model.Screens.IngameScreen;

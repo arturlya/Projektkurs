@@ -42,9 +42,9 @@ public class Mage extends Player{
     @Override
     public void normalAttackRun() {
         if(lookingAt == 1){
-            hurtbox.setRelativeRect(hitbox.width,hitbox.height/4,hitbox.width,hitbox.height*0.5);
+            hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.25,hitbox.width,hitbox.height*0.5);
         }else{
-            hurtbox.setRelativeRect(-hitbox.width,hitbox.height/4,hitbox.width,hitbox.height*0.5);
+            hurtbox.setRelativeRect(-hitbox.width,hitbox.height*0.25,hitbox.width,hitbox.height*0.5);
         }
         hurtbox.setDamage(3);
         hurtbox.setKnockback(3);
@@ -102,7 +102,7 @@ public class Mage extends Player{
     @Override
     public void specialAttackRun() {
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(500,-50),5,2);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(1000,-200),5,2);
         attackWindDown = 0.3;
     }
 

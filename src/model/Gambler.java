@@ -129,8 +129,10 @@ public class Gambler extends Player {
             setSlotCooldown(0);
             if(lookingAt == 1) {
                 hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.8,hitbox.width*0.4,hitbox.height*0.2);
+                pr.triggerAnimation("NormalAttackRun",0.5,0,0);
             }else{
                 hurtbox.setRelativeRect(-hitbox.width*0.4,hitbox.height*0.8,hitbox.width*0.4,hitbox.height*0.2);
+                pr.triggerAnimation("NormalAttackRun",0.5,-hitbox.width*0.4,0);
             }
 
             hurtbox.setDamage(damage);
@@ -163,6 +165,7 @@ public class Gambler extends Player {
             System.out.println("Attack succeeded");
             setSlotCooldown(0);
             hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width+hitbox.width*1.4,hitbox.height*0.8);
+            pr.triggerAnimation("NormalAttackDown",0.4,-hitbox.width,0);
 
             hurtbox.setDamage(damage);
             hurtbox.setKnockback(damage/2);
@@ -194,6 +197,7 @@ public class Gambler extends Player {
             System.out.println("Attack succeeded");
             setSlotCooldown(0);
             hurtbox.setRelativeRect(0,-hitbox.height*0.4,hitbox.width,hitbox.height*0.4);
+            pr.triggerAnimation("NormalAttackUp",0.3,0,-hitbox.height*0.4);
             hurtbox.setDamage(damage);
             hurtbox.setKnockback(damage/2);
             attackWindUp = 0.1;
@@ -222,8 +226,10 @@ public class Gambler extends Player {
             setSlotCooldown(0);
             if(lookingAt == 1) {
                 hurtbox.setRelativeRect(hitbox.width , hitbox.height * 0.4, hitbox.width *0.4, hitbox.height * 0.6);
+                pr.triggerAnimation("NormalAttackStand",0.215,0,0);
             }else{
                 hurtbox.setRelativeRect(-hitbox.width*0.4 , hitbox.height * 0.4, hitbox.width *0.4, hitbox.height * 0.6);
+                pr.triggerAnimation("NormalAttackStand",0.215,-hitbox.width*0.4,0);
             }
             hurtbox.setDamage(damage);
             hurtbox.setKnockback(damage/2);
@@ -249,6 +255,7 @@ public class Gambler extends Player {
      */
     @Override
     public void specialAttackRun() {
+        pr.triggerAnimation("SpecialAttackRun",0.2,0,0);
         attackWindUp = 0.3;
         throwCoins();
         attackWindDown = 0.4;
@@ -260,6 +267,7 @@ public class Gambler extends Player {
      */
     @Override
     public void specialAttackDown() {
+        pr.triggerAnimation("SpecialAttackDown",0.5,0,0);
         attackWindUp = 0.5;
         shieldActive = true;
         attackWindDown = 1;
@@ -291,6 +299,7 @@ public class Gambler extends Player {
      */
     @Override
     public void specialAttackStand() {
+        pr.triggerAnimation("SpecialAttackStand",0.2,0,0);
         attackWindUp = 0.2;
         shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,5, new Vector2D(1700,0),damage,1);
         attackWindDown = 0.3;

@@ -81,9 +81,11 @@ public class CollisionController implements IUpdateable {
                 if(attacker != defender){
                     if(attacker.getHurtbox().isHurting()) {
                         if (attacker.getHurtbox().intersects(defender.getHitbox())) {
-                            playerHit(attacker, defender);
-                            gamblerDefender = defender;
-                            gamblerHit = true;
+                            if(!defender.isShieldActive()) {
+                                playerHit(attacker, defender);
+                                gamblerDefender = defender;
+                                gamblerHit = true;
+                            }
                         }
                     }
                 }
@@ -118,10 +120,11 @@ public class CollisionController implements IUpdateable {
                 for(Player player : players){
                     if(player != projectile.getPlayer()) {
                         if (projectile.getHurtbox().intersects(player.getHitbox())) {
-                            System.out.println(2);
-                            Vector2D smallDir = new Vector2D(projectile.getCenter(), player.getCenter());
-                            Vector2D scaledDir = smallDir.scale(100 / smallDir.length());
-                            player.registerHit(scaledDir, projectile.getHurtbox().getDamage(), projectile.getHurtbox().getKnockback());
+                            if(!player.isShieldActive()) {
+                                Vector2D smallDir = new Vector2D(projectile.getCenter(), player.getCenter());
+                                Vector2D scaledDir = smallDir.scale(100 / smallDir.length());
+                                player.registerHit(scaledDir, projectile.getHurtbox().getDamage(), projectile.getHurtbox().getKnockback());
+                            }
                         }
                     }
                 }

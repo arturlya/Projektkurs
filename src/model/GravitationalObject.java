@@ -51,8 +51,13 @@ public class GravitationalObject extends Entity implements IUpdateable, IRendera
         setX(getX() + horizontalSpeed * dt);
         setY(getY() + verticalSpeed * dt);
         hitbox.setRect(getX(), getY(), getWidth(), getHeight());
-        downLines[0].setLine(getX(), getY() + getHeight() - 5, getX(), getY() + getHeight() + 20);
-        downLines[1].setLine(getX() + getWidth(), getY() + getHeight() - 5, getX() + getWidth(), getY() + getHeight() + 20);
+        if(!(this instanceof Player)){
+            downLines[0].setLine(getX(), getY() + getHeight() - 5, getX(), getY() + getHeight() + 20);
+            downLines[1].setLine(getX() + getWidth(), getY() + getHeight() - 5, getX() + getWidth(), getY() + getHeight() + 20);
+        }else{
+            downLines[0].setLine(getX()+30, getY() + getHeight() - 5, getX()+30, getY() + getHeight() + 20);
+            downLines[1].setLine(getX() + getWidth()-30, getY() + getHeight() - 5, getX() + getWidth()-30, getY() + getHeight() + 20);
+        }
 
         if((this instanceof Player && this.hitbox.intersects(0,0,1920,1080)) || (!(this instanceof Player) && this.hitbox.intersects(-200,-200,2320,1480))) {
             renderHitbox.setRect(getX() / 1920 * gameWidth, getY() / 1080 * gameHeight, getWidth() / 1920 * gameWidth, getHeight() / 1080 * gameHeight);

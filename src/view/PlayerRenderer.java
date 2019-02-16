@@ -13,6 +13,9 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static control.Timer.dt;
 
@@ -44,12 +47,19 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     private double gameWidth = Game.getConfiguration().graphics().getResolution().getWidth();
     /**Merkt sich die Höhe des Fensters*/
     private double gameHeight = Game.getConfiguration().graphics().getResolution().getHeight();
+
+
+    private String currentMove, currentAnimation;
     /**Merkt sich die verschiedenen Bilder des Spielers*/
-    private Image[] playerImages;
+    private HashMap<String, ArrayList<Image>> playerImages;
+
+    private ArrayList<String> allPlayerMoves;
     /**Merkt sich das momentan gezeichnete Bild des Spielers*/
     private Image currentPlayerImage;
     /**Merkt sich den Timer, der für die standingAnimation verantwortlich ist*/
-    private double standingAnimationTimer;
+    private double animationTimer, currentAnimationStartTime, standingAnimationTimer;
+
+    private double animationOffsetX, animationOffsetY;
 
     /**
      * Konstruktor des PlayerRenderers
@@ -63,34 +73,37 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         pathToImageFolder = "assets/img/ingame/Players";
         if (player instanceof Mage) {
             pathToImageFolder += "/Mage";
-            createImages();
         }else if (player instanceof Warrior) {
             pathToImageFolder += "/Warrior";
-            createImages();
         }else if (player instanceof Gambler) {
             pathToImageFolder += "/Gambler";
-            createImages();
         }
+        allPlayerMoves = new ArrayList<>();
+        playerImages = new HashMap<>();
     }
 
     /**
      * Erstellt die verschiedenen Bilder des Spielers
      */
-    private void createImages(){
-        playerImages = new Image[10];
-        try {
-            playerImages[0] = ImageIO.read(new File(pathToImageFolder + "/Standing1Left.png"));
-            playerImages[1] = ImageIO.read(new File(pathToImageFolder + "/Standing2Left.png"));
-            playerImages[2] = ImageIO.read(new File(pathToImageFolder + "/Standing3Left.png"));
-            playerImages[3] = ImageIO.read(new File(pathToImageFolder + "/Standing4Left.png"));
-            playerImages[4] = ImageIO.read(new File(pathToImageFolder + "/Standing5Left.png"));
-            playerImages[5] = ImageIO.read(new File(pathToImageFolder + "/Standing1Right.png"));
-            playerImages[6] = ImageIO.read(new File(pathToImageFolder + "/Standing2Right.png"));
-            playerImages[7] = ImageIO.read(new File(pathToImageFolder + "/Standing3Right.png"));
-            playerImages[8] = ImageIO.read(new File(pathToImageFolder + "/Standing4Right.png"));
-            playerImages[9] = ImageIO.read(new File(pathToImageFolder + "/Standing5Right.png"));
-        } catch (IOException ex) {
-            System.out.println("Bild konnte nicht geladen werden!");
+    public void createImages(){
+        for(String s : allPlayerMoves){
+            String a = "Left";
+            for(int i = 0; i < 2; i++) {
+                ArrayList<Image> tempImg = new ArrayList();
+                boolean done = false;
+                int j = 1;
+                while(!done){
+                    try{
+                        tempImg.add(ImageIO.read(new File(pathToImageFolder+s+a+j+".png")));
+                        j++;
+                    } catch (IOException ex) {
+                        done = true;
+                    }
+                }
+                String temp = s.replace("/","") + a;
+                playerImages.put(temp, tempImg);
+                a = "Right";
+            }
         }
     }
 
@@ -133,7 +146,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             g.setColor(new Color(150,150,150));
         }
         g.fill(player.getRenderHitbox());
-        g.drawImage(currentPlayerImage, (int) player.getRenderHitbox().getX(), (int) player.getRenderHitbox().getY(), (int) player.getRenderHitbox().getWidth(), (int) player.getRenderHitbox().getHeight(), null);
+        if(!(currentPlayerImage==null)) {
+            g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX() + animationOffsetX), (int) (player.getRenderHitbox().getY() + animationOffsetY), (int) (currentPlayerImage.getWidth(null) * gameWidth / 1920), (int) (currentPlayerImage.getHeight(null) * gameHeight / 1080), null);
+        }
         if(!player.getHitbox().intersects(0,0,1920,1080)){
             g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
         }
@@ -148,14 +163,46 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         if (renderHurtboxes) {
             renderHurtbox.setRect(player.getHurtbox().x / 1920 * gameWidth, player.getHurtbox().y / 1080 * gameHeight, player.getHurtbox().width / 1920 * gameWidth, player.getHurtbox().height / 1080 * gameHeight);
         }
-        updateStandingAnimationLoop();
+        updateAnimationLoop();
     }
 
     /**
      * Zählt den AnimationTimer durch und setzt das dazu passende Bild als aktives Bild
      */
-    private void updateStandingAnimationLoop(){
-        if(standingAnimationTimer > 1.5){
+    private void updateAnimationLoop(){
+        if(animationTimer > 0){
+            animationTimer -= dt;
+        }else{
+            currentMove = "Standing";
+            animationOffsetX = 0;
+            animationOffsetY = 0;
+        }
+        currentAnimation = currentMove;
+        if(player.getLookingAt() == 1){
+            currentAnimation += "Right";
+        }else{
+            currentAnimation += "Left";
+        }
+        if(currentMove.equals("Standing")){
+            standingAnimationTimer -= dt;
+            if(standingAnimationTimer <= 0){
+                standingAnimationTimer = 1.5;
+            }
+            int b = playerImages.get(currentAnimation).size();
+            if(b > 0) {
+                double i = (-b / 1.5) * standingAnimationTimer + b;
+                currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
+            }
+        }else{
+            if(animationTimer >= 0){
+                int b = playerImages.get(currentAnimation).size();
+                if(b > 0) {
+                    double i = (-b / currentAnimationStartTime) * animationTimer + b;
+                    currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
+                }
+            }
+        }
+        /*if(standingAnimationTimer > 1.5){
             standingAnimationTimer = 0;
         }
         int i = 0;
@@ -168,7 +215,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         }else {
             currentPlayerImage = playerImages[i];
         }
-        standingAnimationTimer += dt;
+        standingAnimationTimer += dt;*/
     }
 
     /**
@@ -250,5 +297,29 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             offScreenHeight = rheight * factor;
             player.getRenderHitbox().setRect(offScreenX, offScreenY, offScreenWidth, offScreenHeight);
         }
+    }
+
+    public void triggerAnimation(String currentMove, double animationTime, double animationOffsetX, double animationOffsetY){
+        this.currentMove = currentMove;
+        this.animationTimer = animationTime;
+        this.currentAnimationStartTime = animationTime;
+        this.animationOffsetX = animationOffsetX/1920*gameWidth;
+        this.animationOffsetY = animationOffsetY/1080*gameHeight;
+    }
+
+    public ArrayList<String> getAllPlayerMoves() {
+        return allPlayerMoves;
+    }
+
+    public void setAnimationOffsetX(double animationOffsetX) {
+        this.animationOffsetX = animationOffsetX;
+    }
+
+    public void setAnimationOffsetY(double animationOffsetY) {
+        this.animationOffsetY = animationOffsetY;
+    }
+
+    public void setCurrentMove(String currentMove) {
+        this.currentMove = currentMove;
     }
 }
