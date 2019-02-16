@@ -48,17 +48,19 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     /**Merkt sich die Höhe des Fensters*/
     private double gameHeight = Game.getConfiguration().graphics().getResolution().getHeight();
 
-
+    /**Merkt sich den aktuellen Move des Spielers und die dazu zugehörige Animation*/
     private String currentMove, currentAnimation;
     /**Merkt sich die verschiedenen Bilder des Spielers*/
     private HashMap<String, ArrayList<Image>> playerImages;
-
+    /**Merkt sich alle möglichen Moves des Spielers*/
     private ArrayList<String> allPlayerMoves;
     /**Merkt sich das momentan gezeichnete Bild des Spielers*/
     private Image currentPlayerImage;
-    /**Merkt sich den Timer, der für die standingAnimation verantwortlich ist*/
+    /**Merkt sich die Timer, die für das Durcharbeiten der Animationen verantwortlich sind*/
     private double animationTimer, currentAnimationStartTime, standingAnimationTimer;
-
+    /**Merkt sich, ob ein Image aktiv ist, das nicht der StandingAnimation angehört*/
+    private boolean notStandingAnimationImageSet;
+    /**Merkt sich die Position, an der ein Image der Animation relativ zu den Spielerkoordinaten gezeichnet werden soll*/
     private double animationOffsetX, animationOffsetY;
 
     /**
@@ -147,7 +149,11 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         }
         if(renderHitboxes) g.fill(player.getRenderHitbox());
         if(!(currentPlayerImage==null)) {
-            g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX() + animationOffsetX), (int) (player.getRenderHitbox().getY() + animationOffsetY), (int) (currentPlayerImage.getWidth(null) * gameWidth / 1920), (int) (currentPlayerImage.getHeight(null) * gameHeight / 1080), null);
+            if(!notStandingAnimationImageSet){
+                g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+            }else{
+                g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX() + animationOffsetX), (int) (player.getRenderHitbox().getY() + animationOffsetY), (int) (currentPlayerImage.getWidth(null) * gameWidth / 1920), (int) (currentPlayerImage.getHeight(null) * gameHeight / 1080), null);
+            }
         }else {
             if (player.getLookingAt() == 0) {
                 g.drawImage(playerImages.get("StandingLeft").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
@@ -173,7 +179,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     }
 
     /**
-     * Zählt den AnimationTimer durch und setzt das dazu passende Bild als aktives Bild
+     * Geht durch AnimationsTimer durch und wählt zugehörige Bilder dieser Animation als currentImage aus
      */
     private void updateAnimationLoop(){
         if(animationTimer > 0){
@@ -182,6 +188,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             currentMove = "Standing";
             animationOffsetX = 0;
             animationOffsetY = 0;
+            notStandingAnimationImageSet = false;
         }
         currentAnimation = currentMove;
         if(player.getLookingAt() == 1){
@@ -197,6 +204,9 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             int b = playerImages.get(currentAnimation).size();
             if(b > 0) {
                 double i = (-b / 1.5) * standingAnimationTimer + b;
+                if((int)i >= b){
+                    i = b-1;
+                }
                 currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
             }
         }else{
@@ -204,7 +214,11 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
                 int b = playerImages.get(currentAnimation).size();
                 if(b > 0) {
                     double i = (-b / currentAnimationStartTime) * animationTimer + b;
+                    if((int)i >= b){
+                        i = b-1;
+                    }
                     currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
+                    notStandingAnimationImageSet = true;
                 }else{
                     currentPlayerImage = null;
                 }
@@ -294,11 +308,11 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     }
 
     /**
-     *
-     * @param currentMove
-     * @param animationTime
-     * @param animationOffsetX
-     * @param animationOffsetY
+     * Wird ausgeführt, wenn ein Angriff von einem Spieler durchgeführt
+     * @param currentMove der Move, der ausgeführt wird
+     * @param animationTime die Dauer, die die Animation anhält
+     * @param animationOffsetX die relative x-Verschiebung der Animation zum Spieler
+     * @param animationOffsetY die relative y-Verschiebung der Animation zum Spieler
      */
     public void triggerAnimation(String currentMove, double animationTime, double animationOffsetX, double animationOffsetY){
         this.currentMove = currentMove;
@@ -308,19 +322,8 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         this.animationOffsetY = animationOffsetY/1080*gameHeight;
     }
 
+    /**@return Gibt die ArrayList aller SpielerMoves zurück*/
     public ArrayList<String> getAllPlayerMoves() {
         return allPlayerMoves;
-    }
-
-    public void setAnimationOffsetX(double animationOffsetX) {
-        this.animationOffsetX = animationOffsetX;
-    }
-
-    public void setAnimationOffsetY(double animationOffsetY) {
-        this.animationOffsetY = animationOffsetY;
-    }
-
-    public void setCurrentMove(String currentMove) {
-        this.currentMove = currentMove;
     }
 }
