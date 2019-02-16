@@ -109,7 +109,7 @@ public class Mage extends Player{
     public void specialAttackRun() {
         pr.triggerAnimation("SpecialAttackRun",0.2,0,0);
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(1000,-200),5,2);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10,null,new Vector2D(1000,-200),5,2);
         attackWindDown = 0.3;
     }
 
