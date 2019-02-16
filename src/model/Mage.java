@@ -43,8 +43,10 @@ public class Mage extends Player{
     public void normalAttackRun() {
         if(lookingAt == 1){
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.25,hitbox.width,hitbox.height*0.5);
+            pr.triggerAnimation("NormalAttackRun",0.4,0,0);
         }else{
             hurtbox.setRelativeRect(-hitbox.width,hitbox.height*0.25,hitbox.width,hitbox.height*0.5);
+            pr.triggerAnimation("NormalAttackRun",0.4,-hitbox.width,0);
         }
         hurtbox.setDamage(3);
         hurtbox.setKnockback(3);
@@ -59,6 +61,7 @@ public class Mage extends Player{
     @Override
     public void normalAttackDown() {
         hurtbox.setRelativeRect(-hitbox.width,hitbox.height*0.7,hitbox.width*3,hitbox.height*0.3);
+        pr.triggerAnimation("NormalAttackDown",0.7,-hitbox.width,0);
         hurtbox.setDamage(5);
         hurtbox.setKnockback(3);
         attackWindUp = 0.1;
@@ -72,6 +75,7 @@ public class Mage extends Player{
     @Override
     public void normalAttackUp() {
         hurtbox.setRelativeRect(-hitbox.width*0.2,-hitbox.height,hitbox.width*1.4,hitbox.height);
+        pr.triggerAnimation("NormalAttackUp",0.9,-hitbox.width*0.2,-hitbox.height);
         hurtbox.setDamage(4);
         hurtbox.setKnockback(2);
         attackWindUp = 0.5;
@@ -86,8 +90,10 @@ public class Mage extends Player{
     public void normalAttackStand() {
         if(lookingAt == 1) {
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.25,hitbox.width*1.4,hitbox.height*0.5);
+            pr.triggerAnimation("NormalAttackStand",0.7,0,0);
         }else{
             hurtbox.setRelativeRect(-hitbox.width*1.4,hitbox.height*0.25,hitbox.width*1.4,hitbox.height*0.5);
+            pr.triggerAnimation("NormalAttackStand",0.7,-hitbox.width*1.4,0);
         }
         hurtbox.setDamage(5);
         hurtbox.setKnockback(3);
@@ -101,6 +107,7 @@ public class Mage extends Player{
      */
     @Override
     public void specialAttackRun() {
+        pr.triggerAnimation("SpecialAttackRun",0.2,0,0);
         attackWindUp = 0.2;
         shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(1000,-200),5,2);
         attackWindDown = 0.3;
@@ -111,6 +118,7 @@ public class Mage extends Player{
      */
     @Override
     public void specialAttackDown() {
+        pr.triggerAnimation("SpecialAttackDown",0.5,0,0);
         attackWindUp = 0.5;
         shieldActive = true;
         attackWindDown = 1;
@@ -135,6 +143,7 @@ public class Mage extends Player{
     @Override
     public void specialAttackStand() {
         hurtbox.setRelativeRect(-hitbox.width*1.5,-hitbox.height*0.5,hitbox.width*4,hitbox.height*1.5);
+        pr.triggerAnimation("SpecialAttackStand",0.8,-hitbox.width*1.5,-hitbox.height*0.5);
         hurtbox.setDamage(0);
         hurtbox.setKnockback(7);
         attackWindUp = 0.5;

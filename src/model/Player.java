@@ -265,6 +265,7 @@ public abstract class Player extends GravitationalObject {
         attackHurtTime = 0;
         attackWindDown = 0;
         setVerticalSpeed(0);
+        setHorizontalSpeed(0);
         this.setX(point.x);
         this.setY(point.y);
     }

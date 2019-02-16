@@ -30,7 +30,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     /**Merkt sich den Spieler, welcher gezeichnet werden soll*/
     private Player player;
     /**Merkt sich, ob hurtboxes gezeichnet werden sollen*/
-    private boolean renderHurtboxes = true;
+    private boolean renderHurtboxes = true, renderHitboxes = true;
     /**Merkt sich die renderHurtbox, also die hurtbox abhängig von der Fenstergröße gescaled*/
     private Rectangle2D renderHurtbox;
     /**Merkt sich die, auf die Fenstergröße angepassten Koordinaten und Maße, und andere Maße, falls der Spieler außerhalb des Fensters ist*/
@@ -145,9 +145,15 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
         if(player.isShieldActive()) {
             g.setColor(new Color(150,150,150));
         }
-        g.fill(player.getRenderHitbox());
+        if(renderHitboxes) g.fill(player.getRenderHitbox());
         if(!(currentPlayerImage==null)) {
             g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX() + animationOffsetX), (int) (player.getRenderHitbox().getY() + animationOffsetY), (int) (currentPlayerImage.getWidth(null) * gameWidth / 1920), (int) (currentPlayerImage.getHeight(null) * gameHeight / 1080), null);
+        }else {
+            if (player.getLookingAt() == 0) {
+                g.drawImage(playerImages.get("StandingLeft").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+            } else {
+                g.drawImage(playerImages.get("StandingRight").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+            }
         }
         if(!player.getHitbox().intersects(0,0,1920,1080)){
             g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
@@ -199,23 +205,11 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
                 if(b > 0) {
                     double i = (-b / currentAnimationStartTime) * animationTimer + b;
                     currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
+                }else{
+                    currentPlayerImage = null;
                 }
             }
         }
-        /*if(standingAnimationTimer > 1.5){
-            standingAnimationTimer = 0;
-        }
-        int i = 0;
-        i += (int)(standingAnimationTimer * (5/1.5));
-        if(i > 4){
-            i = 4;
-        }
-        if(player.getLookingAt() == 1){
-            currentPlayerImage = playerImages[i+5];
-        }else {
-            currentPlayerImage = playerImages[i];
-        }
-        standingAnimationTimer += dt;*/
     }
 
     /**

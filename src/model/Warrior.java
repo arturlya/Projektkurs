@@ -83,9 +83,10 @@ public class Warrior extends Player{
         //knockback schwach
         if (lookingAt == 1) {
             hurtbox.setRelativeRect(hitbox.width,0,hitbox.width/2,hitbox.height);
+            pr.triggerAnimation("NormalAttackRun",0.2,0,0);
         } else {
             hurtbox.setRelativeRect(-hitbox.width/2,0,hitbox.width/2,hitbox.height);
-            pr.setAnimationOffsetX(-hitbox.width/2);
+            pr.triggerAnimation("NormalAttackRun",0.2,-hitbox.width*0.5,0);
         }
         hurtbox.setDamage(5);
         hurtbox.setKnockback(3);
@@ -104,9 +105,10 @@ public class Warrior extends Player{
         //knockback schwach
         if(lookingAt == 0) {
             hurtbox.setRelativeRect(-hitbox.width/2, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
-            pr.setAnimationOffsetX(-hitbox.width/2);
+            pr.triggerAnimation("NormalAttackDown",0.5,-hitbox.width*0.5,0);
         }else{
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
+            pr.triggerAnimation("NormalAttackDown",0.5,0,0);
         }
         hurtbox.setDamage(8);
         hurtbox.setKnockback(4);
@@ -121,9 +123,10 @@ public class Warrior extends Player{
     private void secondDownAttack() {
         if(lookingAt == 0) {
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
+            pr.triggerAnimation("SecondDownAttack",0.25,0,0);
         }else{
             hurtbox.setRelativeRect(-hitbox.width/2, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
-            pr.setAnimationOffsetX(-hitbox.width/2);
+            pr.triggerAnimation("SecondDownAttack",0.25,-hitbox.width*0.5,0);
         }
         hurtbox.setDamage(10);
         hurtbox.setKnockback(4);
@@ -141,8 +144,7 @@ public class Warrior extends Player{
         //schaden mittel
         //knockback schwach
         hurtbox.setRelativeRect(-hitbox.width*0.1, -hitbox.height*0.5,hitbox.width+hitbox.width*0.2,hitbox.height*0.5);
-        pr.setAnimationOffsetX(-hitbox.width*0.1);
-        pr.setAnimationOffsetY(-hitbox.height*0.5);
+        pr.triggerAnimation("NormalAttackUp",0.6,-hitbox.width*0.1,-hitbox.height*0.5);
         hurtbox.setDamage(6);
         hurtbox.setKnockback(3);
         attackWindUp = 0.3;
@@ -160,9 +162,10 @@ public class Warrior extends Player{
         //knockback schwach
         if(lookingAt == 1){
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.4,hitbox.width*0.6,hitbox.getHeight()*0.2);
+            pr.triggerAnimation("NormalAttackStand",0.5,0,0);
         }else{
             hurtbox.setRelativeRect(-hitbox.width*0.6,hitbox.height*0.4,hitbox.width*0.6,hitbox.getHeight()*0.2);
-            pr.setAnimationOffsetX(-hitbox.width*0.6);
+            pr.triggerAnimation("NormalAttackStand",0.5,-hitbox.width*0.6,0);
         }
         hurtbox.setDamage(7);
         hurtbox.setKnockback(2);
@@ -181,9 +184,11 @@ public class Warrior extends Player{
         //knockback hoch
         if(lookingAt == 1){
             hurtbox.setRelativeRect(hitbox.width,hitbox.height*0.2,hitbox.width*0.7,hitbox.height*0.6);
+            pr.triggerAnimation("SpecialAttackRun",0.3,0,0);
+
         }else{
             hurtbox.setRelativeRect(-hitbox.width*0.7,hitbox.height*0.2,hitbox.width*0.7,hitbox.height*0.6);
-            pr.setAnimationOffsetX(-hitbox.width*0.7);
+            pr.triggerAnimation("SpecialAttackRun",0.3,-hitbox.width*0.7,0);
         }
         hurtbox.setDamage(2);
         hurtbox.setKnockback(8);
@@ -197,6 +202,7 @@ public class Warrior extends Player{
     @Override
     public void specialAttackDown() {
         //blockt
+        pr.triggerAnimation("SpecialAttackDown",0.5,0,0);
         attackWindUp = 0.5;
         shieldActive = true;
         attackWindDown = 0.3;
@@ -220,6 +226,7 @@ public class Warrior extends Player{
         //wirft messer
         //schaden schwach
         //knockback schwach
+        pr.triggerAnimation("SpecialAttackStand",0.2,0,0);
         attackWindUp = 0.2;
         shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10, new Vector2D(1000,0),3,1);
         attackWindDown = 0.3;
