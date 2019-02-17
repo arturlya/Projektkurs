@@ -87,9 +87,9 @@ public class MenuScreen extends Screen implements IUpdateable {
             join = ImageIO.read(new File("assets/img/Buttons/join.png"));
             options = ImageIO.read(new File("assets/img/Buttons/options.png"));
             exit = ImageIO.read(new File("assets/img/Buttons/exit.png"));
-            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Warrior/Standing1Right.png")));
-            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/Standing1Right.png")));
-            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Gambler/Standing1Right.png")));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Warrior/StandingRight1.png")));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Mage/StandingRight1.png")));
+            playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Gambler/StandingRight1.png")));
             joingame = ImageIO.read(new File("assets/img/Menu/joingame.png"));
             creategame = ImageIO.read(new File("assets/img/Menu/creategame.png"));
         } catch (IOException ex) {

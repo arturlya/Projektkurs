@@ -2,6 +2,12 @@ package model;
 
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Klasse Warrior.
  * Erbt von der abtrakten Oberklasse Player
@@ -10,6 +16,8 @@ public class Mage extends Player{
 
     /**Merkt sich, ob der Teleport vom Mage benutzt wurde*/
     private boolean teleUsed;
+
+    private BufferedImage fireball;
 
     /**
      * Konstruktor der Klasse Mages.
@@ -23,6 +31,11 @@ public class Mage extends Player{
         setWidth(96);
         setHeight(96);
         setName("Mage");
+        try {
+            fireball = ImageIO.read(new File("assets/img/ingame/Players/Mage/Projektile/fireball.png"));
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -109,7 +122,7 @@ public class Mage extends Player{
     public void specialAttackRun() {
         pr.triggerAnimation("SpecialAttackRun",0.2,0,0);
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10,null,new Vector2D(1000,-200),5,2);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,fireball.getWidth(),fireball.getHeight(),fireball,new Vector2D(1000,-200),5,2);
         attackWindDown = 0.3;
     }
 

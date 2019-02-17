@@ -64,6 +64,7 @@ public class Projectile extends GravitationalObject {
     @Override
     public void render(Graphics2D g) {
         if (image != null) g.drawImage(image,(int)(getX()*StaticData.ScreenWidthMultiplier),(int)(getY()*StaticData.ScreenHeightMultiplier),null);
+        else g.fillRect((int)(getX()*StaticData.ScreenWidthMultiplier),(int)(getY()*StaticData.ScreenHeightMultiplier),(int)(getWidth()*StaticData.ScreenWidthMultiplier),(int)(getHeight()*StaticData.ScreenHeightMultiplier));
     }
 
     /**
