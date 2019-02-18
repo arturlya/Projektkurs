@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 public class Mage extends Player{
 
-    /**Merkt sich, ob der Teleport vom Mage benutzt wurde*/
+    /** Merkt sich, ob der Teleport vom Mage benutzt wurde*/
     private boolean teleUsed;
-
+    /** Bild des Feuerballs*/
     private BufferedImage fireball;
 
     /**

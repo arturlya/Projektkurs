@@ -40,9 +40,9 @@ public class Gambler extends Player {
     private double[][] uMatrix;
     /** Die Verteilung der Wahrscheinlichkeiten, wird nach Attacke mit der Übergangsmatrix multipliziert*/
     private double[][] verteilung;
-
+    /** Array mit Bildern der einzelnen Coins*/
     private Image[] coins;
-
+    /** Bild einer Karte*/
     private BufferedImage card;
 
     /**

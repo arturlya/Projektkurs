@@ -2,6 +2,7 @@ package model;
 
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
@@ -61,6 +62,12 @@ public class Projectile extends GravitationalObject {
         hurtbox.setRect(getX(),getY(),getWidth(),getHeight());
     }
 
+    /**
+     * Render des Interfaces IRenderable
+     * Rendert das Projektil als Bild wenn ein vorhandes ist
+     * Wenn nicht dann nur das Rechteck (die Hurtbox)
+     * @param g
+     */
     @Override
     public void render(Graphics2D g) {
         if (image != null) g.drawImage(image,(int)(getX()*StaticData.ScreenWidthMultiplier),(int)(getY()*StaticData.ScreenHeightMultiplier),null);
@@ -78,4 +85,11 @@ public class Projectile extends GravitationalObject {
      * @return Gibt den Besitzer des Projektils zurück
      */
     public Player getPlayer(){return player;}
+
+    /**
+     * Setzt das momentane Image auf ein anderes
+     */
+    public void setImage(Image image) {
+        this.image = image;
+    }
 }

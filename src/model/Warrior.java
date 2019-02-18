@@ -5,7 +5,12 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.graphics.RenderType;
 import de.gurkenlabs.litiengine.util.geom.Vector2D;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,6 +26,8 @@ public class Warrior extends Player{
     private boolean downNormalAttackActive, gettingHooked, hookingTimerSet;
     /** Cooldown des Greifhakens*/
     private double hookingTimer;
+    /** Bild eines Wurfmessers*/
+    private BufferedImage knife;
 
     /**
      * Konstruktor der Klasse Warrior.
@@ -34,6 +41,11 @@ public class Warrior extends Player{
         setWidth(96);
         setHeight(96);
         setName("Warrior");
+        try {
+            knife = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/knife.png"));
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -228,7 +240,7 @@ public class Warrior extends Player{
         //knockback schwach
         pr.triggerAnimation("SpecialAttackStand",0.2,0,0);
         attackWindUp = 0.2;
-        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10,null,new Vector2D(1000,0),3,1);
+        shoot(hitbox.x,hitbox.y+hitbox.height*0.25,20,10,knife,new Vector2D(1000,0),3,1);
         attackWindDown = 0.3;
     }
 
@@ -257,8 +269,12 @@ public class Warrior extends Player{
         boolean directionChosen;
         /** Ob der Greifhaken aktiv ist*/
         boolean isActive;
+        /** Ob der Greifhaken nach unten fliegt*/
+        boolean vertical;
         /** Besitzer des Greifhakens*/
         Warrior owner;
+        /** Bild des Greifhakens*/
+        Image grappler;
 
         /**
          * Konstruktor der Klasse GrapplingHook
@@ -274,6 +290,19 @@ public class Warrior extends Player{
             isActive = false;
             directionChosen = false;
             inAir = true;
+            try {
+                grappler = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/grappler.png"));
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            setImage(grappler);
+        }
+
+        @Override
+        public void update() {
+            if (vertical) {
+
+            }
         }
     }
 
