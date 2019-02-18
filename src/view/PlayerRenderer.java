@@ -63,6 +63,8 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     /**Merkt sich die Position, an der ein Image der Animation relativ zu den Spielerkoordinaten gezeichnet werden soll*/
     private double animationOffsetX, animationOffsetY;
 
+    private boolean imagesCreated;
+
     /**
      * Konstruktor des PlayerRenderers
      * @param player der Spieler, der gezeichnet werden soll
@@ -107,6 +109,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
                 a = "Right";
             }
         }
+        imagesCreated = true;
     }
 
     /**
@@ -148,21 +151,23 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             g.setColor(new Color(150,150,150));
         }
         if(renderHitboxes) g.fill(player.getRenderHitbox());
-        if(!(currentPlayerImage==null)) {
-            if(!notStandingAnimationImageSet){
-                g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
-            }else{
-                g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX() + animationOffsetX), (int) (player.getRenderHitbox().getY() + animationOffsetY), (int) (currentPlayerImage.getWidth(null) * gameWidth / 1920), (int) (currentPlayerImage.getHeight(null) * gameHeight / 1080), null);
-            }
-        }else {
-            if (player.getLookingAt() == 0) {
-                g.drawImage(playerImages.get("StandingLeft").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+        if(imagesCreated) {
+            if (!(currentPlayerImage == null)) {
+                if (!notStandingAnimationImageSet) {
+                    g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+                } else {
+                    g.drawImage(currentPlayerImage, (int) (player.getRenderHitbox().getX() + animationOffsetX), (int) (player.getRenderHitbox().getY() + animationOffsetY), (int) (currentPlayerImage.getWidth(null) * gameWidth / 1920), (int) (currentPlayerImage.getHeight(null) * gameHeight / 1080), null);
+                }
             } else {
-                g.drawImage(playerImages.get("StandingRight").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+                if (player.getLookingAt() == 0) {
+                    g.drawImage(playerImages.get("StandingLeft").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+                } else {
+                    g.drawImage(playerImages.get("StandingRight").get(0), (int) (player.getRenderHitbox().getX()), (int) (player.getRenderHitbox().getY()), (int) (player.getRenderHitbox().getWidth()), (int) (player.getRenderHitbox().getHeight()), null);
+                }
             }
-        }
-        if(!player.getHitbox().intersects(0,0,1920,1080)){
-            g.drawImage(activeOffScreenCircle, (int)(circleX/1920*gameWidth), (int)(circleY/1080*gameHeight), (int)(150.0/1920*gameWidth), (int)(150.0/1080*gameHeight), null);
+            if (!player.getHitbox().intersects(0, 0, 1920, 1080)) {
+                g.drawImage(activeOffScreenCircle, (int) (circleX / 1920 * gameWidth), (int) (circleY / 1080 * gameHeight), (int) (150.0 / 1920 * gameWidth), (int) (150.0 / 1080 * gameHeight), null);
+            }
         }
     }
 
