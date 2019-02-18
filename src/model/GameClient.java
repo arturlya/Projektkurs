@@ -51,7 +51,7 @@ public class GameClient extends Client implements IUpdateable {
      */
     public GameClient(String ip, int port){
         super(ip,port);
-        System.out.println("Running GameClient");
+        //System.out.println("Running GameClient");
         ready = false;
         others = new List<>();
         Input.getLoop().attach(this);
@@ -66,7 +66,7 @@ public class GameClient extends Client implements IUpdateable {
         i = 1;
 
         if(ScreenController.isIngame() && !drawnPlayer && allPlayer.contains("ALL")){
-            System.out.println(allPlayer);
+           // System.out.println(allPlayer);
             String[] temp = allPlayer.split("ALL");
             temp = temp[1].split("NEXT");
             if(getNumberOfOtherPlayers() < Integer.parseInt(temp[0])) {
@@ -90,7 +90,7 @@ public class GameClient extends Client implements IUpdateable {
                                 ScreenController.environments.get(1).add(otherPlayer);
                                 ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
 
-                                System.out.println("Added other player");
+                            //    System.out.println("Added other player");
                             } else if (charInfo[1].equals("Mage")) {
                                 Player otherPlayer = new Mage(400,50,false);
                                 otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
@@ -98,25 +98,25 @@ public class GameClient extends Client implements IUpdateable {
                                 ScreenController.environments.get(1).add(otherPlayer);
                                 ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
                                 //ingameScreen.addGravObject(otherPlayer);
-                                System.out.println("Added other player");
+                              //  System.out.println("Added other player");
                             }else if(charInfo[1].equals("Gambler")){
                                 Player otherPlayer = new Gambler(400,50,false);
                                 otherPlayer.setPlayerNumber(Integer.parseInt(charInfo[0]));
                                 others.append(otherPlayer);
                                 ScreenController.environments.get(1).add(otherPlayer);
                                 ScreenController.environments.get(1).add(otherPlayer, RenderType.NORMAL);
-                                System.out.println("Added other player");
+                            //    System.out.println("Added other player");
                             }
                         }
                     }else{
                         ScreenController.environments.get(1).add(player);
                         ScreenController.environments.get(1).add(player,RenderType.NORMAL);
-                        System.out.println("Created own player");
+                     //   System.out.println("Created own player");
                     }
                 }
             }
             drawnPlayer = true;
-            System.out.println("Added Players");
+           // System.out.println("Added Players");
         }
 
         if(gameStarted && coolDown<=0){
@@ -132,7 +132,7 @@ public class GameClient extends Client implements IUpdateable {
                 send("POSITION" + playerNumber + "#" + player.getHorizontalSpeed() + "#" + player.getVerticalSpeed()+"#"+player.directionLR+"#"+player.decelerating);
                 // send("POSITION"+playerNumber+"#" + player.getX() + "#" + player.getY());
                 if(!player.getHitbox().intersects(-200,-200,2320,1480) && player.getStocks()>0) {
-                    System.out.println("Removed Stock");
+                   // System.out.println("Removed Stock");
                     player.setStocks(player.getStocks() - 1);
                     send("STOCKS"+playerNumber+"#"+player.getStocks());
                     if(player.getStocks()<=0){
@@ -161,11 +161,11 @@ public class GameClient extends Client implements IUpdateable {
                 if (MenuScreen.ready && !finalChoose) {
                     send("STARTtrue");
                     finalChoose = true;
-                    System.out.println("You are ready");
+                  //  System.out.println("You are ready");
                 } else if(finalChoose){
                     send("STARTfalse");
                     finalChoose = false;
-                    System.out.println("You are not ready");
+                    //System.out.println("You are not ready");
                 }
             }
             chosenPlayer = MenuScreen.playerPick;
@@ -277,62 +277,64 @@ public class GameClient extends Client implements IUpdateable {
                         others.next();
                     }
                     if (others.hasAccess()) {
-                        switch (temp[1]){
-                            case "nAS":
-                                if(!(others.getContent() instanceof Gambler)) {
-                                    others.getContent().normalAttackStand();
+                        try {
+                            switch (temp[1]) {
+                                case "nAS":
+                                    if (!(others.getContent() instanceof Gambler)) {
+                                        others.getContent().normalAttackStand();
 
-                                }else{
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackStand();
-                                }
-                                break;
-                            case "nAR":
-                                if(!(others.getContent() instanceof Gambler)) {
-                                    others.getContent().normalAttackRun();
+                                    } else {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackStand();
+                                    }
+                                    break;
+                                case "nAR":
+                                    if (!(others.getContent() instanceof Gambler)) {
+                                        others.getContent().normalAttackRun();
 
-                                }else{
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackRun();
-                                }
-                                break;
-                            case "nAD":
-                                if(!(others.getContent() instanceof Gambler)) {
-                                    others.getContent().normalAttackDown();
+                                    } else {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackRun();
+                                    }
+                                    break;
+                                case "nAD":
+                                    if (!(others.getContent() instanceof Gambler)) {
+                                        others.getContent().normalAttackDown();
 
-                                }else{
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackDown();
-                                }
-                                break;
-                            case "nAU":
-                                if(!(others.getContent() instanceof Gambler)) {
-                                    others.getContent().normalAttackUp();
+                                    } else {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackDown();
+                                    }
+                                    break;
+                                case "nAU":
+                                    if (!(others.getContent() instanceof Gambler)) {
+                                        others.getContent().normalAttackUp();
 
-                                }else{
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().normalAttackUp();
-                                }
-                                break;
-                            case "sAS":
-                                others.getContent().specialAttackStand();
-                                break;
-                            case "sAR":
-                                others.getContent().specialAttackRun();
-                                break;
-                            case "sAD":
-                                others.getContent().specialAttackDown();
-                                break;
-                            case "sAU":
-                                if(!(others.getContent() instanceof Gambler)) {
-                                    others.getContent().specialAttackUp();
+                                    } else {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().normalAttackUp();
+                                    }
+                                    break;
+                                case "sAS":
+                                    others.getContent().specialAttackStand();
+                                    break;
+                                case "sAR":
+                                    others.getContent().specialAttackRun();
+                                    break;
+                                case "sAD":
+                                    others.getContent().specialAttackDown();
+                                    break;
+                                case "sAU":
+                                    if (!(others.getContent() instanceof Gambler)) {
+                                        others.getContent().specialAttackUp();
 
-                                }else{
-                                    ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
-                                    others.getContent().specialAttackUp();
-                                }
-                                break;
-                        }
+                                    } else {
+                                        ((Gambler) others.getContent()).setResult(Double.parseDouble(temp[2]));
+                                        others.getContent().specialAttackUp();
+                                    }
+                                    break;
+                            }
+                        }catch(Exception e){}
                     }
                 }
             }else if(pMessage.contains("JUMP")){
@@ -386,22 +388,22 @@ public class GameClient extends Client implements IUpdateable {
                     Game.getEnvironment().removeRenderable(others.getContent());
                     Game.getEnvironment().remove(others.getContent());
                     others.getContent().removeRenderer();
-                    System.out.println("Deleted Player " + temp);
+                 //   System.out.println("Deleted Player " + temp);
                 }else {
-                    System.out.println("error");
+                   // System.out.println("error");
                 }
             }else if (pMessage.contains("START")) {
                 String[] temp = pMessage.split("START", 2);
                 if (temp[1].contains("true")) {
                     gameStarted = true;
-                    System.out.println("Das Spiel startet!!!");
+                 //   System.out.println("Das Spiel startet!!!");
                 } else {
                     gameStarted = false;
                 }
             } else if (pMessage.contains("NUMBER")) {
                 String[] temp = pMessage.split("NUMBER");
                 playerNumber = Integer.parseInt(temp[1]);
-                System.out.println("Playernumber : "+playerNumber);
+               // System.out.println("Playernumber : "+playerNumber);
             }else if(pMessage.contains("STOCKS")){
                 String[] temp = pMessage.split("STOCKS");
                 temp = temp[1].split("#");
