@@ -134,10 +134,10 @@ public class Warrior extends Player{
     private void secondDownAttack() {
         if(lookingAt == 0) {
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
-            pr.triggerAnimation("SecondAttackDown",0.25,0,0);
+            pr.triggerAnimation("SecondAttackDown",0.35,0,0);
         }else{
             hurtbox.setRelativeRect(-hitbox.width/2, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
-            pr.triggerAnimation("SecondAttackDown",0.25,-hitbox.width*0.5,0);
+            pr.triggerAnimation("SecondAttackDown",0.35,-hitbox.width*0.5,0);
         }
         hurtbox.setDamage(10);
         hurtbox.setKnockback(4);
