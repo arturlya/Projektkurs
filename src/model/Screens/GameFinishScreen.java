@@ -4,6 +4,7 @@ import control.ScreenController;
 import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 import model.StaticData;
+import model.User;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -37,12 +38,14 @@ public class GameFinishScreen extends GameScreen {
     public void render(Graphics2D g) {
         g.drawImage(bg, 0, 0, width, height, null);
         g.drawImage(trans, 0, 0, width, height, null);
+        button.render(g);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if(button.getBoundingBox().contains(e.getPoint())){
             screenController.setMenuScreen();
+            User.closeConnection();
         }
     }
 }
