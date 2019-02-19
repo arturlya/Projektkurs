@@ -43,12 +43,8 @@ public final class StaticData {
             ScreenWidth = Game.getConfiguration().graphics().getResolutionWidth();
             ScreenHeight = Game.getConfiguration().graphics().getResolutionHeight();
         }
-        System.out.println(ScreenWidth);
-        System.out.println(ScreenHeight);
         ScreenWidthMultiplier = ScreenWidth/1920f;
         ScreenHeightMultiplier = ScreenHeight/1080f;
-        System.out.println(ScreenWidthMultiplier);
-        System.out.println(ScreenHeightMultiplier);
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException err) {

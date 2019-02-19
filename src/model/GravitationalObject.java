@@ -14,7 +14,7 @@ import static control.Timer.dt;
 /**
  * Klasse GravitationalObject
  * Erbt von Entity
- * Implementiert IUpdatable und IRenderable
+ * Implementiert IUpdateable und IRenderable
  */
 public class GravitationalObject extends Entity implements IUpdateable, IRenderable {
 

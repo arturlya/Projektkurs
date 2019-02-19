@@ -116,7 +116,7 @@ public class IngameScreen extends GameScreen {
                 }
             }
             if (GameClient.others != null) others = GameClient.others;
-        }catch(Exception e){}
+        }catch (Exception e) {}
     }
 
     public void renderGravObjects(final Graphics2D g){

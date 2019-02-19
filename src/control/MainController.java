@@ -38,7 +38,7 @@ public class MainController {
      */
     public MainController(){
         Game.init();
-        Game.getConfiguration().graphics().setFullscreen(false);
+        Game.getConfiguration().graphics().setFullscreen(true);
         new Config();
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
