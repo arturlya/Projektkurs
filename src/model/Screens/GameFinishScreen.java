@@ -12,14 +12,27 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Klasse GameFinishScreen
+ * Erbt von GameScreen
+ * Wird gezeigt, sobald das Spiel vorbei ist
+ */
 public class GameFinishScreen extends GameScreen {
-
+    /**Bilder*/
     private Image bg, trans, exit;
+    /**Bildschirm Breite und Höhe*/
     private int width = StaticData.ScreenWidth,height = StaticData.ScreenHeight;
+    /**Breite und Höhe Multiplikator, zur Skalierung notwendig*/
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
+    /**Exit button*/
     private ImageComponent button;
+    /**Referenz auf den ScreenController*/
     private ScreenController screenController;
 
+    /**
+     * Konstruktor des GameScreens
+     * Erstellt die Bilder und den Exit-Button
+     */
     public GameFinishScreen(ScreenController screenController){
         super("GAMEFINISH");
         try {
@@ -34,6 +47,10 @@ public class GameFinishScreen extends GameScreen {
         this.screenController = screenController;
     }
 
+    /**
+     * Render-Methode des IRenderable-Interfaces
+     * Zeichnet die Bilder und den Button
+     */
     @Override
     public void render(Graphics2D g) {
         g.drawImage(bg, 0, 0, width, height, null);
@@ -41,6 +58,10 @@ public class GameFinishScreen extends GameScreen {
         button.render(g);
     }
 
+    /**
+     * mouseClicked-Methode der GameScreen Klasse
+     * Überprüft, ob der Button geklickt wird
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         if(button.getBoundingBox().contains(e.getPoint())){
