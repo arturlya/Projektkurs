@@ -248,7 +248,7 @@ public class MenuScreen extends Screen implements IUpdateable {
             audio.render(g);
             g.drawString("Volume: ",width/2-200,height/2-117);
             g.drawString(""+audio.getCurrentValue(),width/2+200,height/2-117);
-        }else if (menuName.equalsIgnoreCase("overall")) {
+        }else if (menuName.equalsIgnoreCase("info")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
         }else if (menuName.equalsIgnoreCase("playerpick")) {
@@ -258,7 +258,13 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(playerImages.get(0),(int)(840*widthMultiplier),(int)(490*heightMultiplier),null);
             g.drawImage(playerImages.get(1),(int)(980*widthMultiplier),(int)(490*heightMultiplier),null);
             g.drawImage(playerImages.get(2),(int)(1120*widthMultiplier),(int)(490*heightMultiplier),null);
-
+            if (playerPick == 1) {
+                g.drawRect((int)(840*widthMultiplier),(int)(490*heightMultiplier),(int)(96*widthMultiplier),(int)(96*heightMultiplier));
+            }else if (playerPick == 2) {
+                g.drawRect((int)(980*widthMultiplier),(int)(490*heightMultiplier),(int)(96*widthMultiplier),(int)(96*heightMultiplier));
+            }else if (playerPick == 3) {
+                g.drawRect((int)(1120*widthMultiplier),(int)(490*heightMultiplier),(int)(96*widthMultiplier),(int)(96*heightMultiplier));
+            }
             readyMark.render(g);
         }
     }
@@ -280,7 +286,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         }else if (menuName.equalsIgnoreCase("options")) {
             if (optionsMenu.getCellComponents().get(0).getBoundingBox().intersects(e.getX(),e.getY(),1,1)) menuName = "keys";
             if (optionsMenu.getCellComponents().get(1).getBoundingBox().intersects(e.getX(),e.getY(),1,1)) menuName = "audiovideo";
-            if (optionsMenu.getCellComponents().get(2).getBoundingBox().intersects(e.getX(),e.getY(),1,1)) menuName = "overall";
+            if (optionsMenu.getCellComponents().get(2).getBoundingBox().intersects(e.getX(),e.getY(),1,1)) menuName = "info";
         }else if (menuName.equalsIgnoreCase("keys")) {
             for (int i = 0; i < keyNameMenu.getCellComponents().size(); i++) {
                 if (keyNameMenu.getCellComponents().get(i).getBoundingBox().intersects(e.getX(), e.getY(), 1, 1)) {
@@ -332,7 +338,7 @@ public class MenuScreen extends Screen implements IUpdateable {
      * Initialisierung der Untermenüs.
      *      -> Tastenbelegung
      *      -> Audio & Video
-     *      -> Overall
+     *      -> Info
      */
     private void createSubMenus(){
         keyNameMenu = new Menu(0, 0, width - 500*widthMultiplier, height, "Look Up", "Look Down", "Move Left", "Move Right", "Jump", "Normal Attack", "Special Attack");
@@ -349,7 +355,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         keyMenu = new Menu(width-490*widthMultiplier,0,490*widthMultiplier,height,arrayList.get(0),arrayList.get(1),arrayList.get(2),arrayList.get(3),arrayList.get(4),arrayList.get(5),arrayList.get(6));
         keyMenu.prepare();
         keyMenu.setEnabled(true);
-        optionsMenu = new Menu(0, 0, width, height, "Key Assignment", "Audio & Video", "Overall");
+        optionsMenu = new Menu(0, 0, width, height, "Key Assignment", "Audio & Video", "Info");
         optionsMenu.prepare();
         optionsMenu.setEnabled(true);
         createAudioSlider();
@@ -372,5 +378,9 @@ public class MenuScreen extends Screen implements IUpdateable {
         readyMark = new CheckBox(1800*widthMultiplier,940*heightMultiplier,100,100,null,false);
         readyMark.prepare();
         readyMark.setEnabled(true);
+    }
+    
+    private void resetMenuScreen(){
+        menuName = "main";
     }
 }

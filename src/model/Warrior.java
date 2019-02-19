@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static control.Timer.dt;
 
@@ -90,7 +89,7 @@ public class Warrior extends Player{
      */
     @Override
     public void normalAttackRun() {
-        //Schlag von oben nach unten
+        //Schlag von unten nach oben^
         //schaden mittel
         //knockback schwach
         if (lookingAt == 1) {
@@ -274,7 +273,7 @@ public class Warrior extends Player{
         /** Besitzer des Greifhakens*/
         Warrior owner;
         /** Bild des Greifhakens*/
-        Image grappler;
+        Image grapplerUp,grapplerDown;
 
         /**
          * Konstruktor der Klasse GrapplingHook
@@ -291,17 +290,20 @@ public class Warrior extends Player{
             directionChosen = false;
             inAir = true;
             try {
-                grappler = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/grappler.png"));
+                grapplerUp = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/grapplerUp.png"));
+                grapplerDown = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/grapplerDown.png"));
             }catch (IOException e) {
                 e.printStackTrace();
             }
-            setImage(grappler);
+            setImage(grapplerUp);
         }
 
         @Override
         public void update() {
-            if (vertical) {
-
+            super.update();
+            if (!vertical && getVerticalSpeed() > 0) {
+                vertical = true;
+                setImage(grapplerDown);
             }
         }
     }
