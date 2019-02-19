@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class IngameScreen extends GameScreen {
 
     private ArrayList<GravitationalObject> gravObjects;
-    private Image[] mage,warrior,gambler;
+    private Image[] mage,warrior,gambler,info;
     private List<Player> others;
     private int alpha;
     /** Screen-Größe und Breite*/
@@ -26,7 +26,14 @@ public class IngameScreen extends GameScreen {
         mage = new Image[4];
         warrior = new Image[4];
         gambler = new Image[4];
+        info = new Image[6];
         try {
+            info[0] = ImageIO.read(new File("assets/img/ingame/Players/Mage/info1.png"));
+            info[2] = ImageIO.read(new File("assets/img/ingame/Players/Warrior/info1.png"));
+            info[4] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/info1.png"));
+            info[1] = ImageIO.read(new File("assets/img/ingame/Players/Mage/info2.png"));
+            info[3] = ImageIO.read(new File("assets/img/ingame/Players/Warrior/info2.png"));
+            info[5] = ImageIO.read(new File("assets/img/ingame/Players/Gambler/info2.png"));
             mage[0] = ImageIO.read(new File("assets/img/ingame/Players/Mage/MageLife0.png"));
             mage[1] = ImageIO.read(new File("assets/img/ingame/Players/Mage/MageLife1.png"));
             mage[2] = ImageIO.read(new File("assets/img/ingame/Players/Mage/MageLife2.png"));
@@ -49,7 +56,16 @@ public class IngameScreen extends GameScreen {
     public void render(final Graphics2D g){
         super.render(g);
         renderLifesAndDamage(g);
-
+        if(GameClient.player instanceof Mage){
+            g.drawImage(info[0],(int)(10*widthMultiplier),(int)(10*heightMultiplier),(int)(info[0].getWidth(null)*widthMultiplier),(int)(info[0].getHeight(null)*heightMultiplier),null);
+            g.drawImage(info[1],(int)(500*widthMultiplier),(int)(10*heightMultiplier),(int)(info[1].getWidth(null)*widthMultiplier),(int)(info[1].getHeight(null)*heightMultiplier),null);
+        }else if(GameClient.player instanceof Warrior){
+            g.drawImage(info[2],(int)(10*widthMultiplier),(int)(10*heightMultiplier),(int)(info[2].getWidth(null)*widthMultiplier),(int)(info[2].getHeight(null)*heightMultiplier),null);
+            g.drawImage(info[3],(int)(500*widthMultiplier),(int)(10*heightMultiplier),(int)(info[3].getWidth(null)*widthMultiplier),(int)(info[3].getHeight(null)*heightMultiplier),null);
+        }else if(GameClient.player instanceof Gambler){
+            g.drawImage(info[4],(int)(10*widthMultiplier),(int)(10*heightMultiplier),(int)(info[4].getWidth(null)*widthMultiplier),(int)(info[4].getHeight(null)*heightMultiplier),null);
+            g.drawImage(info[5],(int)(500*widthMultiplier),(int)(10*heightMultiplier),(int)(info[5].getWidth(null)*widthMultiplier),(int)(info[5].getHeight(null)*heightMultiplier),null);
+        }
     }
 
     private void renderLifesAndDamage(final Graphics2D g){

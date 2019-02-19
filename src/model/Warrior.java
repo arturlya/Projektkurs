@@ -289,6 +289,13 @@ public class Warrior extends Player{
             isActive = false;
             directionChosen = false;
             inAir = true;
+            if(owner.isInAir()) {
+                if (owner.getDirectionLR() == 0) {
+                    setHorizontalSpeed(-400);
+                } else {
+                    setHorizontalSpeed(400);
+                }
+            }
             try {
                 grapplerUp = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/grapplerUp.png"));
                 grapplerDown = ImageIO.read(new File("assets/img/ingame/Players/Warrior/Projektile/grapplerDown.png"));

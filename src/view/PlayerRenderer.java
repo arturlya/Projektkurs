@@ -30,7 +30,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     /**Merkt sich den Spieler, welcher gezeichnet werden soll*/
     private Player player;
     /**Merkt sich, ob hurtboxes gezeichnet werden sollen*/
-    private boolean renderHurtboxes = true, renderHitboxes = true;
+    private boolean renderHurtboxes = false, renderHitboxes = false;
     /**Merkt sich die renderHurtbox, also die hurtbox abhängig von der Fenstergröße gescaled*/
     private Rectangle2D renderHurtbox;
     /**Merkt sich die, auf die Fenstergröße angepassten Koordinaten und Maße, und andere Maße, falls der Spieler außerhalb des Fensters ist*/
@@ -206,13 +206,17 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
             if(standingAnimationTimer <= 0){
                 standingAnimationTimer = 1.5;
             }
-            int b = playerImages.get(currentAnimation).size();
-            if(b > 0) {
-                double i = (-b / 1.5) * standingAnimationTimer + b;
-                if((int)i >= b){
-                    i = b-1;
+            try {
+                int b = playerImages.get(currentAnimation).size();
+                if (b > 0) {
+                    double i = (-b / 1.5) * standingAnimationTimer + b;
+                    if ((int) i >= b) {
+                        i = b - 1;
+                    }
+                    currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
                 }
-                currentPlayerImage = playerImages.get(currentAnimation).get((int) i);
+            }catch(Exception e){
+
             }
         }else{
             if(animationTimer >= 0){
