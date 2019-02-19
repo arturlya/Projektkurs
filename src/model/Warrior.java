@@ -123,7 +123,7 @@ public class Warrior extends Player{
         }
         hurtbox.setDamage(8);
         hurtbox.setKnockback(4);
-        attackWindUp = 0.3;
+        attackWindUp = 0.1;
         attackHurtTime = 0.2;
         attackWindDown = 0.05;
         downNormalAttackActive = true;
@@ -134,14 +134,14 @@ public class Warrior extends Player{
     private void secondDownAttack() {
         if(lookingAt == 0) {
             hurtbox.setRelativeRect(hitbox.width, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
-            pr.triggerAnimation("SecondDownAttack",0.25,0,0);
+            pr.triggerAnimation("SecondAttackDown",0.25,0,0);
         }else{
             hurtbox.setRelativeRect(-hitbox.width/2, hitbox.height * 0.8, hitbox.width/2, hitbox.height * 0.2);
-            pr.triggerAnimation("SecondDownAttack",0.25,-hitbox.width*0.5,0);
+            pr.triggerAnimation("SecondAttackDown",0.25,-hitbox.width*0.5,0);
         }
         hurtbox.setDamage(10);
         hurtbox.setKnockback(4);
-        attackWindUp = 0.05;
+        attackWindUp = 0.1;
         attackHurtTime = 0.2;
         attackWindDown = 0.3;
         downNormalAttackActive = false;
@@ -305,6 +305,9 @@ public class Warrior extends Player{
             setImage(grapplerUp);
         }
 
+        /**
+         * Methode Update des Interface IUpdateable
+         */
         @Override
         public void update() {
             super.update();
