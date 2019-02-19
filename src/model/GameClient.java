@@ -207,7 +207,8 @@ public class GameClient extends Client implements IUpdateable {
     public void processMessage(String pMessage) {
         //int max = 0;
         //if(max == 0) {
-            if(pMessage.contains("PLAYER")){
+        try {
+            if (pMessage.contains("PLAYER")) {
                 choosePlayer(chosenPlayer);
             } else if (pMessage.contains("ALL")) {
                 allPlayer = pMessage;
@@ -220,8 +221,8 @@ public class GameClient extends Client implements IUpdateable {
 
                         int playerIndex = Integer.parseInt(temp[0]);
                         others.toFirst();
-                        while(others.hasAccess()){
-                            if(others.getContent().getPlayerNumber() == playerIndex){
+                        while (others.hasAccess()) {
+                            if (others.getContent().getPlayerNumber() == playerIndex) {
                                 break;
                             }
                             others.next();
@@ -233,45 +234,47 @@ public class GameClient extends Client implements IUpdateable {
                                 others.getContent().setY(Double.parseDouble(temp[2]));
                                 others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
                                 others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
-                            }catch(Exception e){}
+                            } catch (Exception e) {
+                            }
                         }
                     }
-                }else {
+                } else {
                     temp = temp[1].split("#");
                     if (Integer.parseInt(temp[0]) != playerNumber) {
 
                         int playerIndex = Integer.parseInt(temp[0]);
                         others.toFirst();
-                        while(others.hasAccess()){
-                            if(others.getContent().getPlayerNumber() == playerIndex){
+                        while (others.hasAccess()) {
+                            if (others.getContent().getPlayerNumber() == playerIndex) {
                                 break;
                             }
                             others.next();
                         }
                         if (others.hasAccess() && others.getContent() != null && others != null) {
 
-                         //   System.out.println(temp[1]);
-                         //   System.out.println(temp[2]);
-                         //   System.out.println(temp[3]);
-                         //   System.out.println(temp[4]);
+                            //   System.out.println(temp[1]);
+                            //   System.out.println(temp[2]);
+                            //   System.out.println(temp[3]);
+                            //   System.out.println(temp[4]);
                             try {
                                 others.getContent().setHorizontalSpeed(Double.parseDouble(temp[1]));
                                 others.getContent().setVerticalSpeed(Double.parseDouble(temp[2]));
                                 others.getContent().setDirectionLR(Integer.parseInt(temp[3]));
                                 others.getContent().setDecelerating(Boolean.getBoolean(temp[4]));
-                            }catch(Exception e){}
+                            } catch (Exception e) {
+                            }
                         }
                     }
                 }
-            } else if(pMessage.contains("ATTACK")){
+            } else if (pMessage.contains("ATTACK")) {
                 String[] temp = pMessage.split("ATTACK");
                 temp = temp[1].split("#");
                 if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
                     int playerIndex = Integer.parseInt(temp[0]);
                     others.toFirst();
-                    while(others.hasAccess()){
-                        if(others.getContent().getPlayerNumber() == playerIndex){
+                    while (others.hasAccess()) {
+                        if (others.getContent().getPlayerNumber() == playerIndex) {
                             break;
                         }
                         others.next();
@@ -334,17 +337,18 @@ public class GameClient extends Client implements IUpdateable {
                                     }
                                     break;
                             }
-                        }catch(Exception e){}
+                        } catch (Exception e) {
+                        }
                     }
                 }
-            }else if(pMessage.contains("JUMP")){
+            } else if (pMessage.contains("JUMP")) {
                 String[] temp = pMessage.split("JUMP");
                 if (Integer.parseInt(temp[1]) != playerNumber) {
 
                     int playerIndex = Integer.parseInt(temp[1]);
                     others.toFirst();
-                    while(others.hasAccess()){
-                        if(others.getContent().getPlayerNumber() == playerIndex){
+                    while (others.hasAccess()) {
+                        if (others.getContent().getPlayerNumber() == playerIndex) {
                             break;
                         }
                         others.next();
@@ -352,19 +356,19 @@ public class GameClient extends Client implements IUpdateable {
                     if (others.hasAccess()) {
                         others.getContent().setVerticalSpeed(-700);
                         others.getContent().setInAir(true);
-                        others.getContent().setJumpsAvailable(player.getJumpsAvailable()-1);
+                        others.getContent().setJumpsAvailable(player.getJumpsAvailable() - 1);
                         others.getContent().setJumpCooldown(0.5);
                     }
                 }
-            }else if(pMessage.contains("LOOKING")){
+            } else if (pMessage.contains("LOOKING")) {
                 String[] temp = pMessage.split("LOOKING");
                 temp = temp[1].split("#");
                 if (Integer.parseInt(temp[0]) != player.getPlayerNumber()) {
 
                     int playerIndex = Integer.parseInt(temp[0]);
                     others.toFirst();
-                    while(others.hasAccess()){
-                        if(others.getContent().getPlayerNumber() == playerIndex){
+                    while (others.hasAccess()) {
+                        if (others.getContent().getPlayerNumber() == playerIndex) {
                             break;
                         }
                         others.next();
@@ -373,41 +377,41 @@ public class GameClient extends Client implements IUpdateable {
                         others.getContent().setLookingAt(Integer.parseInt(temp[1]));
                     }
                 }
-            }else if(pMessage.contains("QUIT")){
+            } else if (pMessage.contains("QUIT")) {
                 String temp = pMessage.split("QUIT")[1];
 
                 int playerIndex = Integer.parseInt(temp);
                 others.toFirst();
-                while(others.hasAccess()){
-                    if(others.getContent().getPlayerNumber() == playerIndex){
+                while (others.hasAccess()) {
+                    if (others.getContent().getPlayerNumber() == playerIndex) {
                         break;
                     }
                     others.next();
                 }
-                if(others.hasAccess()) {
+                if (others.hasAccess()) {
                     Game.getEnvironment().removeRenderable(others.getContent());
                     Game.getEnvironment().remove(others.getContent());
                     others.getContent().removeRenderer();
-                 //   System.out.println("Deleted Player " + temp);
-                }else {
-                   // System.out.println("error");
+                    //   System.out.println("Deleted Player " + temp);
+                } else {
+                    // System.out.println("error");
                 }
-            }else if (pMessage.contains("START")) {
+            } else if (pMessage.contains("START")) {
                 String[] temp = pMessage.split("START", 2);
                 if (temp[1].contains("true")) {
                     gameStarted = true;
-                 //   System.out.println("Das Spiel startet!!!");
+                    //   System.out.println("Das Spiel startet!!!");
                 } else {
                     gameStarted = false;
                 }
             } else if (pMessage.contains("NUMBER")) {
                 String[] temp = pMessage.split("NUMBER");
                 playerNumber = Integer.parseInt(temp[1]);
-               // System.out.println("Playernumber : "+playerNumber);
-            }else if(pMessage.contains("STOCKS")){
+                // System.out.println("Playernumber : "+playerNumber);
+            } else if (pMessage.contains("STOCKS")) {
                 String[] temp = pMessage.split("STOCKS");
                 temp = temp[1].split("#");
-                if(Integer.parseInt(temp[0]) != playerNumber) {
+                if (Integer.parseInt(temp[0]) != playerNumber) {
                     int playerIndex = Integer.parseInt(temp[0]);
                     others.toFirst();
                     while (others.hasAccess()) {
@@ -427,6 +431,7 @@ public class GameClient extends Client implements IUpdateable {
                     }
                 }
             }
+        }catch(Exception e){}
     }
 
     /**
