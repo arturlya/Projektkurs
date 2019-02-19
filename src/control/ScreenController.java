@@ -91,6 +91,7 @@ public class ScreenController extends Entity implements IUpdateable {
      * @param map Stage des Spiels
      */
     public void setIngameScreen(Map map){
+        menuScreen.resetMenuScreen();
         Game.loadEnvironment(environments.get(1));
         Game.getScreenManager().displayScreen(ingameScreen);
         currentMap = map;

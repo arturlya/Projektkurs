@@ -38,14 +38,14 @@ public class MenuScreen extends Screen implements IUpdateable {
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
     /** Ausgewählte Figurnummer*/
     public static int playerPick;
-    /** Ob ein Spieler verbunden ist (Client-Side)*/
-    private boolean connected;
+    /** Ob ein Spieler verbunden ist (Client-Side) | Ob man jetzt eine Taste drücken für die Tastenbelegung*/
+    private boolean connected,pressNow;
     /** Ob ein Spieler eine Figur ausgewählt hat und ready ist*/
     public static boolean ready;
     /** Zuständig für die Tastenbelegung*/
     private static boolean chooseKey;
     /** Menü-Bilder*/
-    private Image bg,trans,join,create,options,exit,joingame,creategame;
+    private BufferedImage bg,trans,join,create,options,exit,joingame,creategame,info,press;
     /** Figuren-Bilder für die Figurenauswahl*/
     private ArrayList<Image> playerImages;
     /** Bild für ein Textfeld*/
@@ -92,6 +92,8 @@ public class MenuScreen extends Screen implements IUpdateable {
             playerImages.add(ImageIO.read(new File("assets/img/ingame/Players/Gambler/StandingRight1.png")));
             joingame = ImageIO.read(new File("assets/img/Menu/joingame.png"));
             creategame = ImageIO.read(new File("assets/img/Menu/creategame.png"));
+            info = ImageIO.read(new File("assets/img/Menu/info.png"));
+            press = ImageIO.read(new File("assets/img/Menu/press.png"));
         } catch (IOException ex) {
             System.out.println("Bild konnte nicht geladen werden!");
         }
@@ -196,6 +198,7 @@ public class MenuScreen extends Screen implements IUpdateable {
                 keyMenu.getCellComponents().get(6).setText(KeyEvent.getKeyText(keyChecker.getKey()));
             }
             chooseKey = false;
+            pressNow = false;
             keyChecker.setKey(0);
         }
         if (menuName.equalsIgnoreCase("audiovideo")) {
@@ -242,6 +245,11 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(trans,0,0,width,height,null);
             keyNameMenu.render(g);
             keyMenu.render(g);
+            if (pressNow) {
+                g.drawImage(trans,width/4,height/4,width/2,height/2,null);
+                g.drawImage(trans,width/4,height/4,width/2,height/2,null);
+                g.drawImage(press,width/4,height/4,null);
+            }
         }else if (menuName.equalsIgnoreCase("audiovideo")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
@@ -251,6 +259,7 @@ public class MenuScreen extends Screen implements IUpdateable {
         }else if (menuName.equalsIgnoreCase("info")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
+            g.drawImage(info,0,0,width,height,null);
         }else if (menuName.equalsIgnoreCase("playerpick")) {
             g.drawImage(trans,0,0,width,height,null);
             g.drawImage(trans,0,0,width,height,null);
@@ -258,12 +267,19 @@ public class MenuScreen extends Screen implements IUpdateable {
             g.drawImage(playerImages.get(0),(int)(840*widthMultiplier),(int)(490*heightMultiplier),null);
             g.drawImage(playerImages.get(1),(int)(980*widthMultiplier),(int)(490*heightMultiplier),null);
             g.drawImage(playerImages.get(2),(int)(1120*widthMultiplier),(int)(490*heightMultiplier),null);
+            g.setColor(Color.RED);
             if (playerPick == 1) {
-                g.drawRect((int)(840*widthMultiplier),(int)(490*heightMultiplier),(int)(96*widthMultiplier),(int)(96*heightMultiplier));
+                g.drawRect((int)(840*widthMultiplier),(int)(490*heightMultiplier),96,96);
+                g.drawRect((int)(839*widthMultiplier),(int)(489*heightMultiplier),98,98);
+                g.drawRect((int)(838*widthMultiplier),(int)(488*heightMultiplier),100,100);
             }else if (playerPick == 2) {
-                g.drawRect((int)(980*widthMultiplier),(int)(490*heightMultiplier),(int)(96*widthMultiplier),(int)(96*heightMultiplier));
+                g.drawRect((int)(980*widthMultiplier),(int)(490*heightMultiplier),96,96);
+                g.drawRect((int)(979*widthMultiplier),(int)(489*heightMultiplier),98,98);
+                g.drawRect((int)(978*widthMultiplier),(int)(488*heightMultiplier),100,100);
             }else if (playerPick == 3) {
-                g.drawRect((int)(1120*widthMultiplier),(int)(490*heightMultiplier),(int)(96*widthMultiplier),(int)(96*heightMultiplier));
+                g.drawRect((int)(1120*widthMultiplier),(int)(490*heightMultiplier),96,96);
+                g.drawRect((int)(1119*widthMultiplier),(int)(489*heightMultiplier),98,98);
+                g.drawRect((int)(1118*widthMultiplier),(int)(488*heightMultiplier),100,100);
             }
             readyMark.render(g);
         }
@@ -291,6 +307,7 @@ public class MenuScreen extends Screen implements IUpdateable {
             for (int i = 0; i < keyNameMenu.getCellComponents().size(); i++) {
                 if (keyNameMenu.getCellComponents().get(i).getBoundingBox().intersects(e.getX(), e.getY(), 1, 1)) {
                     chooseKey = true;
+                    pressNow = true;
                     keyNameMenu.setCurrentSelection(i);
                 }
             }
@@ -312,11 +329,12 @@ public class MenuScreen extends Screen implements IUpdateable {
      * Initialisieren der Buttons vom Hauptmenü.
      */
     private void createButtons(){
-        buttons.add(new ImageComponent(640*widthMultiplier,151*heightMultiplier,join));
-        buttons.add(new ImageComponent(640*widthMultiplier,349*heightMultiplier,create));
-        buttons.add(new ImageComponent(640*widthMultiplier,547*heightMultiplier,options));
-        buttons.add(new ImageComponent(640*widthMultiplier,745*heightMultiplier,exit));
+        buttons.add(new ImageComponent(640*widthMultiplier,151*heightMultiplier,join.getWidth()*widthMultiplier,join.getHeight()*heightMultiplier,null,null,join));
+        buttons.add(new ImageComponent(640*widthMultiplier,349*heightMultiplier,create.getWidth()*widthMultiplier,create.getHeight()*heightMultiplier,null,null,create));
+        buttons.add(new ImageComponent(640*widthMultiplier,547*heightMultiplier,options.getWidth()*widthMultiplier,options.getHeight()*heightMultiplier,null,null,options));
+        buttons.add(new ImageComponent(640*widthMultiplier,745*heightMultiplier,exit.getWidth()*widthMultiplier,exit.getHeight()*heightMultiplier,null,null,exit));
         for (ImageComponent button : buttons) {
+            button.setImageScaleMode(ImageScaleMode.STRETCH);
             button.prepare();
         }
     }
@@ -379,8 +397,14 @@ public class MenuScreen extends Screen implements IUpdateable {
         readyMark.prepare();
         readyMark.setEnabled(true);
     }
-    
-    private void resetMenuScreen(){
+
+    /**
+     * Setzt den MenuScreen auf Standard zurück
+     */
+    public void resetMenuScreen(){
         menuName = "main";
+        readyMark.setChecked(false);
+        playerPick = 0;
+        ready = false;
     }
 }
