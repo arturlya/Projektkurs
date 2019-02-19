@@ -80,7 +80,7 @@ public class Warrior extends Player{
     @Override
     protected void listAllAnimations() {
         ArrayList<String> moves = pr.getAllPlayerMoves();
-        moves.add("SecondDownAttack");
+        moves.add("/SecondAttack/Down/");
         super.listAllAnimations();
     }
 
