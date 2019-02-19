@@ -30,7 +30,7 @@ public class MainController {
     }
 
     private ScreenController screenController;
-    private Image cursor;
+    private Image cursor, icon;
 
     /**
      * Konstruktor der Klasse MainController.
@@ -42,13 +42,14 @@ public class MainController {
         new Config();
         try {
             cursor = ImageIO.read(new File("assets/img/cursor.png"));
+            icon = ImageIO.read(new File("assets/img/Get_Bashed.png"));
         } catch (IOException ex) {
             System.err.println(ex);
             //System.out.println("Bild konnte nicht geladen werden!");
         }
         Game.getScreenManager().getRenderComponent().setCursor(cursor,0,0);
         User user = new User();
-
+        Game.getScreenManager().setIconImage(icon);
         screenController = new ScreenController(user);
         //screenController.setIngameScreen(new Map1());
         screenController.setMenuScreen();
