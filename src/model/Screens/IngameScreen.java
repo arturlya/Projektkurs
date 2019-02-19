@@ -9,6 +9,12 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Klasse IngameScreen
+ * Erbt von der Klasse GameScreen
+ * Wird erstellt beim Wechsel zum Ingame
+ * Ist relevant zum Zeichnen der Spieler und deren Leben
+ */
 public class IngameScreen extends GameScreen {
 
     private ArrayList<GravitationalObject> gravObjects;
@@ -20,6 +26,11 @@ public class IngameScreen extends GameScreen {
     /** Multiplikator falls Auflösung nicht 1920x1080*/
     private float widthMultiplier = StaticData.ScreenWidthMultiplier,heightMultiplier = StaticData.ScreenHeightMultiplier;
 
+    /**
+     * Konstruktor des IngameScreens
+     * Erstellt einige Bilder, wie z.b. die Bilder der Lebensanzeigen
+     * @param others eine Liste der anderen Spieler
+     */
     public IngameScreen(List<Player> others){
         super("INGAME");
         gravObjects = new ArrayList<>();
@@ -52,6 +63,10 @@ public class IngameScreen extends GameScreen {
         this.others = others;
     }
 
+    /**
+     * Render-Methode des IRenderable-Interfaces
+     * Zeichnet die Input Informationen
+     */
     @Override
     public void render(final Graphics2D g){
         super.render(g);
@@ -68,6 +83,9 @@ public class IngameScreen extends GameScreen {
         }
     }
 
+    /**
+     * Zeichnet die Lebensanzeige der Spieler
+     */
     private void renderLifesAndDamage(final Graphics2D g){
         try {
             if (others != null) {
@@ -117,34 +135,6 @@ public class IngameScreen extends GameScreen {
             }
             if (GameClient.others != null) others = GameClient.others;
         }catch(Exception e){}
-    }
-
-    public void renderGravObjects(final Graphics2D g){
-        for(int i = 0; i < gravObjects.size(); i++){
-            if(gravObjects.get(i) instanceof Player){
-                if(((Player) gravObjects.get(i)).getHurtbox().isHurting()){
-                    g.setColor(new Color(255,0,0,100));
-                }else{
-                    g.setColor(new Color(0,255,0,100));
-                }
-                g.fill(((Player) gravObjects.get(i)).getHurtbox());
-            }
-            g.setColor(new Color(70,120,255));
-            if(gravObjects.get(i) instanceof Player)if(((Player) gravObjects.get(i)).isShieldActive()) g.setColor(new Color(150,150,150));
-            g.fill(gravObjects.get(i).getRenderHitbox());
-        }
-    }
-
-    public void addGravObject(GravitationalObject g){
-        gravObjects.add(g);
-    }
-
-    public ArrayList<GravitationalObject> getGravObjects() {
-        return gravObjects;
-    }
-
-    public void removeGravObject(GravitationalObject g){
-        gravObjects.remove(g);
     }
 
 

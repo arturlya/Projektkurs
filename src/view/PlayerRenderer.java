@@ -62,7 +62,7 @@ public class PlayerRenderer implements IUpdateable, IRenderable {
     private boolean notStandingAnimationImageSet;
     /**Merkt sich die Position, an der ein Image der Animation relativ zu den Spielerkoordinaten gezeichnet werden soll*/
     private double animationOffsetX, animationOffsetY;
-
+    /**Merkt sich, ob die Bilder des Spielers bereits erstellt wurden*/
     private boolean imagesCreated;
 
     /**
