@@ -69,52 +69,54 @@ public class IngameScreen extends GameScreen {
     }
 
     private void renderLifesAndDamage(final Graphics2D g){
-        if (others != null) {
-            boolean playerDrawn = false;
-            others.toFirst();
-            while (others.hasAccess()) {
-                if (GameClient.player != null && !playerDrawn) {
-                    playerDrawn = true;
-                    int x = 1920 - GameClient.player.getPlayerNumber() * 120 + 3;
-                    g.setColor(Color.WHITE);
-                    g.fillRect((int)(x*widthMultiplier)+3, 13, (int)(104*widthMultiplier), (int)(104*widthMultiplier));
-                    if (GameClient.player.getKnockbackPercentage() >= 50) {
-                        alpha = 255;
-                    } else {
-                        alpha = GameClient.player.getKnockbackPercentage() * 5;
+        try {
+            if (others != null) {
+                boolean playerDrawn = false;
+                others.toFirst();
+                while (others.hasAccess()) {
+                    if (GameClient.player != null && !playerDrawn) {
+                        playerDrawn = true;
+                        int x = 1920 - GameClient.player.getPlayerNumber() * 120 + 3;
+                        g.setColor(Color.WHITE);
+                        g.fillRect((int) (x * widthMultiplier) + 3, 13, (int) (104 * widthMultiplier), (int) (104 * widthMultiplier));
+                        if (GameClient.player.getKnockbackPercentage() >= 50) {
+                            alpha = 255;
+                        } else {
+                            alpha = GameClient.player.getKnockbackPercentage() * 5;
+                        }
+                        g.setColor(new Color(255, 0, 0, alpha));
+                        g.fillRect((int) (x * widthMultiplier) + 3, 13, (int) (104 * widthMultiplier), (int) (104 * widthMultiplier));
+                        if (GameClient.player instanceof Mage) {
+                            g.drawImage(mage[GameClient.player.getStocks()], (int) (x * widthMultiplier), 10, (int) (110 * widthMultiplier), (int) (110 * heightMultiplier), null);
+                        } else if (GameClient.player instanceof Warrior) {
+                            g.drawImage(warrior[GameClient.player.getStocks()], (int) (x * widthMultiplier), 10, (int) (110 * widthMultiplier), (int) (110 * heightMultiplier), null);
+                        } else if (GameClient.player instanceof Gambler) {
+                            g.drawImage(gambler[GameClient.player.getStocks()], (int) (x * widthMultiplier), 10, (int) (110 * widthMultiplier), (int) (110 * heightMultiplier), null);
+                        }
+                    } else if (others.getContent().getStocks() >= 0) {
+                        int x = 1920 - others.getContent().getPlayerNumber() * 120 + 3;
+                        g.setColor(Color.WHITE);
+                        g.fillRect((int) (x * widthMultiplier) + 3, 13, (int) (104 * widthMultiplier), (int) (104 * widthMultiplier));
+                        if (others.getContent().getKnockbackPercentage() >= 50) {
+                            alpha = 255;
+                        } else {
+                            alpha = others.getContent().getKnockbackPercentage() * 5;
+                        }
+                        g.setColor(new Color(255, 0, 0, alpha));
+                        g.fillRect((int) (x * widthMultiplier) + 3, 13, (int) (104 * widthMultiplier), (int) (104 * widthMultiplier));
+                        if (others.getContent() instanceof Mage) {
+                            g.drawImage(mage[others.getContent().getStocks()], (int) (x * widthMultiplier), 10, (int) (110 * widthMultiplier), (int) (110 * heightMultiplier), null);
+                        } else if (others.getContent() instanceof Warrior) {
+                            g.drawImage(warrior[others.getContent().getStocks()], (int) (x * widthMultiplier), 10, (int) (110 * widthMultiplier), (int) (110 * heightMultiplier), null);
+                        } else if (others.getContent() instanceof Gambler) {
+                            g.drawImage(gambler[others.getContent().getStocks()], (int) (x * widthMultiplier), 10, (int) (110 * widthMultiplier), (int) (110 * heightMultiplier), null);
+                        }
+                        others.next();
                     }
-                    g.setColor(new Color(255, 0, 0, alpha));
-                    g.fillRect((int)(x*widthMultiplier)+3, 13, (int)(104*widthMultiplier), (int)(104*widthMultiplier));
-                    if (GameClient.player instanceof Mage) {
-                        g.drawImage(mage[GameClient.player.getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
-                    } else if (GameClient.player instanceof Warrior) {
-                        g.drawImage(warrior[GameClient.player.getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
-                    } else if (GameClient.player instanceof Gambler) {
-                        g.drawImage(gambler[GameClient.player.getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
-                    }
-                }else if (others.getContent().getStocks() >= 0) {
-                    int x = 1920 - others.getContent().getPlayerNumber() * 120 + 3;
-                    g.setColor(Color.WHITE);
-                    g.fillRect((int)(x*widthMultiplier)+3, 13, (int)(104*widthMultiplier), (int)(104*widthMultiplier));
-                    if (others.getContent().getKnockbackPercentage() >= 50) {
-                        alpha = 255;
-                    } else {
-                        alpha = others.getContent().getKnockbackPercentage() * 5;
-                    }
-                    g.setColor(new Color(255, 0, 0, alpha));
-                    g.fillRect((int)(x*widthMultiplier)+3, 13, (int)(104*widthMultiplier), (int)(104*widthMultiplier));
-                    if (others.getContent() instanceof Mage) {
-                        g.drawImage(mage[others.getContent().getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
-                    } else if (others.getContent() instanceof Warrior) {
-                        g.drawImage(warrior[others.getContent().getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
-                    } else if (others.getContent() instanceof Gambler) {
-                        g.drawImage(gambler[others.getContent().getStocks()],(int)(x*widthMultiplier), 10, (int)(110*widthMultiplier), (int)(110*heightMultiplier), null);
-                    }
-                    others.next();
                 }
             }
-        }
-        if (GameClient.others != null) others = GameClient.others;
+            if (GameClient.others != null) others = GameClient.others;
+        }catch(Exception e){}
     }
 
     public void renderGravObjects(final Graphics2D g){
